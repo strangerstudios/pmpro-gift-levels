@@ -3,7 +3,7 @@
 Plugin Name: PMPro Gift Levels
 Plugin URI: http://www.paidmembershipspro.com/add-ons/pmpro-sponsored-members/
 Description: Some levels will generate discount codes to give to others to use for gift memberships.
-Version: .1
+Version: .1.2
 Author: Stranger Studios
 Author URI: http://www.strangerstudios.com
 */
@@ -45,29 +45,14 @@ Author URI: http://www.strangerstudios.com
 		)
 	);
 */
-global $pmprogl_gift_levels;
-$pmprogl_gift_levels = array(
-		5 => array(
-			'level_id' => 6,
-			'initial_payment' => '', 
-			'billing_amount' => '', 
-			'cycle_number' => '', 
-			'cycle_period' => '', 
-			'billing_limit' => '', 
-			'trial_amount' => '', 
-			'trial_limit' => '', 
-			'expiration_number' => 1, 
-			'expiration_period' => 'Year'
-		)
-	);
 
 /*
 	These levels will require a gift code.
 	Array should contain the level ids.
 */
 global $pmprogl_require_gift_code;
-$pmprogl_require_gift_code = array(6);
-	
+//$pmprogl_require_gift_code = array(3);
+
 /*
 	When checking out for the purchase gift level, create a code.
 	
@@ -195,7 +180,7 @@ function pmprogl_the_content_account_page($content)
 		$gift_codes = get_user_meta($current_user->ID, "pmprogl_gift_codes_purchased", true);
 		
 		if(!empty($gift_codes))
-		{		
+		{
 		ob_start();
 		?>
 		<div id="pmpro_account-gift_codes" class="pmpro_box">	
@@ -226,12 +211,11 @@ function pmprogl_the_content_account_page($content)
 			</ul>			
 		</div>
 		<?php
-		}	
 		$temp_content = ob_get_contents();
 		ob_end_clean();
-				
 		$content = str_replace('<!-- end pmpro_account-profile -->', '<!-- end pmpro_account-profile -->' . $temp_content, $content);
-	}
+        }
+    }
 	
 	return $content;
 }
