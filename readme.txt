@@ -3,7 +3,7 @@ Contributors: strangerstudios
 Tags: pmpro, membership, gifts
 Requires at least: 3.5
 Tested up to: 3.9.1
-Stable tag: .1.2
+Stable tag: .1.3
 
 Generate discount codes to give to others to use for gift memberships.
 
@@ -32,6 +32,9 @@ Generate discount codes to give to others to use for gift memberships.
 Please post it in the issues section of GitHub and we'll fix it as soon as we can. Thanks for helping. https://github.com/strangerstudios/pmpro-gift-levels/issues
 
 == Changelog ==
+= .1.3 =
+* Added gift code link to confirmation email
+
 = .1.2 =
 * Added readme.txt
 * Fixed bug on account page for users without purchased gift codes.
