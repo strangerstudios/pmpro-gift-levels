@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: PMPro Gift Levels
-Plugin URI: http://www.paidmembershipspro.com/add-ons/pmpro-sponsored-members/
+Plugin URI: http://www.paidmembershipspro.com/add-ons/pmpro-gift-levels/
 Description: Some levels will generate discount codes to give to others to use for gift memberships.
 Version: .2
 Author: Stranger Studios
@@ -80,9 +80,7 @@ function pmprogl_pmpro_after_checkout($user_id)
 	{
 		//remove last row added to members_users table
 		$sqlQuery = "DELETE FROM $wpdb->pmpro_memberships_users WHERE user_id = '" . $user_id . "' AND membership_id = '" . $level_id . "' ORDER BY id DESC LIMIT 1";				
-		
-		d($sqlQuery);
-		
+				
 		$wpdb->query($sqlQuery);
 		
 		//reset user
@@ -187,7 +185,7 @@ function pmprogl_the_content_account_page($content)
 		$gift_codes = get_user_meta($current_user->ID, "pmprogl_gift_codes_purchased", true);
 		
 		if(!empty($gift_codes))
-		{		
+		{
 		ob_start();
 		?>
 		<div id="pmpro_account-gift_codes" class="pmpro_box">	
@@ -218,12 +216,11 @@ function pmprogl_the_content_account_page($content)
 			</ul>			
 		</div>
 		<?php
-		}	
 		$temp_content = ob_get_contents();
 		ob_end_clean();
-				
 		$content = str_replace('<!-- end pmpro_account-profile -->', '<!-- end pmpro_account-profile -->' . $temp_content, $content);
-	}
+        }
+    }
 	
 	return $content;
 }
@@ -300,3 +297,36 @@ function pmprogl_pmpro_cancel_previous_subscriptions($cancel)
 	return $cancel;
 }
 add_action("pmpro_cancel_previous_subscriptions", "pmprogl_pmpro_cancel_previous_subscriptions");
+
+/*
+	Add code to confirmation email.
+*/
+function pmprogl_pmpro_email_body($body, $pmpro_email)
+{
+    global $wpdb, $pmprogl_gift_levels, $current_user;
+
+    //only checkout emails, not admins
+    if(strpos($pmpro_email->template, "checkout") !== false && strpos($pmpro_email->template, "admin") == false)
+    {
+        //get the user_id from the email
+        $user_id = $wpdb->get_var("SELECT ID FROM $wpdb->users WHERE user_email = '" . $pmpro_email->data['user_email'] . "' LIMIT 1");
+        $level_id = $pmpro_email->data['membership_id'];
+
+        //get the user's last purchased gift code
+        $gift_codes = get_user_meta($current_user->ID, "pmprogl_gift_codes_purchased", true);
+
+        if(is_array($gift_codes))
+            $code_id = end($gift_codes);
+
+        if(!empty($code_id))
+        {
+            $code = $wpdb->get_var("SELECT code FROM $wpdb->pmpro_discount_codes WHERE id = '" . intval($code_id) . "' LIMIT 1");
+            $code_url = pmpro_url("checkout", "?level=" . $pmprogl_gift_levels[$level_id]['level_id'] . "&discount_code=" . $code);
+
+            if(!empty($code))
+                $body = "<p><strong>Share this link with your gift recipient: <a href=\"" . $code_url . "\">" . $code_url . "</a></strong></p>" . $body;
+        }
+    }
+    return $body;
+}
+add_filter("pmpro_email_body", "pmprogl_pmpro_email_body", 10, 2);

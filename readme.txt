@@ -1,5 +1,4 @@
 === PMPro Gift Levels ===
-
 Contributors: strangerstudios
 Tags: pmpro, membership, gift, gift level, gift card, giftcard, gift certificate
 Requires at least: 3.5
@@ -9,10 +8,17 @@ Stable tag: .2
 == Description ==
 Setup some PMPro levels to allow for the purchase of gift certificates. A discount code for a "real" level is generated when checking out for the gift level.
 
+* Define "gift giver" and "gift recipeient" level relationships, with customized gift levels.
+* When users checkout for a gift giver level (or are assigned one by an admin), a discount code is generated to allow gift recipient members to sign up for the customized gift level.
+* If a user has purchased any gift levels, their claimed and unclaimed levels will be displayed on the Account page.
+* Restrict users from registering for the gift level if they don't have a gift code. Additionally, gift givers can not use their own gift codes.
+* Gift giver members will be linked to their giftee through their pmprogl_gift_codes_purchased user meta.
+
 == Installation ==
 1. Upload the `pmpro-gift-levels` directory to the `/wp-content/plugins/` directory of your site.
 2. Activate the plugin through the 'Plugins' menu in WordPress.
-3. Add code like this to your active theme's functions.php or a custom plugin to setup the global gift levels array.
+3. Create one level for gift givers and one level for gift recipients.
+4. Add code like this to your active theme's functions.php or a custom plugin to setup the global gift levels array.
 
 `
 // Each key is the id of the "purchase level"
@@ -48,10 +54,15 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 == Changelog ==
 
 = .2 =
-* Added readme.
 * Commented out $pmprogl_gift_levels example. Should be put into a custom plugin or the active theme's functions.php.
 * Fixed bug where entries for gift level purchases were not being deleted from the pmpro_memberships_users table. (Thanks, andrewatduckpin)
 
+= .1.3 =
+* Added gift code link to confirmation email
+
+= .1.2 =
+* Added readme.txt
+* Fixed bug on account page for users without purchased gift codes.
+
 = .1 =
 * This is the initial version of the plugin.
-
