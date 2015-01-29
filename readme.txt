@@ -1,0 +1,57 @@
+=== PMPro Gift Levels ===
+
+Contributors: strangerstudios
+Tags: pmpro, membership, gift, gift level, gift card, giftcard, gift certificate
+Requires at least: 3.5
+Tested up to: 4.1
+Stable tag: .2
+
+== Description ==
+Setup some PMPro levels to allow for the purchase of gift certificates. A discount code for a "real" level is generated when checking out for the gift level.
+
+== Installation ==
+1. Upload the `pmpro-gift-levels` directory to the `/wp-content/plugins/` directory of your site.
+2. Activate the plugin through the 'Plugins' menu in WordPress.
+3. Add code like this to your active theme's functions.php or a custom plugin to setup the global gift levels array.
+
+`
+// Each key is the id of the "purchase level"
+// Each value is an array of values for the discount code created.
+global $pmprogl_gift_levels;
+	$pmprogl_gift_levels = array(
+		5 => array(						//5 is the purchase level
+			'level_id' => 6,			//6 is the level gifted
+			'initial_payment' => '', 	//discount code is setup for $0
+			'billing_amount' => '', 
+			'cycle_number' => '', 
+			'cycle_period' => '', 
+			'billing_limit' => '', 
+			'trial_amount' => '', 
+			'trial_limit' => '', 
+			'expiration_number' => 1, 		//membership expires after 1
+			'expiration_period' => 'Year'	//year
+		)
+	);
+`
+	
+4. Add a global array to set certain levels to require a discount code to check out. (Optional)
+
+`
+global $pmprogl_require_gift_code;
+$pmprogl_require_gift_code = array(6);
+`
+	
+== Frequently Asked Questions ==
+= I found a bug in the plugin.
+Please post it in the issues section of GitHub and we'll fix it as soon as we can. Thanks for helping. https://github.com/strangerstudios/pmpro-gift-levels/issues
+
+== Changelog ==
+
+= .2 =
+* Added readme.
+* Commented out $pmprogl_gift_levels example. Should be put into a custom plugin or the active theme's functions.php.
+* Fixed bug where entries for gift level purchases were not being deleted from the pmpro_memberships_users table. (Thanks, andrewatduckpin)
+
+= .1 =
+* This is the initial version of the plugin.
+

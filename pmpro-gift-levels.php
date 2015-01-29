@@ -3,7 +3,7 @@
 Plugin Name: PMPro Gift Levels
 Plugin URI: http://www.paidmembershipspro.com/add-ons/pmpro-sponsored-members/
 Description: Some levels will generate discount codes to give to others to use for gift memberships.
-Version: .1
+Version: .2
 Author: Stranger Studios
 Author URI: http://www.strangerstudios.com
 */
@@ -28,8 +28,10 @@ Author URI: http://www.strangerstudios.com
 	Array of gift levels. 
 	- Each key is the id of the "purchase level"
 	- Each value is an array of values for the discount code created.
+	- Add this to your active theme's functions.php or a custom plugin.
 	
 	e.g. 
+	global $pmprogl_gift_levels;
 	$pmprogl_gift_levels = array(
 		5 => array(
 			'level_id' => 6,
@@ -45,36 +47,23 @@ Author URI: http://www.strangerstudios.com
 		)
 	);
 */
-global $pmprogl_gift_levels;
-$pmprogl_gift_levels = array(
-		5 => array(
-			'level_id' => 6,
-			'initial_payment' => '', 
-			'billing_amount' => '', 
-			'cycle_number' => '', 
-			'cycle_period' => '', 
-			'billing_limit' => '', 
-			'trial_amount' => '', 
-			'trial_limit' => '', 
-			'expiration_number' => 1, 
-			'expiration_period' => 'Year'
-		)
-	);
 
 /*
 	These levels will require a gift code.
 	Array should contain the level ids.
 */
+/*
 global $pmprogl_require_gift_code;
 $pmprogl_require_gift_code = array(6);
+*/
 	
 /*
 	When checking out for the purchase gift level, create a code.
 	
 */
 function pmprogl_pmpro_after_checkout($user_id)
-{
-	global $pmprogl_gift_levels, $wpdb, $pmpro_old_memberships_users_id;
+{	
+	global $pmprogl_gift_levels, $wpdb, $pmpro_old_memberships_users_id, $pmprogl_existing_member_flag;
 	
 	//which level purchased
 	$level_id = intval($_REQUEST['level']);	
@@ -82,7 +71,7 @@ function pmprogl_pmpro_after_checkout($user_id)
 	//gift for this? if not, stop now
 	if(empty($pmprogl_gift_levels) || empty($pmprogl_gift_levels[$level_id]))
 		return;
-	
+		
 	/*
 		If they had an old level, change them back
 		$pmprogl_existing_member_flag is set in pmprogl_pmpro_cancel_previous_subscriptions() below
@@ -91,6 +80,9 @@ function pmprogl_pmpro_after_checkout($user_id)
 	{
 		//remove last row added to members_users table
 		$sqlQuery = "DELETE FROM $wpdb->pmpro_memberships_users WHERE user_id = '" . $user_id . "' AND membership_id = '" . $level_id . "' ORDER BY id DESC LIMIT 1";				
+		
+		d($sqlQuery);
+		
 		$wpdb->query($sqlQuery);
 		
 		//reset user
