@@ -1,9 +1,9 @@
-=== PMPro Gift Levels ===
+=== Paid Memberships Pro - Gift Levels Add On ===
 Contributors: strangerstudios
-Tags: pmpro, membership, gift, gift level, gift card, giftcard, gift certificate
+Tags: pmpro, paid memberships pro, membership, gift, gift level, gift card, giftcard, gift certificate
 Requires at least: 3.5
-Tested up to: 4.1
-Stable tag: .2
+Tested up to: 4.1.1
+Stable tag: .2.1
 
 == Description ==
 Setup some PMPro levels to allow for the purchase of gift certificates. A discount code for a "real" level is generated when checking out for the gift level.
@@ -52,6 +52,9 @@ $pmprogl_require_gift_code = array(6);
 Please post it in the issues section of GitHub and we'll fix it as soon as we can. Thanks for helping. https://github.com/strangerstudios/pmpro-gift-levels/issues
 
 == Changelog ==
+
+= .2.1 =
+* Added code to set status of last level to "active" explicitly after checkout. Makes this addon compatible with PMPro v1.8+
 
 = .2 =
 * Commented out $pmprogl_gift_levels example. Should be put into a custom plugin or the active theme's functions.php.

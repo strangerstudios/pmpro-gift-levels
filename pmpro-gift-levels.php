@@ -1,9 +1,9 @@
 <?php
 /*
-Plugin Name: PMPro Gift Levels
+Plugin Name: Paid Memberships Pro - Gift Levels Add On
 Plugin URI: http://www.paidmembershipspro.com/add-ons/pmpro-gift-levels/
 Description: Some levels will generate discount codes to give to others to use for gift memberships.
-Version: .2
+Version: .2.1
 Author: Stranger Studios
 Author URI: http://www.strangerstudios.com
 */
@@ -80,7 +80,10 @@ function pmprogl_pmpro_after_checkout($user_id)
 	{
 		//remove last row added to members_users table
 		$sqlQuery = "DELETE FROM $wpdb->pmpro_memberships_users WHERE user_id = '" . $user_id . "' AND membership_id = '" . $level_id . "' ORDER BY id DESC LIMIT 1";				
-				
+		$wpdb->query($sqlQuery);
+		
+		//activate their old level again
+		$sqlQuery = "UPDATE $wpdb->pmpro_memberships_users SET status = 'active' WHERE user_id = '" . $user_id . "' AND membership_id = '" . $pmprogl_existing_member_flag . "' ORDER BY id DESC LIMIT 1";
 		$wpdb->query($sqlQuery);
 		
 		//reset user
@@ -284,7 +287,7 @@ function pmprogl_pmpro_cancel_previous_subscriptions($cancel)
 			if($level_id == $checkout_level_id)
 			{				
 				//store flag so we know to remove the membership row that gets inserted
-				$pmprogl_existing_member_flag = true;
+				$pmprogl_existing_member_flag = $current_user->membership_level->id;
 				
 				//don't cancel their subscription
 				$cancel = false;
@@ -330,3 +333,19 @@ function pmprogl_pmpro_email_body($body, $pmpro_email)
     return $body;
 }
 add_filter("pmpro_email_body", "pmprogl_pmpro_email_body", 10, 2);
+
+/*
+Function to add links to the plugin row meta
+*/
+function pmprogl_plugin_row_meta($links, $file) {
+	if(strpos($file, 'pmpro-gift-levels.php') !== false)
+	{
+		$new_links = array(
+			'<a href="' . esc_url('http://www.paidmembershipspro.com/add-ons/plugins-on-github/pmpro-gift-levels/')  . '" title="' . esc_attr( __( 'View Documentation', 'pmpro' ) ) . '">' . __( 'Docs', 'pmpro' ) . '</a>',
+			'<a href="' . esc_url('http://paidmembershipspro.com/support/') . '" title="' . esc_attr( __( 'Visit Customer Support Forum', 'pmpro' ) ) . '">' . __( 'Support', 'pmpro' ) . '</a>',
+		);
+		$links = array_merge($links, $new_links);
+	}
+	return $links;
+}
+add_filter('plugin_row_meta', 'pmprogl_plugin_row_meta', 10, 2);
