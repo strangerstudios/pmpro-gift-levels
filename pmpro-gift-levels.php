@@ -3,7 +3,7 @@
 Plugin Name: Paid Memberships Pro - Gift Levels Add On
 Plugin URI: http://www.paidmembershipspro.com/add-ons/pmpro-gift-levels/
 Description: Some levels will generate discount codes to give to others to use for gift memberships.
-Version: .2.1
+Version: .2.2
 Author: Stranger Studios
 Author URI: http://www.strangerstudios.com
 */
@@ -78,12 +78,19 @@ function pmprogl_pmpro_after_checkout($user_id)
 	*/	
 	if(!empty($pmprogl_existing_member_flag))
 	{
+		$last_membership_level_id = $pmprogl_existing_member_flag[0];
+		$last_membership_level_enddate = $pmprogl_existing_member_flag[1];
+		if(empty($last_membership_level_enddate))
+			$last_membership_level_enddate = '';
+		else
+			$last_membership_level_enddate = date('Y-m-d', $last_membership_level_enddate);
+
 		//remove last row added to members_users table
 		$sqlQuery = "DELETE FROM $wpdb->pmpro_memberships_users WHERE user_id = '" . $user_id . "' AND membership_id = '" . $level_id . "' ORDER BY id DESC LIMIT 1";				
 		$wpdb->query($sqlQuery);
 		
 		//activate their old level again
-		$sqlQuery = "UPDATE $wpdb->pmpro_memberships_users SET status = 'active' WHERE user_id = '" . $user_id . "' AND membership_id = '" . $pmprogl_existing_member_flag . "' ORDER BY id DESC LIMIT 1";
+		$sqlQuery = "UPDATE $wpdb->pmpro_memberships_users SET status = 'active', enddate = '" . esc_sql($last_membership_level_enddate) . "' WHERE user_id = '" . $user_id . "' AND membership_id = '" . $last_membership_level_id . "' ORDER BY id DESC LIMIT 1";
 		$wpdb->query($sqlQuery);
 		
 		//reset user
@@ -287,7 +294,7 @@ function pmprogl_pmpro_cancel_previous_subscriptions($cancel)
 			if($level_id == $checkout_level_id)
 			{				
 				//store flag so we know to remove the membership row that gets inserted
-				$pmprogl_existing_member_flag = $current_user->membership_level->id;
+				$pmprogl_existing_member_flag = array($current_user->membership_level->id, $current_user->membership_level->enddate);
 				
 				//don't cancel their subscription
 				$cancel = false;
