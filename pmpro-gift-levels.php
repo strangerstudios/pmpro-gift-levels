@@ -115,18 +115,18 @@ function pmprogl_pmpro_after_checkout($user_id)
 		
 		//save gift codes
 		update_user_meta($user_id, "pmprogl_gift_codes_purchased", $gift_codes);
+	}
 
-		// $pmprogl_existing_member_flag is set below.
-		if(isset($pmprogl_existing_member_flag)) {
-			//remove last row added to members_users table
-			$sqlQuery = "DELETE FROM $wpdb->pmpro_memberships_users WHERE user_id = '" . $user_id . "' AND membership_id = '" . $level_id . "' ORDER BY id DESC LIMIT 1";
-			$wpdb->query($sqlQuery);
+	// $pmprogl_existing_member_flag is set below.
+	if(isset($pmprogl_existing_member_flag)) {
+		//remove last row added to members_users table
+		$sqlQuery = "DELETE FROM $wpdb->pmpro_memberships_users WHERE user_id = '" . $user_id . "' AND membership_id = '" . $level_id . "' ORDER BY id DESC LIMIT 1";
+		$wpdb->query($sqlQuery);
 
-			//reset user
-			global $all_membership_levels;
-			unset($all_membership_levels[$user_id]);
-			pmpro_set_current_user();
-		}
+		//reset user
+		global $all_membership_levels;
+		unset($all_membership_levels[$user_id]);
+		pmpro_set_current_user();
 	}
 }
 add_action("pmpro_after_checkout", "pmprogl_pmpro_after_checkout");
