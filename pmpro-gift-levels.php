@@ -3,7 +3,7 @@
 Plugin Name: Paid Memberships Pro - Gift Levels Add On
 Plugin URI: http://www.paidmembershipspro.com/add-ons/pmpro-gift-levels/
 Description: Some levels will generate discount codes to give to others to use for gift memberships.
-Version: .2.2
+Version: .2.3
 Author: Stranger Studios
 Author URI: http://www.strangerstudios.com
 */
@@ -63,7 +63,7 @@ $pmprogl_require_gift_code = array(6);
 */
 function pmprogl_pmpro_after_checkout($user_id)
 {	
-	global $pmprogl_gift_levels, $wpdb, $pmpro_old_memberships_users_id, $pmprogl_existing_member_flag;
+	global $pmprogl_gift_levels, $wpdb, $pmprogl_existing_member_flag;
 	
 	//which level purchased
 	$level_id = intval($_REQUEST['level']);	
@@ -71,34 +71,7 @@ function pmprogl_pmpro_after_checkout($user_id)
 	//gift for this? if not, stop now
 	if(empty($pmprogl_gift_levels) || empty($pmprogl_gift_levels[$level_id]))
 		return;
-		
-	/*
-		If they had an old level, change them back
-		$pmprogl_existing_member_flag is set in pmprogl_pmpro_cancel_previous_subscriptions() below
-	*/	
-	if(!empty($pmprogl_existing_member_flag))
-	{
-		$last_membership_level_id = $pmprogl_existing_member_flag[0];
-		$last_membership_level_enddate = $pmprogl_existing_member_flag[1];
-		if(empty($last_membership_level_enddate))
-			$last_membership_level_enddate = '';
-		else
-			$last_membership_level_enddate = date('Y-m-d', $last_membership_level_enddate);
 
-		//remove last row added to members_users table
-		$sqlQuery = "DELETE FROM $wpdb->pmpro_memberships_users WHERE user_id = '" . $user_id . "' AND membership_id = '" . $level_id . "' ORDER BY id DESC LIMIT 1";				
-		$wpdb->query($sqlQuery);
-		
-		//activate their old level again
-		$sqlQuery = "UPDATE $wpdb->pmpro_memberships_users SET status = 'active', enddate = '" . esc_sql($last_membership_level_enddate) . "' WHERE user_id = '" . $user_id . "' AND membership_id = '" . $last_membership_level_id . "' ORDER BY id DESC LIMIT 1";
-		$wpdb->query($sqlQuery);
-		
-		//reset user
-		global $all_membership_levels;
-		unset($all_membership_levels[$user_id]);
-		pmpro_set_current_user();
-	}
-	
 	/*
 		Create Gift Code
 	*/	
@@ -143,8 +116,39 @@ function pmprogl_pmpro_after_checkout($user_id)
 		//save gift codes
 		update_user_meta($user_id, "pmprogl_gift_codes_purchased", $gift_codes);
 	}
+
+	// $pmprogl_existing_member_flag is set below.
+	if(isset($pmprogl_existing_member_flag)) {
+		//remove last row added to members_users table
+		$sqlQuery = "DELETE FROM $wpdb->pmpro_memberships_users WHERE user_id = '" . $user_id . "' AND membership_id = '" . $level_id . "' ORDER BY id DESC LIMIT 1";
+		$wpdb->query($sqlQuery);
+
+		//reset user
+		global $all_membership_levels;
+		unset($all_membership_levels[$user_id]);
+		pmpro_set_current_user();
+	}
 }
 add_action("pmpro_after_checkout", "pmprogl_pmpro_after_checkout");
+
+/*
+ * Set existing member flags.
+ */
+function pmprogl_pmpro_checkout_before_change_membership_level() {
+	global $pmprogl_existing_member_flag, $pmprogl_gift_levels;
+
+	if ( pmpro_hasMembershipLevel() && ! empty( $_REQUEST['level'] ) ) {
+		$checkout_level_id = intval( $_REQUEST['level'] );
+		foreach ( $pmprogl_gift_levels as $level_id => $code ) {
+			if ( $level_id == $checkout_level_id ) {
+				add_filter('pmpro_cancel_previous_subscriptions', '__return_false');
+				add_filter('pmpro_deactivate_old_levels', '__return_false');
+				$pmprogl_existing_member_flag = true;
+			}
+		}
+	}
+}
+add_action('pmpro_checkout_before_change_membership_level', 'pmprogl_pmpro_checkout_before_change_membership_level');
 
 /*
 	Show last purchased gift code on the confirmation page.
@@ -276,37 +280,6 @@ function pmprogl_pmpro_registration_checks($pmpro_continue_registration)
 	return $pmpro_continue_registration;
 }
 add_filter("pmpro_registration_checks", "pmprogl_pmpro_registration_checks");
-
-/*
-	If checking out for the purchase gift level and you already have a membership, don't change membership levels.
-*/
-//disable cancelling old subscriptions
-function pmprogl_pmpro_cancel_previous_subscriptions($cancel)
-{
-	global $pmprogl_gift_levels, $pmprogl_existing_member_flag, $current_user, $wpdb;
-	
-	//existing user
-	if(pmpro_hasMembershipLevel() && !empty($_REQUEST['level']))
-	{
-		$checkout_level_id = intval($_REQUEST['level']);
-		foreach($pmprogl_gift_levels as $level_id => $code)
-		{
-			if($level_id == $checkout_level_id)
-			{				
-				//store flag so we know to remove the membership row that gets inserted
-				$pmprogl_existing_member_flag = array($current_user->membership_level->id, $current_user->membership_level->enddate);
-				
-				//don't cancel their subscription
-				$cancel = false;
-								
-				return $cancel;
-			}
-		}
-	}
-	
-	return $cancel;
-}
-add_action("pmpro_cancel_previous_subscriptions", "pmprogl_pmpro_cancel_previous_subscriptions");
 
 /*
 	Add code to confirmation email.
