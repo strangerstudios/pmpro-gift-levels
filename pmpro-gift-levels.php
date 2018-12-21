@@ -148,7 +148,7 @@ function pmprogl_pmpro_checkout_before_change_membership_level() {
 		}
 	}
 }
-add_action('pmpro_checkout_before_processing', 'pmprogl_pmpro_checkout_before_change_membership_level');
+add_action('pmpro_checkout_before_processing', 'pmprogl_pmpro_checkout_before_change_membership_level', 1);
 
 /*
 	Show last purchased gift code on the confirmation page.
