@@ -1,8 +1,8 @@
 === Paid Memberships Pro - Gift Levels Add On ===
 Contributors: strangerstudios
 Tags: pmpro, paid memberships pro, membership, gift, gift level, gift card, giftcard, gift certificate
-Requires at least: 3.5
-Tested up to: 4.6.1
+Requires at least: 4
+Tested up to: 5.0.2
 Stable tag: .3
 
 == Description ==
@@ -52,6 +52,9 @@ $pmprogl_require_gift_code = array(6);
 Please post it in the issues section of GitHub and we'll fix it as soon as we can. Thanks for helping. https://github.com/strangerstudios/pmpro-gift-levels/issues
 
 == Changelog ==
+= .3 =
+* BUG FIX: Fixed bug where Gift Levels was not working with Stripe checkout for existing users. Users are no longer given an expiration date 3 days in the future.
+
 = .2.3 =
 * BUG: Fixed bug where $pmprogl_existing_member_flag was not being set correctly.
 
