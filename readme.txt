@@ -52,7 +52,7 @@ $pmprogl_require_gift_code = array(6);
 Please post it in the issues section of GitHub and we'll fix it as soon as we can. Thanks for helping. https://github.com/strangerstudios/pmpro-gift-levels/issues
 
 == Changelog ==
-= .3 =
+= .3 - 2019-01-08 =
 * BUG FIX: Fixed bug where Gift Levels was not working with Stripe checkout for existing users. Users are no longer given an expiration date 3 days in the future.
 
 = .2.3 =
