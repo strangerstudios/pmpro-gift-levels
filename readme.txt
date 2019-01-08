@@ -3,7 +3,7 @@ Contributors: strangerstudios
 Tags: pmpro, paid memberships pro, membership, gift, gift level, gift card, giftcard, gift certificate
 Requires at least: 3.5
 Tested up to: 4.6.1
-Stable tag: .2.3
+Stable tag: .3
 
 == Description ==
 Setup some PMPro levels to allow for the purchase of gift certificates. A discount code for a "real" level is generated when checking out for the gift level.
