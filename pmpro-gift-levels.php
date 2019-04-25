@@ -80,9 +80,14 @@ function pmprogl_pmpro_after_checkout($user_id)
 		
 	//create new gift code
 	$code = "G" . pmpro_getDiscountCode();
-	$starts = date("Y-m-d");
-	$expires = date("Y-m-d", strtotime("+1 year"));		
-	$sqlQuery = "INSERT INTO $wpdb->pmpro_discount_codes (code, starts, expires, uses) VALUES('" . esc_sql($code) . "', '" . $starts . "', '" . $expires . "', '1')";
+	$starts = date("Y-m-d", strtotime("-1 day"));
+	$expires = date("Y-m-d", strtotime("+1 year"));
+	$uses = 1;
+	
+	$gift_code_settings = array('code' => $code, 'starts' => $starts, 'expires' => $expires, 'uses' => $uses);
+	$gift_code_settings = apply_filters( 'pmprogl_gift_code_settings', $gift_code_settings);
+			
+	$sqlQuery = "INSERT INTO $wpdb->pmpro_discount_codes (code, starts, expires, uses) VALUES('" . esc_sql($gift_code_settings[code]) . "', '" . $gift_code_settings[starts] . "', '" . $gift_code_settings[expires] . "', '$gift_code_settings[uses]')";
 	
 	if($wpdb->query($sqlQuery) !== false)
 	{
