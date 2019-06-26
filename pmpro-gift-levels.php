@@ -6,7 +6,18 @@ Description: Some levels will generate discount codes to give to others to use f
 Version: .3
 Author: Stranger Studios
 Author URI: http://www.strangerstudios.com
+Text Domain: pmpro-gift-levels
+Domain Path: /languages
 */
+
+/**
+ * Load text domain
+ * pmprogl_load_plugin_text_domain
+ */
+function pmprogl_load_plugin_text_domain() {
+	load_plugin_textdomain( 'pmpro-gift-levels', false, basename( dirname( __FILE__ ) ) . '/languages' ); 
+}
+add_action( 'plugins_loaded', 'pmprogl_load_plugin_text_domain' ); 
 
 /*
 	The Plan
@@ -178,7 +189,7 @@ function pmprogl_pmpro_confirmation_message($message)
 			
 			if(!empty($code))
 			{
-				$message .= "<p><strong>Share this link with your gift recipient: <a href=\"" . $code_url . "\">" . $code_url . "</a></strong></p>";
+				$message .= "<p><strong>" . __( "Share this link with your gift recipient", "pmpro-gift-levels" ) . ": <a href=\"" . $code_url . "\">" . $code_url . "</a></strong></p>";
 			}			
 		}
 	}
@@ -206,7 +217,7 @@ function pmprogl_the_content_account_page($content)
 		?>
 		<div id="pmpro_account-gift_codes" class="pmpro_box">	
 			 
-			<h3>Gift Codes</h3>
+			<h3><?php _e( "Gift Codes", "pmpro-gift-levels" ); ?></h3>
 			<ul>
 			<?php
 				foreach($gift_codes as $gift_code_id)
@@ -219,9 +230,13 @@ function pmprogl_the_content_account_page($content)
 						$code_use = $wpdb->get_var("SELECT user_id FROM $wpdb->pmpro_discount_codes_uses WHERE code_id = '" . intval($gift_code_id) . "' LIMIT 1");
 						?>
 						<li>
-							<?php if(!empty($code_use)) { ?>
-								<?php echo $code->code;?> claimed by <?php $code_user = get_userdata($code_use); echo $code_user->display_name;?>
-							<?php } else { ?>
+							<?php 
+							if(!empty($code_use)) 
+							{ 
+								echo $code->code, " ", __("claimed by", "pmpro-gift-levels" ), " ";
+								$code_user = get_userdata( $code_use ); 
+								echo $code_user->display_name;
+							} else { ?>
 								<a target="_blank" href="<?php echo $code_url;?>"><?php echo $code->code;?></a>
 							<?php } ?>
 						</li>
@@ -265,7 +280,7 @@ function pmprogl_pmpro_registration_checks($pmpro_continue_registration)
 			
 			if(is_array($gift_codes) && in_array($code_id, $gift_codes))
 			{
-				pmpro_setMessage("You can't use a code you purchased yourself. This was probably an accident.", "pmpro_error");
+				pmpro_setMessage( __("You can't use a code you purchased yourself. This was probably an accident.", "pmpro-gift-levels" ), "pmpro_error" );
 				return false;
 			}
 		}		
@@ -274,7 +289,7 @@ function pmprogl_pmpro_registration_checks($pmpro_continue_registration)
 	//does this level require a gift code?	
 	if(is_array($pmprogl_require_gift_code) && in_array($pmpro_level->id, $pmprogl_require_gift_code) && empty($discount_code))
 	{
-		pmpro_setMessage("You must use a valid discount code to register for this level.", "pmpro_error");
+		pmpro_setMessage( __("You must use a valid discount code to register for this level.", "pmpro-gift-levels" ), "pmpro_error" );
 		return false;
 	}					
 	
@@ -309,7 +324,7 @@ function pmprogl_pmpro_email_body($body, $pmpro_email)
             $code_url = pmpro_url("checkout", "?level=" . $pmprogl_gift_levels[$level_id]['level_id'] . "&discount_code=" . $code);
 
             if(!empty($code))
-                $body = "<p><strong>Share this link with your gift recipient: <a href=\"" . $code_url . "\">" . $code_url . "</a></strong></p>" . $body;
+                $body = "<p><strong> " . __( "Share this link with your gift recipient", "pmpro-gift-levels" ) . ": <a href=\"" . $code_url . "\">" . $code_url . "</a></strong></p>" . $body;
         }
     }
     return $body;
@@ -323,8 +338,8 @@ function pmprogl_plugin_row_meta($links, $file) {
 	if(strpos($file, 'pmpro-gift-levels.php') !== false)
 	{
 		$new_links = array(
-			'<a href="' . esc_url('http://www.paidmembershipspro.com/add-ons/plugins-on-github/pmpro-gift-levels/')  . '" title="' . esc_attr( __( 'View Documentation', 'pmpro' ) ) . '">' . __( 'Docs', 'pmpro' ) . '</a>',
-			'<a href="' . esc_url('http://paidmembershipspro.com/support/') . '" title="' . esc_attr( __( 'Visit Customer Support Forum', 'pmpro' ) ) . '">' . __( 'Support', 'pmpro' ) . '</a>',
+			'<a href="' . esc_url('http://www.paidmembershipspro.com/add-ons/plugins-on-github/pmpro-gift-levels/')  . '" title="' . esc_attr( __( 'View Documentation', 'pmpro-gift-levels' ) ) . '">' . __( 'Docs', 'pmpro-gift-levels' ) . '</a>',
+			'<a href="' . esc_url('http://paidmembershipspro.com/support/') . '" title="' . esc_attr( __( 'Visit Customer Support Forum', 'pmpro-gift-levels' ) ) . '">' . __( 'Support', 'pmpro-gift-levels' ) . '</a>',
 		);
 		$links = array_merge($links, $new_links);
 	}
