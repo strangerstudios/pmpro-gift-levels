@@ -17,7 +17,7 @@ Domain Path: /languages
 function pmprogl_load_plugin_text_domain() {
 	load_plugin_textdomain( 'pmpro-gift-levels', false, basename( dirname( __FILE__ ) ) . '/languages' ); 
 }
-add_action( 'plugins_loaded', 'pmprogl_load_plugin_text_domain' ); 
+add_action( 'init', 'pmprogl_load_plugin_text_domain' ); 
 
 /*
 	The Plan
