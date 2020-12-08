@@ -82,12 +82,16 @@ function pmprogl_pmpro_after_checkout($user_id)
 	$code = "G" . pmpro_getDiscountCode();
 	$starts = date("Y-m-d", strtotime("-1 day"));
 	$expires = date("Y-m-d", strtotime("+1 year"));
-	$uses = 1;
 	
-	$gift_code_settings = array('code' => $code, 'starts' => $starts, 'expires' => $expires, 'uses' => $uses);
-	$gift_code_settings = apply_filters( 'pmprogl_gift_code_settings', $gift_code_settings);
+	$gift_code_settings = apply_filters( 'pmprogl_gift_code_settings', array('code' => $code, 'starts' => $starts, 'expires' => $expires, 'uses' => 1 ) );
+
+	// Set variables and escape them right before the SQL query.
+	$gcode = esc_sql( $gift_code_settings['code'] );
+	$gstarts = esc_sql( $gift_code_settings['starts'] );
+	$gexpires = esc_sql( $gift_code_settings['expires'] );
+	$guses = esc_sql( $gift_code_settings['uses'] );
 			
-	$sqlQuery = "INSERT INTO $wpdb->pmpro_discount_codes (code, starts, expires, uses) VALUES('" . esc_sql($gift_code_settings[code]) . "', '" . $gift_code_settings[starts] . "', '" . $gift_code_settings[expires] . "', '$gift_code_settings[uses]')";
+	$sqlQuery = "INSERT INTO $wpdb->pmpro_discount_codes (code, starts, expires, uses) VALUES('" . esc_sql($gcode) . "', '" . $gstarts . "', '" . $gexpires . "', '$guses')";
 	
 	if($wpdb->query($sqlQuery) !== false)
 	{
