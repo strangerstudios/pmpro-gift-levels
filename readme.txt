@@ -1,9 +1,9 @@
 === Paid Memberships Pro - Gift Levels Add On ===
 Contributors: strangerstudios
 Tags: pmpro, paid memberships pro, membership, gift, gift level, gift card, giftcard, gift certificate
-Requires at least: 4
-Tested up to: 5.0.2
-Stable tag: .3
+Requires at least: 4.5
+Tested up to: 5.6
+Stable tag: 0.4
 
 == Description ==
 Setup some PMPro levels to allow for the purchase of gift certificates. A discount code for a "real" level is generated when checking out for the gift level.
@@ -52,6 +52,11 @@ $pmprogl_require_gift_code = array(6);
 Please post it in the issues section of GitHub and we'll fix it as soon as we can. Thanks for helping. https://github.com/strangerstudios/pmpro-gift-levels/issues
 
 == Changelog ==
+= 0.4 - 2020-12-09 =
+* BUG FIX: Fixed an issue when checking out with PayPal would change the user's level. User's will now keep their current level when purchasing a gift.
+* ENHANCEMENT: Plugin strings have been localized and now support translations.
+* ENHANCEMENT: New filter added to allow changing of discount code settings during checkout process. Filter: 'pmprogl_gift_code_settings'
+
 = .3 - 2019-01-08 =
 * BUG FIX: Fixed bug where Gift Levels was not working with Stripe checkout for existing users. Users are no longer given an expiration date 3 days in the future.
 

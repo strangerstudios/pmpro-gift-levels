@@ -1,0 +1,4 @@
+# Items to ignore when downloading a zip
+.gitattributes export-ignore
+pmpro-gift-levels.jpg export-ignore
+README.md export-ignore
