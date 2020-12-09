@@ -6,7 +6,7 @@
 ![License](https://img.shields.io/badge/license-GPL--2.0%2B-red.svg?style=flat-square)
 
 ### Welcome to the Paid Memberships Pro - Gift Membership GitHub Repository
-Add a description of the product here.
+Setup some PMPro levels to allow for the purchase of gift certificates. A discount code for a "real" level is generated when checking out for the gift level.
 
 For more information please visit [www.paidmembershipspro.com/add-ons/pmpro-gift-levels/](https://www.paidmembershipspro.com/add-ons/pmpro-gift-levels/)
 
