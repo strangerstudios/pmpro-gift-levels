@@ -194,7 +194,7 @@ function pmprogl_pmpro_confirmation_message($message)
 		if(!empty($last_code_id))
 		{
 			$code = $wpdb->get_row("SELECT * FROM $wpdb->pmpro_discount_codes WHERE id = '" . intval($last_code_id) . "' LIMIT 1");
-			$code_url = pmpro_url("checkout", "?level=" . $pmprogl_gift_levels[$level_id]['level_id'] . "&discount_code=" . $code->code);
+			$code_url = pmpro_url("checkout", "?level=" . $pmprogl_gift_levels[$level_id]['level_id'] . "&discount_code=" . $code->code . "&discount_source=gift");
 			
 			if(!empty($code))
 			{
@@ -235,7 +235,7 @@ function pmprogl_the_content_account_page($content)
 					if(!empty($code))
 					{
 						$code_level_id = $wpdb->get_var("SELECT level_id FROM $wpdb->pmpro_discount_codes_levels WHERE code_id = '" . intval($gift_code_id) . "' LIMIT 1");
-						$code_url = pmpro_url("checkout", "?level=" . $code_level_id . "&discount_code=" . $code->code);
+						$code_url = pmpro_url("checkout", "?level=" . $code_level_id . "&discount_code=" . $code->code . "&discount_source=gift");
 						$code_use = $wpdb->get_var("SELECT user_id FROM $wpdb->pmpro_discount_codes_uses WHERE code_id = '" . intval($gift_code_id) . "' LIMIT 1");
 						?>
 						<li>
@@ -330,7 +330,7 @@ function pmprogl_pmpro_email_body($body, $pmpro_email)
         if(!empty($code_id))
         {
             $code = $wpdb->get_var("SELECT code FROM $wpdb->pmpro_discount_codes WHERE id = '" . intval($code_id) . "' LIMIT 1");
-            $code_url = pmpro_url("checkout", "?level=" . $pmprogl_gift_levels[$level_id]['level_id'] . "&discount_code=" . $code);
+            $code_url = pmpro_url("checkout", "?level=" . $pmprogl_gift_levels[$level_id]['level_id'] . "&discount_code=" . $code . "&discount_source=gift");
 
             if(!empty($code))
                 $body = "<p><strong> " . __( "Share this link with your gift recipient", "pmpro-gift-levels" ) . ": <a href=\"" . $code_url . "\">" . $code_url . "</a></strong></p>" . $body;
