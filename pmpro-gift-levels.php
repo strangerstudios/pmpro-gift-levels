@@ -157,9 +157,7 @@ add_action("pmpro_after_checkout", "pmprogl_pmpro_after_checkout");
 function pmprogl_pmpro_checkout_before_change_membership_level() {
 	global $pmprogl_existing_member_flag, $pmprogl_gift_levels;
 
-	if ( pmpro_hasMembershipLevel()
-	&& ! empty( $_REQUEST['level'] )
-	&& ! empty( $pmprogl_gift_levels ) ) {
+	if ( ! empty( $_REQUEST['level'] ) && ! empty( $pmprogl_gift_levels ) ) {
 		$checkout_level_id = intval( $_REQUEST['level'] );
 		foreach ( $pmprogl_gift_levels as $level_id => $code ) {
 			if ( $level_id == $checkout_level_id ) {
