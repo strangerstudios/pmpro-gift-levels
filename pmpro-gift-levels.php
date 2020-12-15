@@ -333,7 +333,7 @@ function pmprogl_pmpro_email_body($body, $pmpro_email)
             $code_url = pmpro_url("checkout", "?level=" . $pmprogl_gift_levels[$level_id]['level_id'] . "&discount_code=" . $code);
 
             if(!empty($code))
-                $body = "<p><strong> " . __( "Share this link with your gift recipient", "pmpro-gift-levels" ) . ": <a href=\"" . $code_url . "\">" . $code_url . "</a></strong></p>" . $body;
+                $body .= "<p><strong> " . __( "Share this link with your gift recipient", "pmpro-gift-levels" ) . ": <a href=\"" . $code_url . "\">" . $code_url . "</a></strong></p>";
         }
     }
     return $body;
