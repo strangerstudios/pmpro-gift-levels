@@ -72,12 +72,12 @@ $pmprogl_require_gift_code = array(6);
 	When checking out for the purchase gift level, create a code.
 	
 */
-function pmprogl_pmpro_after_checkout($user_id)
+function pmprogl_pmpro_after_checkout($user_id, $morder)
 {	
 	global $pmprogl_gift_levels, $wpdb, $pmprogl_existing_member_flag;
 	
 	//which level purchased
-	$level_id = intval($_REQUEST['level']);	
+	$level_id = intval($morder->membership_level->id);	
 		
 	//gift for this? if not, stop now
 	if(empty($pmprogl_gift_levels) || empty($pmprogl_gift_levels[$level_id]))
@@ -149,18 +149,18 @@ function pmprogl_pmpro_after_checkout($user_id)
 		pmpro_set_current_user();
 	}
 }
-add_action("pmpro_after_checkout", "pmprogl_pmpro_after_checkout");
+add_action("pmpro_after_checkout", "pmprogl_pmpro_after_checkout", 10, 2);
 
 /*
  * Set existing member flags.
  */
-function pmprogl_pmpro_checkout_before_change_membership_level() {
+function pmprogl_pmpro_checkout_before_change_membership_level( $user_id, $morder ) {
 	global $pmprogl_existing_member_flag, $pmprogl_gift_levels;
 
 	if ( pmpro_hasMembershipLevel()
-	&& ! empty( $_REQUEST['level'] )
+	&& ! empty( $morder->membership_level->id )
 	&& ! empty( $pmprogl_gift_levels ) ) {
-		$checkout_level_id = intval( $_REQUEST['level'] );
+		$checkout_level_id = intval( $morder->membership_level->id );
 		foreach ( $pmprogl_gift_levels as $level_id => $code ) {
 			if ( $level_id == $checkout_level_id ) {
 				add_filter('pmpro_cancel_previous_subscriptions', '__return_false');
@@ -170,7 +170,7 @@ function pmprogl_pmpro_checkout_before_change_membership_level() {
 		}
 	}
 }
-add_action('pmpro_checkout_before_change_membership_level', 'pmprogl_pmpro_checkout_before_change_membership_level', 1);
+add_action('pmpro_checkout_before_change_membership_level', 'pmprogl_pmpro_checkout_before_change_membership_level', 1, 2);
 
 /*
 	Show last purchased gift code on the confirmation page.
