@@ -91,6 +91,9 @@ function pmprogl_pmpro_after_checkout($user_id)
 		
 	//create new gift code
 	$code = "G" . pmpro_getDiscountCode();
+	
+	// set start date to -1 day, because we want to make
+	// sure that the code is able to be used immediately
 	$starts = date("Y-m-d", strtotime("-1 day"));
 	$expires = date("Y-m-d", strtotime("+1 year"));
 	
