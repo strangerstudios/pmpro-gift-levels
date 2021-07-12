@@ -224,7 +224,7 @@ function pmprogl_the_content_account_page($content)
 {
 	global $post, $pmpro_pages, $current_user, $wpdb, $pmprogl_gift_levels;
 			
-	if(!is_admin() && $post->ID == $pmpro_pages['account'])
+	if(!is_admin() && isset( $post ) && $post->ID == $pmpro_pages['account'])
 	{
 		//get the user's last purchased gift code
 		$gift_codes = get_user_meta($current_user->ID, "pmprogl_gift_codes_purchased", true);
