@@ -146,9 +146,17 @@ function pmprogl_pmpro_after_checkout($user_id)
 		$sqlQuery = "DELETE FROM $wpdb->pmpro_memberships_users WHERE user_id = '" . $user_id . "' AND membership_id = '" . $level_id . "' ORDER BY id DESC LIMIT 1";
 		$wpdb->query($sqlQuery);
 
-		//reset user
+		// remove cached level
 		global $all_membership_levels;
-		unset($all_membership_levels[$user_id]);
+		unset( $all_membership_levels[$user_id] );
+
+		// remove levels cache for user
+		$cache_key = 'user_' . $user_id . '_levels';
+		wp_cache_delete( $cache_key, 'pmpro' );
+		wp_cache_delete( $cache_key . '_all', 'pmpro' );
+		wp_cache_delete( $cache_key . '_active', 'pmpro' );
+
+		// update user data and call action
 		pmpro_set_current_user();
 	}
 }
