@@ -231,49 +231,56 @@ function pmprogl_the_content_account_page($content)
 		
 		if(!empty($gift_codes))
 		{
-		ob_start();
-		?>
-		<div id="pmpro_account-gift_codes" class="pmpro_box">	
-			 
-			<h3><?php _e( "Gift Codes", "pmpro-gift-levels" ); ?></h3>
-			<ul>
-			<?php
-				foreach($gift_codes as $gift_code_id)
-				{
-					$code = $wpdb->get_row("SELECT * FROM $wpdb->pmpro_discount_codes WHERE id = '" . intval($gift_code_id) . "' LIMIT 1");					
-					if(!empty($code))
-					{
-						$code_level_id = $wpdb->get_var("SELECT level_id FROM $wpdb->pmpro_discount_codes_levels WHERE code_id = '" . intval($gift_code_id) . "' LIMIT 1");
-						$code_url = pmpro_url("checkout", "?level=" . $code_level_id . "&discount_code=" . $code->code);
-						$code_use = $wpdb->get_var("SELECT user_id FROM $wpdb->pmpro_discount_codes_uses WHERE code_id = '" . intval($gift_code_id) . "' LIMIT 1");
-						?>
-						<li>
-							<?php 
-							if(!empty($code_use)) 
-							{ 
-								echo $code->code, " ", __("claimed by", "pmpro-gift-levels" ), " ";
-								$code_user = get_userdata( $code_use ); 
-								echo $code_user->display_name;
-							} else { ?>
-								<a target="_blank" href="<?php echo $code_url;?>"><?php echo $code->code;?></a>
-							<?php } ?>
-						</li>
-						<?php
-					}
-				}
-			?>
-			</ul>			
-		</div>
-		<?php
-		$temp_content = ob_get_contents();
-		ob_end_clean();
-		$content = str_replace('<!-- end pmpro_account-profile -->', '<!-- end pmpro_account-profile -->' . $temp_content, $content);
-        }
-    }
+			$temp_content = pmprogl_account_gift_codes_html();
+			$content = str_replace('<!-- end pmpro_account-profile -->', '<!-- end pmpro_account-profile -->' . $temp_content, $content);
+ 		}
+	}
 	
 	return $content;
 }
 add_filter("the_content", "pmprogl_the_content_account_page", 30);
+
+function pmprogl_account_gift_codes_html(){
+	global $current_user, $wpdb;
+	
+	ob_start();
+	?>
+	<div id="pmpro_account-gift_codes" class="pmpro_box">	
+
+		<h3><?php _e( "Gift Codes", "pmpro-gift-levels" ); ?></h3>
+		<ul>
+		<?php
+			foreach($gift_codes as $gift_code_id)
+			{
+				$code = $wpdb->get_row("SELECT * FROM $wpdb->pmpro_discount_codes WHERE id = '" . intval($gift_code_id) . "' LIMIT 1");					
+				if(!empty($code))
+				{
+					$code_level_id = $wpdb->get_var("SELECT level_id FROM $wpdb->pmpro_discount_codes_levels WHERE code_id = '" . intval($gift_code_id) . "' LIMIT 1");
+					$code_url = pmpro_url("checkout", "?level=" . $code_level_id . "&discount_code=" . $code->code);
+					$code_use = $wpdb->get_var("SELECT user_id FROM $wpdb->pmpro_discount_codes_uses WHERE code_id = '" . intval($gift_code_id) . "' LIMIT 1");
+					?>
+					<li>
+						<?php 
+						if(!empty($code_use)) 
+						{ 
+							echo $code->code, " ", __("claimed by", "pmpro-gift-levels" ), " ";
+							$code_user = get_userdata( $code_use ); 
+							echo $code_user->display_name;
+						} else { ?>
+							<a target="_blank" href="<?php echo $code_url;?>"><?php echo $code->code;?></a>
+						<?php } ?>
+					</li>
+					<?php
+				}
+			}
+		?>
+		</ul>			
+	</div>
+	<?php
+	$temp_content = ob_get_contents();
+	
+	return $temp_content;
+}
 
 /*
 	Don't let users use their own gift codes.
