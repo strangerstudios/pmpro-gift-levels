@@ -392,7 +392,7 @@ add_filter("the_content", "pmprogl_the_content_account_page", 30);
 
 function pmprogl_account_gift_codes_html(){
 	global $current_user, $wpdb;
-	
+	$gift_codes = get_user_meta($current_user->ID, "pmprogl_gift_codes_purchased", true);
 	ob_start();
 	?>
 	<div id="pmpro_account-gift_codes" class="pmpro_box">	
