@@ -150,6 +150,8 @@ function pmprogl_pmpro_after_checkout($user_id)
 		// remove levels cache for user
 		$cache_key = 'user_' . $user_id . '_levels';
 		wp_cache_delete( $cache_key, 'pmpro' );
+		wp_cache_delete( $cache_key . '_all', 'pmpro' );
+		wp_cache_delete( $cache_key . '_active', 'pmpro' );
 
 		// update user data and call action
 		pmpro_set_current_user();
