@@ -528,7 +528,7 @@ function pmprogl_pmpro_email_body($body, $pmpro_email)
 }
 add_filter("pmpro_email_body", "pmprogl_pmpro_email_body", 10, 2);
 
-function pmproava_after_order_settings( $order ) {
+function pmprogl_after_order_settings( $order ) {
 	global $wpdb;
 
 	if ( empty( $order->id ) ) {
@@ -562,7 +562,7 @@ function pmproava_after_order_settings( $order ) {
 	</tr>
 	<?php
 }
-add_action( 'pmpro_after_order_settings', 'pmproava_after_order_settings', 10, 1 );
+add_action( 'pmpro_after_order_settings', 'pmprogl_after_order_settings', 10, 1 );
 
 /*
 Function to add links to the plugin row meta
