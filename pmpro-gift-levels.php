@@ -428,6 +428,7 @@ function pmprogl_account_gift_codes_html(){
 	</div>
 	<?php
 	$temp_content = ob_get_contents();
+	ob_end_clean();
 	
 	return $temp_content;
 }
