@@ -136,7 +136,7 @@ function pmprogl_pmpro_after_checkout($user_id, $morder)
 		//save gift codes
 		update_user_meta($user_id, "pmprogl_gift_codes_purchased", $gift_codes);
 
-		do_action( 'pmprogl_gift_codes_purchased', $code_id, $user_id, $morder->id );
+		do_action( 'pmprogl_gift_code_purchased', $code_id, $user_id, $morder->id );
 	}
 
 	// $pmprogl_existing_member_flag is set below.
