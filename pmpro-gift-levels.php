@@ -77,7 +77,7 @@ function pmprogl_pmpro_after_checkout($user_id, $morder)
 	global $pmprogl_gift_levels, $wpdb, $pmprogl_existing_member_flag;
 	
 	//which level purchased
-	$level_id = intval($morder->membership_level->id);	
+	$level_id = intval($morder->membership_id);	
 		
 	//gift for this? if not, stop now
 	if(empty($pmprogl_gift_levels) || empty($pmprogl_gift_levels[$level_id]))
