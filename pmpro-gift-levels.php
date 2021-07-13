@@ -81,7 +81,8 @@ $pmprogl_require_gift_code = array(6);
  * Not using $level parameter as it will not be available for PMPro version < 2.5.10.
  */
 function pmprogl_membership_level_after_other_settings() {
-	$edit_level_id          = $_REQUEST['edit'];
+	global $wpdb, $wp_version;
+	$edit_level_id = $_REQUEST['edit'];
 
 	$require_gift_code = get_pmpro_membership_level_meta( $edit_level_id, 'pmprogl_require_gift_code', true );
 	if ( empty( $require_gift_code ) ) {
@@ -89,6 +90,10 @@ function pmprogl_membership_level_after_other_settings() {
 	}
 
 	$gift_level = intval( get_pmpro_membership_level_meta( $edit_level_id, 'pmprogl_gift_level', true ) );
+	$confirmation_message = get_pmpro_membership_level_meta( $level_id, 'pmprogl_confirmation_message', true );
+	if ( empty( $confirmation_message ) ) {
+		$confirmation_message = '<p><strong>' . __( 'Share this link with your gift recipient' ) . ': <a href="!!pmprogl_gift_code_url!!">!!pmprogl_gift_code_url!!</a></p></strong>';
+	}
 
 	$expiration_number = intval( get_pmpro_membership_level_meta( $edit_level_id, 'pmprogl_expiration_number', true ) );
 	$expiration_period = get_pmpro_membership_level_meta( $edit_level_id, 'pmprogl_expiration_period', true );
@@ -125,15 +130,31 @@ function pmprogl_membership_level_after_other_settings() {
 					<label for="pmprogl_gift_level"><?php esc_html_e('Choose the level that a gift code is generated for when this level is purchased.', 'pmpro-gift-levels' );?></label>
 					<?php
 					// Show error if level has an expiration period or recurring payments set.
-					global $wpdb;
 					if ( ! empty( $current_level ) && ( ! empty( intval( $current_level->billing_amount ) ) || ! empty( intval( $current_level->expiration_number ) ) ) ) {
 						?>
-						<p class="description pmprogl_gift_level_warning" <?php if( empty( $gift_level ) ) {?>style="display: none;"<?php } ?>>
+						<p class="description pmprogl_gift_level_toggle_setting" <?php if( empty( $gift_level ) ) {?>style="display: none;"<?php } ?>>
 							<strong class="pmpro_red"><?php esc_html_e( 'Memberships with Gift Levels should not have recurring payments or an expiration period set.', 'pmpro-gift-levels' ); ?></strong>
 						</p>
 						<?php
 					}
 					?>
+				</td>
+			</tr>
+			<tr class="pmprogl_gift_level_toggle_setting" <?php if( empty( $gift_level ) ) {?>style="display: none;"<?php }  ?>>
+				<th scope="row" valign="top"><label><?php esc_html_e('Gift Confirmation Message', 'pmpro-gift-levels' );?>:</label></th>
+				<td>
+				<div class="pmpro_confirmation">
+					<?php
+						if(version_compare($wp_version, '3.3') >= 0) {
+							wp_editor( $confirmation_message, 'pmprogl_confirmation_message', array( 'textarea_rows' => 5 ) );
+						} else {
+						?>
+						<textarea rows="10" name="pmprogl_confirmation_message" id="pmprogl_confirmation_message" class="large-text"><?php echo esc_textarea($confirmation_message);?></textarea>
+						<?php
+						}
+					?>
+					<label for="pmprogl_confirmation_message"><?php esc_html_e('Available variables are !!pmprogl_gift_code!! and !!pmprogl_gift_code_url!!', 'pmpro-gift-levels' );?></label>
+					</div>
 				</td>
 			</tr>
 			<tr id="pmprogl_gift_expires_tr" <?php if( empty( $gift_level ) ) {?>style="display: none;"<?php } ?>>
@@ -165,8 +186,10 @@ function pmprogl_membership_level_after_other_settings() {
 add_action( 'pmpro_membership_level_after_other_settings', 'pmprogl_membership_level_after_other_settings' );
 
 function pmprogl_save_membership_level( $save_id ) {
-	$require_gift_code = empty( $_REQUEST['pmprogl_require_gift_code'] ) ? 'no' : 'yes';
-	$gift_level = intval( $_REQUEST['pmprogl_gift_level'] );
+	global $allowedposttags;
+	$require_gift_code    = empty( $_REQUEST['pmprogl_require_gift_code'] ) ? 'no' : 'yes';
+	$gift_level           = intval( $_REQUEST['pmprogl_gift_level'] );
+	$confirmation_message = wp_kses( wp_unslash( $_REQUEST['pmprogl_confirmation_message'] ), $allowedposttags);
 	if ( empty( $gift_level ) || empty( $_REQUEST['pmprogl_gift_expires'] ) ) {
 		$expiration_number = 0;
 		$expiration_period = 'day';
@@ -177,6 +200,7 @@ function pmprogl_save_membership_level( $save_id ) {
 	
 	update_pmpro_membership_level_meta( $save_id, 'pmprogl_require_gift_code', $require_gift_code );
 	update_pmpro_membership_level_meta( $save_id, 'pmprogl_gift_level', $gift_level );
+	update_pmpro_membership_level_meta( $save_id, 'pmprogl_confirmation_message', $confirmation_message );
 	update_pmpro_membership_level_meta( $save_id, 'pmprogl_expiration_number', $expiration_number );
 	update_pmpro_membership_level_meta( $save_id, 'pmprogl_expiration_period', $expiration_period );
 }
@@ -374,11 +398,10 @@ function pmprogl_pmpro_confirmation_message($message)
 		if(!empty($last_code_id))
 		{
 			$code = $wpdb->get_row("SELECT * FROM $wpdb->pmpro_discount_codes WHERE id = '" . intval($last_code_id) . "' LIMIT 1");
-			$code_url = pmpro_url("checkout", "?level=" . $pmprogl_gift_levels[$level_id]['level_id'] . "&discount_code=" . $code->code);
 			
 			if(!empty($code))
 			{
-				$message .= "<p><strong>" . __( "Share this link with your gift recipient", "pmpro-gift-levels" ) . ": <a href=\"" . $code_url . "\">" . $code_url . "</a></strong></p>";
+				$message .= pmprogl_get_confirmation_message( $level_id, $code->code );
 			}			
 		}
 	}
@@ -501,10 +524,10 @@ function pmprogl_email_data( $data, $pmpro_email ) {
 	// Only create these variables if we have an invoice.
 	if ( strpos($pmpro_email->template, "checkout") !== false && strpos($pmpro_email->template, "admin") == false ) {
 		// Default to empty.
-		$data['pmprogl_gift_code'] = '';
-		$data['pmprogl_gift_code_url'] = '';
-		$data['pmprogl_gift_giver_msg'] = '';
-		$data['pmprogl_hide_default_message'] = ''; // Can be used to just hide the default pmprogl email message.
+		$data['pmprogl_gift_code']                 = '';
+		$data['pmprogl_gift_code_url']             = '';
+		$data['pmprogl_confirmation_message']      = '';
+		$data['pmprogl_hide_confirmation_message'] = ''; // Can be used to just hide the default pmprogl email message.
 		if ( version_compare( '2.5', PMPRO_VERSION, '<=' ) ) {
 			// Order meta was only implemented in PMPro v2.5.
 			// Get the order that was created for this checkout.
@@ -521,7 +544,7 @@ function pmprogl_email_data( $data, $pmpro_email ) {
 					$code_url = pmpro_url("checkout", "?level=" . $pmprogl_gift_levels[ intval( $data['membership_id'] ) ]['level_id'] . "&discount_code=" . $gift_code);
 					$data['pmprogl_gift_code'] = $gift_code;
 					$data['pmprogl_gift_code_url'] = $code_url;
-					$data['pmprogl_gift_giver_msg'] = "<p><strong> " . __( "Share this link with your gift recipient", "pmpro-gift-levels" ) . ": <a href=\"" . $code_url . "\">" . $code_url . "</a></strong></p>";
+					$data['pmprogl_confirmation_message'] = pmprogl_get_confirmation_message( $data['membership_id'], $gift_code );
 				}
 			}
 		}
@@ -559,16 +582,42 @@ function pmprogl_pmpro_email_body($body, $pmpro_email)
         if(!empty($code_id))
         {
             $code = $wpdb->get_var("SELECT code FROM $wpdb->pmpro_discount_codes WHERE id = '" . intval($code_id) . "' LIMIT 1");
-            $code_url = pmpro_url("checkout", "?level=" . $pmprogl_gift_levels[$level_id]['level_id'] . "&discount_code=" . $code);
-
             if(!empty($code))
-                $body .= "<p><strong> " . __( "Share this link with your gift recipient", "pmpro-gift-levels" ) . ": <a href=\"" . $code_url . "\">" . $code_url . "</a></strong></p>";
+                $body .= pmprogl_get_confirmation_message( $level_id, $code );
         }
     }
 	unset( $pmprogl_email_template_var_used );
     return $body;
 }
 add_filter("pmpro_email_body", "pmprogl_pmpro_email_body", 10, 2);
+
+function pmprogl_get_confirmation_message( $level_id, $gift_code ) {
+	global $wpdb, $pmprogl_gift_levels;
+
+	// Get the gift membership level...
+	$gift_membership_level = $pmprogl_gift_levels[ intval( $level_id ) ]['level_id'];
+	if ( empty( $gift_membership_level ) ) {
+		// $level_id is not a gift level. Return.
+		return '';
+	}
+
+	// Get the raw confirmation message...
+	$confirmation_message = get_pmpro_membership_level_meta( $level_id, 'pmprogl_confirmation_message', true );
+	if ( empty( $confirmation_message ) ) {
+		$confirmation_message = '<p><strong>' . __( 'Share this link with your gift recipient' ) . ': <a href="!!pmprogl_gift_code_url!!">!!pmprogl_gift_code_url!!</a></p></strong>';
+	}
+
+	// Replace the variables...
+	$variables = array(
+		'pmprogl_gift_code' => $gift_code,
+		'pmprogl_gift_code_url' => pmpro_url( 'checkout', '?level=' . $gift_membership_level . '&discount_code=' . $gift_code ),
+	);
+	foreach($variables as $key => $value) {
+		$confirmation_message = str_replace( '!!' . $key . '!!', $value, $confirmation_message );
+	}
+
+	return $confirmation_message;
+}
 
 function pmprogl_after_order_settings( $order ) {
 	global $wpdb;
