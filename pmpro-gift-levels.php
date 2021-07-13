@@ -115,6 +115,7 @@ function pmprogl_membership_level_after_other_settings() {
 						<option value='0'></option>
 						<?php
 						$levels = pmpro_getAllLevels( true );
+						$current_level = $levels[ strval( $edit_level_id ) ];
 						unset( $levels[ strval( $edit_level_id ) ] );
 						foreach ( $levels as $level_id => $level ) {
 							echo "<option value='" . esc_attr( $level_id ) . "' " . selected( $gift_level, intval ( $level_id ), false ) . ">" . esc_html( $level->name ) . "</option>";
@@ -122,6 +123,17 @@ function pmprogl_membership_level_after_other_settings() {
 						?>
 					</select>
 					<label for="pmprogl_gift_level"><?php esc_html_e('Choose the level that a gift code is generated for when this level is purchased.', 'pmpro-gift-levels' );?></label>
+					<?php
+					// Show error if level has an expiration period or recurring payments set.
+					global $wpdb;
+					if ( ! empty( $current_level ) && ( ! empty( intval( $current_level->billing_amount ) ) || ! empty( intval( $current_level->expiration_number ) ) ) ) {
+						?>
+						<p class="description pmprogl_gift_level_warning" <?php if( empty( $gift_level ) ) {?>style="display: none;"<?php } ?>>
+							<strong class="pmpro_red"><?php esc_html_e( 'Memberships with Gift Levels should not have recurring payments or an expiration period set.', 'pmpro-gift-levels' ); ?></strong>
+						</p>
+						<?php
+					}
+					?>
 				</td>
 			</tr>
 			<tr id="pmprogl_gift_expires_tr" <?php if( empty( $gift_level ) ) {?>style="display: none;"<?php } ?>>
