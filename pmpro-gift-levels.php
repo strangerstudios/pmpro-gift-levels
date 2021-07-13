@@ -160,7 +160,7 @@ function pmprogl_pmpro_checkout_before_change_membership_level( $user_id, $morde
 	if ( pmpro_hasMembershipLevel()
 	&& ! empty( $morder->membership_level->id )
 	&& ! empty( $pmprogl_gift_levels ) ) {
-		$checkout_level_id = intval( $morder->membership_level->id );
+		$checkout_level_id = intval( $morder->membership_id );
 		foreach ( $pmprogl_gift_levels as $level_id => $code ) {
 			if ( $level_id == $checkout_level_id ) {
 				add_filter('pmpro_cancel_previous_subscriptions', '__return_false');
