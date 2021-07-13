@@ -300,6 +300,13 @@ function pmprogl_pmpro_after_checkout($user_id, $morder)
 		//save gift codes
 		update_user_meta($user_id, "pmprogl_gift_codes_purchased", $gift_codes);
 
+		// Attach gift code to order...
+		if ( version_compare( '2.5', PMPRO_VERSION, '<=' ) ) {
+			// Order meta was only implemented in PMPro v2.5.
+			update_pmpro_membership_order_meta( $morder->id, 'pmprogl_code_id', $code_id );
+		}
+
+
 		do_action( 'pmprogl_gift_code_purchased', $code_id, $user_id, $morder->id );
 	}
 
@@ -520,6 +527,42 @@ function pmprogl_pmpro_email_body($body, $pmpro_email)
     return $body;
 }
 add_filter("pmpro_email_body", "pmprogl_pmpro_email_body", 10, 2);
+
+function pmproava_after_order_settings( $order ) {
+	global $wpdb;
+
+	if ( empty( $order->id ) ) {
+		// This is a new order.
+		return;
+	}
+
+	if ( version_compare( '2.5', PMPRO_VERSION, '>' ) ) {
+		// Order meta was only implemented in PMPro v2.5.
+		return;
+	}
+
+	$gift_code_id = get_pmpro_membership_order_meta( $order->id, 'pmprogl_code_id', true );
+	if ( empty( $gift_code_id ) ) {
+		// No gift code was purchased with this order.
+		return;
+	}
+
+	$gift_code = $wpdb->get_var("SELECT code FROM $wpdb->pmpro_discount_codes WHERE id = '" . intval( $gift_code_id ) . "' LIMIT 1");
+	if ( empty( $gift_code ) ) {
+		$gift_code = __( '[DELETED]', 'pmpro-gift-levels' ); 
+	}
+	?>
+	<tr>
+		<th><?php esc_html_e( 'Gift Code Purchased', 'pmpro-gift-levels' ); ?></th>
+		<td>
+			<?php
+				echo esc_html( $gift_code );
+			?>
+		</td>
+	</tr>
+	<?php
+}
+add_action( 'pmpro_after_order_settings', 'pmproava_after_order_settings', 10, 1 );
 
 /*
 Function to add links to the plugin row meta
