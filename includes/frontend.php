@@ -56,7 +56,7 @@ function pmprogl_the_content_account_page($content)
 		
 		if(!empty($gift_codes))
 		{
-			$temp_content = pmprogl_account_gift_codes_html();
+			$temp_content = pmprogl_build_gift_code_table();
 			$content = str_replace('<!-- end pmpro_account-profile -->', '<!-- end pmpro_account-profile -->' . $temp_content, $content);
  		}
 	}
