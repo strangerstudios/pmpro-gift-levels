@@ -15,6 +15,11 @@ function pmprogl_membership_level_after_other_settings() {
 		$confirmation_message = '<p><strong>' . __( 'Share this link with your gift recipient' ) . ': <a href="!!pmprogl_gift_code_url!!">!!pmprogl_gift_code_url!!</a></p></strong>';
 	}
 
+	$allow_gift_emails = get_pmpro_membership_level_meta( $edit_level_id, 'pmprogl_allow_gift_emails', true );
+	if ( empty( $allow_gift_emails ) ) {
+		$allow_gift_emails = 'no';
+	}
+
 	$expiration_number = intval( get_pmpro_membership_level_meta( $edit_level_id, 'pmprogl_expiration_number', true ) );
 	$expiration_period = get_pmpro_membership_level_meta( $edit_level_id, 'pmprogl_expiration_period', true );
 	if ( empty( $expiration_period ) ) {
@@ -71,6 +76,13 @@ function pmprogl_membership_level_after_other_settings() {
 				</td>
 			</tr>
 			<tr id="pmprogl_gift_expires_tr" <?php if( empty( $gift_level ) ) {?>style="display: none;"<?php } ?>>
+ 				<th scope="row" valign="top"><label><?php esc_html_e('Allow Gift Emails', 'pmpro-gift-levels' );?>:</label></th>
+ 				<td>
+ 					<input id="pmprogl_allow_gift_emails" name="pmprogl_allow_gift_emails" type="checkbox" value="yes" <?php if( 'yes' === $allow_gift_emails ) { ?>checked="checked"<?php } ?> />
+ 					<label for="pmprogl_allow_gift_emails"><?php _e('Check to allow customers to enter an email address at checout to send the gift code to.', 'pmpro-gift-levels' );?></label>
+ 				</td>
+ 			</tr>
+			<tr id="pmprogl_gift_expires_tr" <?php if( empty( $gift_level ) ) {?>style="display: none;"<?php } ?>>
 				<th scope="row" valign="top"><label><?php esc_html_e('Gift Membership Expires', 'pmpro-gift-levels' );?>:</label></th>
 				<td>
 					<input id="pmprogl_gift_expires" name="pmprogl_gift_expires" type="checkbox" value="yes" <?php if ( $expiration_number ) { echo "checked='checked'"; } ?>/>
@@ -102,6 +114,7 @@ function pmprogl_save_membership_level( $save_id ) {
 	global $allowedposttags;
 	$gift_level           = intval( $_REQUEST['pmprogl_gift_level'] );
 	$confirmation_message = wp_kses( wp_unslash( $_REQUEST['pmprogl_confirmation_message'] ), $allowedposttags);
+	$allow_gift_emails = empty( $_REQUEST['pmprogl_allow_gift_emails'] ) ? 'no' : 'yes';
 	if ( empty( $gift_level ) || empty( $_REQUEST['pmprogl_gift_expires'] ) ) {
 		$expiration_number = 0;
 		$expiration_period = 'day';
@@ -112,6 +125,7 @@ function pmprogl_save_membership_level( $save_id ) {
 	
 	update_pmpro_membership_level_meta( $save_id, 'pmprogl_gift_level', $gift_level );
 	update_pmpro_membership_level_meta( $save_id, 'pmprogl_confirmation_message', $confirmation_message );
+	update_pmpro_membership_level_meta( $save_id, 'pmprogl_allow_gift_emails', $allow_gift_emails );
 	update_pmpro_membership_level_meta( $save_id, 'pmprogl_expiration_number', $expiration_number );
 	update_pmpro_membership_level_meta( $save_id, 'pmprogl_expiration_period', $expiration_period );
 }
@@ -149,6 +163,21 @@ function pmprogl_after_order_settings( $order ) {
 		<td>
 			<?php
 				echo esc_html( $gift_code );
+			?>
+		</td>
+	</tr>
+	<?php
+
+	$gift_recipient = get_pmpro_membership_order_meta( $order->id, 'pmprogl_recipient_email', true );
+	if ( empty( $gift_recipient ) ) {
+		return;
+	}
+	?>
+	<tr>
+		<th><?php esc_html_e( 'Gift Recipient Email', 'pmpro-gift-levels' ); ?></th>
+		<td>
+			<?php
+				echo esc_html( $gift_recipient );
 			?>
 		</td>
 	</tr>

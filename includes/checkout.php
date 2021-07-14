@@ -1,6 +1,33 @@
 <?php
 
 /**
+ * Show field to enter recipeient email at checkout.
+ *
+ * Note: Can instead add this field with Register Helper by naming a field 'pmprogl_recipient_email`
+ * and unchecking the allow gift emails box in the level settings.
+ */
+function pmprogl_checkout_boxes() {
+	global $pmpro_level, $pmprogl_gift_levels;
+	if ( ! array_key_exists( intval( $pmpro_level->id ), $pmprogl_gift_levels ) || 'yes' !== get_pmpro_membership_level_meta( $pmpro_level->id, 'pmprogl_allow_gift_emails', true ) ) {
+		return;
+	}
+	?>
+	<div id="pmprogl_checkout_box" class="pmpro_checkout">
+		<hr />
+		<h3>
+			<span class="pmpro_checkout-h3-name"><?php esc_html_e( 'Gift Code' );?></span>
+		</h3>
+		<div class="pmpro_checkout_decription"><?php esc_html_e( 'If you would like the gift code purchased to be immediately sent to the gift recipient after checout is complete, enter their email address here.' );?></div>
+		<div class="pmpro_checkout-fields">
+			<label for="pmprogl_recipient_email"><?php esc_html_e( 'Recipient Email' );?></label>
+			<input type="text" name="pmprogl_recipient_email" />
+		</div>
+	</div>
+	<?php
+}
+add_action( 'pmpro_checkout_boxes', 'pmprogl_checkout_boxes' );
+
+/**
  * Prevent checkout if a user attempts to use their own gift code
  * or if they are trying to check out for a "gift only" level
  * without a discount code.
@@ -43,6 +70,17 @@ function pmprogl_pmpro_registration_checks( $pmpro_continue_registration ) {
 	return $pmpro_continue_registration;
 }
 add_filter("pmpro_registration_checks", "pmprogl_pmpro_registration_checks");
+
+/**
+ * Save recipient email when paying offiste.
+ */
+function pmprogl_paypalexpress_session_vars() {
+	if ( isset( $_REQUEST['pmprogl_recipient_email'] ) ) {
+		$_SESSION['pmprogl_recipient_email'] = $_REQUEST['pmprogl_recipient_email'];
+	}
+}
+add_action("pmpro_paypalexpress_session_vars", "pmprogl_paypalexpress_session_vars");
+add_action("pmpro_before_send_to_twocheckout", "pmprogl_paypalexpress_session_vars", 10, 0);
 
 /**
  * Prevent user's existing membership from changing if they are checking
@@ -147,12 +185,30 @@ function pmprogl_pmpro_after_checkout($user_id, $morder)
 		//save gift codes
 		update_user_meta($user_id, "pmprogl_gift_codes_purchased", $gift_codes);
 
-		// Attach gift code to order...
+		// Get gift recipeint email if available
+		if ( ! empty( $_REQUEST['pmprogl_recipient_email'] ) ) {
+			$recipient_email = sanitize_email( $_REQUEST['pmprogl_recipient_email'] );
+		} elseif ( ! empty( $_SESSION['pmprogl_recipient_email'] ) ) {
+			$recipient_email = sanitize_email( $_SESSION['pmprogl_recipient_email'] );
+			unset( $_SESSION['pmprogl_recipient_email'] ); // In case the user checks out again after.
+		}
+
+		// Save order meta...
 		if ( version_compare( '2.5', PMPRO_VERSION, '<=' ) ) {
 			// Order meta was only implemented in PMPro v2.5.
 			update_pmpro_membership_order_meta( $morder->id, 'pmprogl_code_id', $code_id );
+			if ( ! empty( $recipient_email ) ) {
+				update_pmpro_membership_order_meta( $morder->id, 'pmprogl_recipient_email', $recipient_email );
+			}
 		}
 
+		// Send email to gift recipient...
+		if ( ! empty( $recipient_email ) ) {
+			$code = $wpdb->get_var("SELECT code FROM $wpdb->pmpro_discount_codes WHERE id = '" . intval($code_id) . "' LIMIT 1");
+			if ( ! empty( $code ) ) {
+				pmprogl_send_gift_code_to_gift_recipient( $recipient_email, $code );
+			}
+		}
 
 		do_action( 'pmprogl_gift_code_purchased', $code_id, $user_id, $morder->id );
 	}
