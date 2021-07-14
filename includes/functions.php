@@ -77,16 +77,22 @@ function pmprogl_get_confirmation_message( $level_id, $gift_code ) {
 /**
  * Build a table showing all gift codes purchased by the current user.
  *
+ * @param int|null $user_id to build table for.
  * @return string
  */
-function pmprogl_account_gift_codes_html(){
+function pmprogl_build_gift_code_table( $user_id = null ){
 	global $current_user, $wpdb;
-	$gift_codes = get_user_meta($current_user->ID, "pmprogl_gift_codes_purchased", true);
+
+	if ( empty( $user_id ) ) {
+		$user_id = $current_user->ID;
+	}
+
+	$gift_codes = get_user_meta( $user_id, "pmprogl_gift_codes_purchased", true) ;
 	ob_start();
 	?>
 	<div id="pmpro_account-gift_codes" class="pmpro_box">	
 
-		<h3><?php _e( "Gift Codes", "pmpro-gift-levels" ); ?></h3>
+		<h3><?php esc_html_e( "Gift Codes", "pmpro-gift-levels" ); ?></h3>
 		<ul>
 		<?php
 			foreach($gift_codes as $gift_code_id)
@@ -102,11 +108,11 @@ function pmprogl_account_gift_codes_html(){
 						<?php 
 						if(!empty($code_use)) 
 						{ 
-							echo $code->code, " ", __("claimed by", "pmpro-gift-levels" ), " ";
+							echo $code->code, " ", esc_html__("claimed by", "pmpro-gift-levels" ), " ";
 							$code_user = get_userdata( $code_use ); 
-							echo $code_user->display_name;
+							echo esc_html( $code_user->display_name );
 						} else { ?>
-							<a target="_blank" href="<?php echo $code_url;?>"><?php echo $code->code;?></a>
+							<a target="_blank" href="<?php echo esc_attr( $code_url );?>"><?php echo esc_html( $code->code );?></a>
 						<?php } ?>
 					</li>
 					<?php

@@ -184,3 +184,38 @@ function pmprogl_after_order_settings( $order ) {
 	<?php
 }
 add_action( 'pmpro_after_order_settings', 'pmprogl_after_order_settings', 10, 1 );
+
+/**
+ * Show gift codes that the user has purchased on the Edit User page.
+ */
+function pmprogl_after_membership_level_profile_fields( $user ) {
+	echo pmprogl_build_gift_code_table( $user->id );
+}
+add_action( 'pmpro_after_membership_level_profile_fields', 'pmprogl_after_membership_level_profile_fields' );
+
+/**
+ * Show the user who purchased a discount code while editing the code.
+ */
+function pmprogl_discount_code_after_settings( $discount_code_id ) {
+	global $wpdb;
+	if ( version_compare( '2.5', PMPRO_VERSION, '>' ) ) {
+		// Order meta was only implemented in PMPro v2.5.
+		return;
+	}
+
+	$order_id = $wpdb->get_var("SELECT pmpro_membership_order_id FROM $wpdb->pmpro_membership_ordermeta WHERE meta_key = 'pmprogl_code_id' AND meta_value = '" . intval($discount_code_id) . "' LIMIT 1");
+	if ( empty( $order_id ) ) {
+		return;
+	}
+
+	$order = new MemberOrder( $order_id );
+	if ( empty( $order->user_id ) ) {
+		return;
+	}
+
+	$user = get_userdata( $order->user_id );
+	if ( ! empty( $user ) ) {
+		echo '<strong>' . esc_html__( 'This discount code was purchased as a gift by', 'pmpro-gift-levels' ) . ' ' . '<a href="user-edit.php?user_id=' . $user->ID . '">' . $user->display_name . '</a></h3>';
+	}
+}
+add_action( 'pmpro_discount_code_after_settings', 'pmprogl_discount_code_after_settings' );
