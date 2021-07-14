@@ -262,7 +262,7 @@ function pmprogl_pmpro_after_checkout($user_id, $morder)
 	global $pmprogl_gift_levels, $wpdb, $pmprogl_existing_member_flag;
 	
 	//which level purchased
-	$level_id = intval($_REQUEST['level']);	
+	$level_id = intval($morder->membership_id);	
 		
 	//gift for this? if not, stop now
 	if(empty($pmprogl_gift_levels) || empty($pmprogl_gift_levels[$level_id]))
@@ -359,22 +359,28 @@ add_action("pmpro_after_checkout", "pmprogl_pmpro_after_checkout", 10, 2);
 /*
  * Set existing member flags.
  */
-function pmprogl_pmpro_checkout_before_change_membership_level() {
+function pmprogl_pmpro_checkout_before_change_membership_level( $user_id = false, $morder = false ) {
 	global $pmprogl_existing_member_flag, $pmprogl_gift_levels;
 
-	if ( ! empty( $_REQUEST['level'] ) && ! empty( $pmprogl_gift_levels ) ) {
-		$checkout_level_id = intval( $_REQUEST['level'] );
-		foreach ( $pmprogl_gift_levels as $level_id => $code ) {
-			if ( $level_id == $checkout_level_id ) {
-				add_filter('pmpro_cancel_previous_subscriptions', '__return_false');
-				add_filter('pmpro_deactivate_old_levels', '__return_false');
-				$pmprogl_existing_member_flag = true;
-			}
-		}
+	// Get the level that the user is checking out for.
+	if ( ! empty( $_REQUEST['level'] ) ) {
+		$level_id = intval( $_REQUEST['level'] );
+	} elseif( ! empty( $morder->membership_id ) ) {
+		$level_id = intval( $morder->membership_id );
+	} else {
+		// We don't know what level the user is checking out for.
+		return;
+	}
+
+	// If checking out for a gift level, do not cancel old membership.
+	if ( ! empty( $pmprogl_gift_levels ) && array_key_exists( $level_id, $pmprogl_gift_levels ) ) {
+		add_filter('pmpro_cancel_previous_subscriptions', '__return_false');
+		add_filter('pmpro_deactivate_old_levels', '__return_false');
+		$pmprogl_existing_member_flag = true;
 	}
 }
 add_action('pmpro_checkout_before_processing', 'pmprogl_pmpro_checkout_before_change_membership_level', 1);
-add_action('pmpro_checkout_before_change_membership_level', 'pmprogl_pmpro_checkout_before_change_membership_level', 1);
+add_action('pmpro_checkout_before_change_membership_level', 'pmprogl_pmpro_checkout_before_change_membership_level', 1, 2);
 
 /*
 	Show last purchased gift code on the confirmation page.
