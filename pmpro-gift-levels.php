@@ -84,11 +84,6 @@ function pmprogl_membership_level_after_other_settings() {
 	global $wpdb, $wp_version;
 	$edit_level_id = $_REQUEST['edit'];
 
-	$require_gift_code = get_pmpro_membership_level_meta( $edit_level_id, 'pmprogl_require_gift_code', true );
-	if ( empty( $require_gift_code ) ) {
-		$require_gift_code = 'no';
-	}
-
 	$gift_level = intval( get_pmpro_membership_level_meta( $edit_level_id, 'pmprogl_gift_level', true ) );
 	$confirmation_message = get_pmpro_membership_level_meta( $edit_level_id, 'pmprogl_confirmation_message', true );
 	if ( empty( $confirmation_message ) ) {
@@ -106,13 +101,6 @@ function pmprogl_membership_level_after_other_settings() {
 	<h2 class="title"><?php esc_html_e( 'Gift Levels', 'pmpro-gift-levels' ); ?></h2>
 	<table class="form-table">
 		<tbody>
-			<tr>
-				<th scope="row" valign="top"><label><?php esc_html_e('Require Gift Code', 'pmpro-gift-levels' );?>:</label></th>
-				<td>
-					<input id="pmprogl_require_gift_code" name="pmprogl_require_gift_code" type="checkbox" value="yes" <?php if( 'yes' === $require_gift_code ) { ?>checked="checked"<?php } ?> />
-					<label for="pmprogl_require_gift_code"><?php _e('Check to require a discount code in order to check out for this membesrhp level.', 'pmpro-gift-levels' );?></label>
-				</td>
-			</tr>
 			<tr>
 				<th scope="row" valign="top"><label><?php esc_html_e('Gift Level', 'pmpro-gift-levels' );?>:</label></th>
 				<td>
@@ -187,7 +175,6 @@ add_action( 'pmpro_membership_level_after_other_settings', 'pmprogl_membership_l
 
 function pmprogl_save_membership_level( $save_id ) {
 	global $allowedposttags;
-	$require_gift_code    = empty( $_REQUEST['pmprogl_require_gift_code'] ) ? 'no' : 'yes';
 	$gift_level           = intval( $_REQUEST['pmprogl_gift_level'] );
 	$confirmation_message = wp_kses( wp_unslash( $_REQUEST['pmprogl_confirmation_message'] ), $allowedposttags);
 	if ( empty( $gift_level ) || empty( $_REQUEST['pmprogl_gift_expires'] ) ) {
@@ -198,7 +185,6 @@ function pmprogl_save_membership_level( $save_id ) {
 		$expiration_period = sanitize_text_field( $_REQUEST['pmprogl_expiration_period'] );
 	}
 	
-	update_pmpro_membership_level_meta( $save_id, 'pmprogl_require_gift_code', $require_gift_code );
 	update_pmpro_membership_level_meta( $save_id, 'pmprogl_gift_level', $gift_level );
 	update_pmpro_membership_level_meta( $save_id, 'pmprogl_confirmation_message', $confirmation_message );
 	update_pmpro_membership_level_meta( $save_id, 'pmprogl_expiration_number', $expiration_number );
@@ -207,26 +193,15 @@ function pmprogl_save_membership_level( $save_id ) {
 add_action( 'pmpro_save_membership_level', 'pmprogl_save_membership_level', 10, 1 );
 
 function pmprogl_populate_gift_levels_array() {
-	global $pmprogl_gift_levels, $pmprogl_require_gift_code;
+	global $pmprogl_gift_levels;
 	if ( isset( $pmprogl_gift_levels ) ) {
 		// Array is already set up.
 		return;
 	}
 
 	$pmprogl_gift_levels = array();
-	if ( empty( $pmprogl_require_gift_code ) ) {
-		// If required gift code levels array is already set up, we can just extend it.
-		$pmprogl_require_gift_code = array();
-	}
-
 	$levels = pmpro_getAllLevels();
 	foreach ( $levels as $level_id => $level ) {
-		// Update $pmprogl_require_gift_code.
-		$require_gift_code = get_pmpro_membership_level_meta( $level_id, 'pmprogl_require_gift_code', true );
-		if ( $require_gift_code === 'yes' ) {
-			$pmprogl_require_gift_code[] = intval( $level_id );
-		}
-
 		// Update $pmprogl_gift_levels.
 		$gift_level = intval( get_pmpro_membership_level_meta( $level_id, 'pmprogl_gift_level', true ) );
 		if ( ! empty( $gift_level ) ) {
