@@ -71,7 +71,7 @@ function pmprogl_membership_level_after_other_settings() {
 						<?php
 						}
 					?>
-					<label for="pmprogl_confirmation_message"><?php esc_html_e('Available variables are !!pmprogl_gift_code!! and !!pmprogl_gift_code_url!!', 'pmpro-gift-levels' );?></label>
+					<label for="pmprogl_confirmation_message"><?php echo esc_html('This message will be shown on the confirmation page after checkout and in the checkout email.', 'pmpro-gift-levels' ) . '<br/>' . esc_html('Available variables are !!pmprogl_gift_code!! and !!pmprogl_gift_code_url!!', 'pmpro-gift-levels' );?></label>
 					</div>
 				</td>
 			</tr>
