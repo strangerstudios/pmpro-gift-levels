@@ -11,6 +11,8 @@ function pmprogl_checkout_boxes() {
 	if ( ! array_key_exists( intval( $pmpro_level->id ), $pmprogl_gift_levels ) || 'yes' !== get_pmpro_membership_level_meta( $pmpro_level->id, 'pmprogl_allow_gift_emails', true ) ) {
 		return;
 	}
+
+	$current_recipient_email = empty( $_REQUEST['pmprogl_recipient_email'] ) ? '' : $_REQUEST['pmprogl_recipient_email'];
 	?>
 	<div id="pmprogl_checkout_box" class="pmpro_checkout">
 		<hr />
@@ -20,7 +22,7 @@ function pmprogl_checkout_boxes() {
 		<div class="pmpro_checkout_decription"><?php esc_html_e( 'If you would like the gift code purchased to be immediately sent to the gift recipient after checout is complete, enter their email address here.' );?></div>
 		<div class="pmpro_checkout-fields">
 			<label for="pmprogl_recipient_email"><?php esc_html_e( 'Recipient Email' );?></label>
-			<input type="text" name="pmprogl_recipient_email" />
+			<input type="text" name="pmprogl_recipient_email" value="<?php echo esc_attr( $current_recipient_email ) ?>" />
 		</div>
 	</div>
 	<?php
