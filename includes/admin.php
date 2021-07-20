@@ -30,6 +30,21 @@ function pmprogl_membership_level_after_other_settings() {
 	<hr>
 	<h2 class="title"><?php esc_html_e( 'Gift Membership', 'pmpro-gift-levels' ); ?></h2>
 	<p><?php esc_html_e( 'This level can be assigned as a "gift level" that users can purchase. After checkout, the gift giver will receive a code they can share with the recipient. To enable this feature, choose a level from the dropdown below. The selected level is the level that will be given to the user who claims the gift code generated after purchase.', 'pmpro-gift-levels' ); ?> <a href="https://www.paidmembershipspro.com/add-ons/pmpro-gift-levels/?utm_source=plugin&utm_medium=pmpro-membershiplevels&utm_campaign=add-ons&utm_content=pmpro-gift-levels" target="_blank"><?php esc_html_e( 'Click here to read the Gift Membership Add On documentation.', 'pmpro-gift-levels' ); ?></a></p>
+	<?php
+		// Populate an array of all membership levels, then remove the currently edited level from the array.
+		$giftable_levels = pmpro_sort_levels_by_order( pmpro_getAllLevels(false, true) );
+		$current_level = $giftable_levels[ strval( $edit_level_id ) ];
+		unset( $giftable_levels[ strval( $edit_level_id ) ] );
+
+		// Show an error if currently edited level has a recurring subscription or membership expiration set.
+		if ( ! empty( $current_level ) && ( ! empty( intval( $current_level->billing_amount ) ) || ! empty( intval( $current_level->expiration_number ) ) ) ) {
+			?>
+			<div class="pmprogl_gift_level_toggle_setting notice error" <?php if( empty( $gift_level ) ) {?>style="display: none;"<?php } ?>>
+				<p><strong><?php esc_html_e( 'Gift Membership Warning:', 'pmpro-gift-levels' ); ?></strong> <?php esc_html_e( 'The settings of this level are not recommended. Remove the recurring subscription and membership expiration from this level.', 'pmpro-gift-levels' ); ?></p>
+			</div>
+			<?php
+		}
+	?>
 	<table class="form-table">
 		<tbody>
 			<tr>
@@ -38,24 +53,12 @@ function pmprogl_membership_level_after_other_settings() {
 					<select id="pmprogl_gift_level" name="pmprogl_gift_level">
 						<option value='0'></option>
 						<?php
-						$levels = pmpro_getAllLevels( true );
-						$current_level = $levels[ strval( $edit_level_id ) ];
-						unset( $levels[ strval( $edit_level_id ) ] );
-						foreach ( $levels as $level_id => $level ) {
+						// Show a dropdown of all membership levels, excluding the currently edited level.
+						foreach ( $giftable_levels as $level_id => $level ) {
 							echo "<option value='" . esc_attr( $level_id ) . "' " . selected( $gift_level, intval ( $level_id ), false ) . ">" . esc_html( $level->name ) . "</option>";
 						}
 						?>
 					</select>
-					<?php
-					// Show error if level has an expiration period or recurring payments set.
-					if ( ! empty( $current_level ) && ( ! empty( intval( $current_level->billing_amount ) ) || ! empty( intval( $current_level->expiration_number ) ) ) ) {
-						?>
-						<p class="description pmprogl_gift_level_toggle_setting" <?php if( empty( $gift_level ) ) {?>style="display: none;"<?php } ?>>
-							<strong class="pmpro_red"><?php esc_html_e( 'Memberships with Gift Levels should not have recurring payments or an expiration period set.', 'pmpro-gift-levels' ); ?></strong>
-						</p>
-						<?php
-					}
-					?>
 				</td>
 			</tr>
 			<tr class="pmprogl_gift_level_toggle_setting" <?php if( empty( $gift_level ) ) {?>style="display: none;"<?php }  ?>>
