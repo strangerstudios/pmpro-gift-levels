@@ -34,51 +34,6 @@ msgstr ""
 msgid "http://www.strangerstudios.com"
 msgstr ""
 
-#: pmpro-gift-levels.php:192
-#: pmpro-gift-levels.php:327
-msgid "Share this link with your gift recipient"
-msgstr ""
-
-#: pmpro-gift-levels.php:220
-#: includes/functions.php:95
-msgid "Gift Codes"
-msgstr ""
-
-#: pmpro-gift-levels.php:236
-#: includes/functions.php:111
-msgid "claimed by"
-msgstr ""
-
-#: pmpro-gift-levels.php:283
-#: includes/checkout.php:58
-msgid "You can't use a code you purchased yourself. This was probably an accident."
-msgstr ""
-
-#: pmpro-gift-levels.php:292
-#: includes/checkout.php:67
-msgid "You must use a valid discount code to register for this level."
-msgstr ""
-
-#: pmpro-gift-levels.php:341
-#: pmpro-gift-levels.php:44
-msgid "View Documentation"
-msgstr ""
-
-#: pmpro-gift-levels.php:341
-#: pmpro-gift-levels.php:44
-msgid "Docs"
-msgstr ""
-
-#: pmpro-gift-levels.php:342
-#: pmpro-gift-levels.php:45
-msgid "Visit Customer Support Forum"
-msgstr ""
-
-#: pmpro-gift-levels.php:342
-#: pmpro-gift-levels.php:45
-msgid "Support"
-msgstr ""
-
 #: includes/admin.php:31
 msgid "Gift Levels"
 msgstr ""
@@ -149,4 +104,36 @@ msgstr ""
 
 #: includes/admin.php:218
 msgid "This discount code was purchased as a gift by"
+msgstr ""
+
+#: includes/checkout.php:58
+msgid "You can't use a code you purchased yourself. This was probably an accident."
+msgstr ""
+
+#: includes/checkout.php:67
+msgid "You must use a valid discount code to register for this level."
+msgstr ""
+
+#: includes/functions.php:95
+msgid "Gift Codes"
+msgstr ""
+
+#: includes/functions.php:111
+msgid "claimed by"
+msgstr ""
+
+#: pmpro-gift-levels.php:44
+msgid "View Documentation"
+msgstr ""
+
+#: pmpro-gift-levels.php:44
+msgid "Docs"
+msgstr ""
+
+#: pmpro-gift-levels.php:45
+msgid "Visit Customer Support Forum"
+msgstr ""
+
+#: pmpro-gift-levels.php:45
+msgid "Support"
 msgstr ""
