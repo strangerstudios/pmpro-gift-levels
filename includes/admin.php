@@ -28,7 +28,8 @@ function pmprogl_membership_level_after_other_settings() {
 
 	?>
 	<hr>
-	<h2 class="title"><?php esc_html_e( 'Gift Levels', 'pmpro-gift-levels' ); ?></h2>
+	<h2 class="title"><?php esc_html_e( 'Gift Membership', 'pmpro-gift-levels' ); ?></h2>
+	<p><?php esc_html_e( 'This level can be assigned as a "gift level" that users can purchase. After checkout, the gift giver will receive a code they can share with the recipient. To enable this feature, choose a level from the dropdown below. The selected level is the level that will be given to the user who claims the gift code generated after purchase.', 'pmpro-gift-levels' ); ?> <a href="https://www.paidmembershipspro.com/add-ons/pmpro-gift-levels/?utm_source=plugin&utm_medium=pmpro-membershiplevels&utm_campaign=add-ons&utm_content=pmpro-gift-levels" target="_blank"><?php esc_html_e( 'Click here to read the Gift Membership Add On documentation.', 'pmpro-gift-levels' ); ?></a></p>
 	<table class="form-table">
 		<tbody>
 			<tr>
@@ -45,7 +46,6 @@ function pmprogl_membership_level_after_other_settings() {
 						}
 						?>
 					</select>
-					<label for="pmprogl_gift_level"><?php esc_html_e('Choose the level that a gift code is generated for when this level is purchased.', 'pmpro-gift-levels' );?></label>
 					<?php
 					// Show error if level has an expiration period or recurring payments set.
 					if ( ! empty( $current_level ) && ( ! empty( intval( $current_level->billing_amount ) ) || ! empty( intval( $current_level->expiration_number ) ) ) ) {
@@ -59,38 +59,43 @@ function pmprogl_membership_level_after_other_settings() {
 				</td>
 			</tr>
 			<tr class="pmprogl_gift_level_toggle_setting" <?php if( empty( $gift_level ) ) {?>style="display: none;"<?php }  ?>>
-				<th scope="row" valign="top"><label><?php esc_html_e('Gift Confirmation Message', 'pmpro-gift-levels' );?>:</label></th>
+				<th scope="row" valign="top"><label for="pmprogl_confirmation_message"><?php esc_html_e('Gift Confirmation Message', 'pmpro-gift-levels' );?>:</label></th>
 				<td>
-				<div class="pmpro_confirmation">
-					<?php
-						if(version_compare($wp_version, '3.3') >= 0) {
-							wp_editor( $confirmation_message, 'pmprogl_confirmation_message', array( 'textarea_rows' => 5 ) );
-						} else {
-						?>
-						<textarea rows="10" name="pmprogl_confirmation_message" id="pmprogl_confirmation_message" class="large-text"><?php echo esc_textarea($confirmation_message);?></textarea>
+					<div class="pmpro_confirmation">
 						<?php
-						}
-					?>
-					<label for="pmprogl_confirmation_message"><?php echo esc_html('This message will be shown on the confirmation page after checkout and in the checkout email.', 'pmpro-gift-levels' ) . '<br/>' . esc_html('Available variables are !!pmprogl_gift_code!! and !!pmprogl_gift_code_url!!', 'pmpro-gift-levels' );?></label>
+							if(version_compare($wp_version, '3.3') >= 0) {
+								wp_editor( $confirmation_message, 'pmprogl_confirmation_message', array( 'textarea_rows' => 5 ) );
+							} else {
+							?>
+							<textarea rows="10" name="pmprogl_confirmation_message" id="pmprogl_confirmation_message" class="large-text"><?php echo esc_textarea($confirmation_message);?></textarea>
+							<?php
+							}
+						?>
+						<p class="description">
+							<?php esc_html_e( 'This message will be shown on the confirmation page after checkout and in the checkout confirmation email.', 'pmpro-gift-levels' ); ?>
+							<?php echo wp_kses_post( 'Available variables are <code>!!pmprogl_gift_code!!</code> and <code>!!pmprogl_gift_code_url!!</code>', 'pmpro-gift-levels' ); ?>
+						</p>
 					</div>
 				</td>
 			</tr>
 			<tr id="pmprogl_gift_expires_tr" <?php if( empty( $gift_level ) ) {?>style="display: none;"<?php } ?>>
- 				<th scope="row" valign="top"><label><?php esc_html_e('Allow Gift Emails', 'pmpro-gift-levels' );?>:</label></th>
+				<th scope="row" valign="top"><?php esc_html_e('Allow Gift Emails', 'pmpro-gift-levels' ); ?>:</th>
  				<td>
  					<input id="pmprogl_allow_gift_emails" name="pmprogl_allow_gift_emails" type="checkbox" value="yes" <?php if( 'yes' === $allow_gift_emails ) { ?>checked="checked"<?php } ?> />
- 					<label for="pmprogl_allow_gift_emails"><?php _e('Check to allow customers to enter an email address at checout to send the gift code to.', 'pmpro-gift-levels' );?></label>
+					<label for="pmprogl_allow_gift_emails"><?php esc_html_e( 'Check to allow customers to enter the recipient email address at checkout.', 'pmpro-gift-levels' );?></label>
+					<p class="description"><?php esc_html_e( 'If an email address is provided, the recipient will automatically receive an email containing the gift code. You can customize the "Gift Recipient" template on the Memberships > Settings > Email Templates page in the WordPress admin.', 'pmpro-gift-levels' ); ?></p>
  				</td>
  			</tr>
 			<tr id="pmprogl_gift_expires_tr" <?php if( empty( $gift_level ) ) {?>style="display: none;"<?php } ?>>
-				<th scope="row" valign="top"><label><?php esc_html_e('Gift Membership Expires', 'pmpro-gift-levels' );?>:</label></th>
+				<th scope="row" valign="top"><?php esc_html_e('Gift Membership Expires', 'pmpro-gift-levels' ); ?>:</th>
 				<td>
 					<input id="pmprogl_gift_expires" name="pmprogl_gift_expires" type="checkbox" value="yes" <?php if ( $expiration_number ) { echo "checked='checked'"; } ?>/>
-					<label for="pmprogl_gift_expires"><?php esc_html_e('Check this to set an expiration period for gift memberships.', 'pmpro_gift_levels' );?></label>
+					<label for="pmprogl_gift_expires"><?php esc_html_e( 'Check this to set an expiration period for the gifted membership level.', 'pmpro_gift_levels' ); ?></label>
+					<p class="description"><?php esc_html_e( 'If you do not set an expiration period, the gift recipient\'s membership will never expire.', 'pmpro-gift-levels' ); ?></p>
 				</td>
 			</tr>
 			<tr id="pmprogl_period_tr" <?php if( empty( $expiration_number ) ) {?>style="display: none;"<?php } ?>>
-				<th scope="row" valign="top"><label><?php esc_html_e('Gift Expiration Period', 'pmpro-gift-levels' );?>:</label></th>
+				<th scope="row" valign="top"><label><?php esc_html_e( 'Gift Expiration Period', 'pmpro-gift-levels' );?>:</label></th>
 				<td>
 					<input id="pmprogl_expiration_number" name="pmprogl_expiration_number" type="number" value="<?php echo esc_attr( $expiration_number );?>" />
 					<select id="pmprogl_expiration_period" name="pmprogl_expiration_period">
