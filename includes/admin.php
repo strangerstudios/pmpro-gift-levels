@@ -33,8 +33,10 @@ function pmprogl_membership_level_after_other_settings() {
 	<?php
 		// Populate an array of all membership levels, then remove the currently edited level from the array.
 		$giftable_levels = pmpro_sort_levels_by_order( pmpro_getAllLevels(false, true) );
-		$current_level = $giftable_levels[ strval( $edit_level_id ) ];
-		unset( $giftable_levels[ strval( $edit_level_id ) ] );
+		if ( ! empty( strval( $edit_level_id ) ) && ! empty( $giftable_levels[ strval( $edit_level_id ) ] ) ) {
+			$current_level = $giftable_levels[ strval( $edit_level_id ) ];
+			unset( $giftable_levels[ strval( $edit_level_id ) ] );
+		}
 
 		// Show an error if currently edited level has a recurring subscription or membership expiration set.
 		if ( ! empty( $current_level ) && ( ! empty( intval( $current_level->billing_amount ) ) || ! empty( intval( $current_level->expiration_number ) ) ) ) {
