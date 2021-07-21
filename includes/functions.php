@@ -49,6 +49,11 @@ add_action( 'init', 'pmprogl_populate_gift_levels_array', 15 );
 function pmprogl_get_confirmation_message( $level_id, $gift_code ) {
 	global $wpdb, $pmprogl_gift_levels;
 
+	// Check that this is a gift membership level...
+	if ( empty( $pmprogl_gift_levels[ intval( $level_id ) ] ) ) {
+		return '';
+	}
+
 	// Get the gift membership level...
 	$gift_membership_level = $pmprogl_gift_levels[ intval( $level_id ) ]['level_id'];
 	if ( empty( $gift_membership_level ) ) {
@@ -87,7 +92,11 @@ function pmprogl_build_gift_code_table( $user_id = null ){
 		$user_id = $current_user->ID;
 	}
 
-	$gift_codes = get_user_meta( $user_id, "pmprogl_gift_codes_purchased", true) ;
+	$gift_codes = get_user_meta( $user_id, "pmprogl_gift_codes_purchased", true);
+	if ( empty( $gift_codes ) ) {
+		return '';
+	}
+
 	ob_start();
 	?>
 	<div id="pmpro_account-gift_codes" class="pmpro_box">	

@@ -19,7 +19,7 @@ function pmprogl_checkout_boxes() {
 		<h3>
 			<span class="pmpro_checkout-h3-name"><?php esc_html_e( 'Gift Code' );?></span>
 		</h3>
-		<div class="pmpro_checkout_decription"><?php esc_html_e( 'If you would like the gift code purchased to be immediately sent to the gift recipient after checout is complete, enter their email address here.' );?></div>
+		<div class="pmpro_checkout_decription"><?php esc_html_e( 'If you would like the gift code purchased to be immediately sent to the gift recipient after checkout is complete, enter their email address here.' );?></div>
 		<div class="pmpro_checkout-fields">
 			<label for="pmprogl_recipient_email"><?php esc_html_e( 'Recipient Email' );?></label>
 			<input type="text" name="pmprogl_recipient_email" value="<?php echo esc_attr( $current_recipient_email ) ?>" />
