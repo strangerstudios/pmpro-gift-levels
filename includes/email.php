@@ -96,9 +96,13 @@ function pmprogl_send_gift_code_to_gift_recipient( $recipient_email, $gift_code 
 
 	add_filter( 'option_pmpro_email_header_disabled', '__return_true', 15 );
 	add_filter( 'default_option_pmpro_email_header_disabled', '__return_true', 15 );
+	add_filter( 'option_pmpro_email_footer_disabled', '__return_true', 15 );
+	add_filter( 'default_option_pmpro_email_footer_disabled', '__return_true', 15 );
 	$email->sendEmail();
 	remove_filter( 'option_pmpro_email_header_disabled', '__return_true', 15 );
 	remove_filter( 'default_option_pmpro_email_header_disabled', '__return_true', 15 );
+	remove_filter( 'option_pmpro_email_footer_disabled', '__return_true', 15 );
+	remove_filter( 'default_option_pmpro_email_footer_disabled', '__return_true', 15 );
 }
 
 /**
