@@ -10,6 +10,11 @@ function pmprogl_populate_gift_levels_array() {
 		return;
 	}
 
+	if ( ! function_exists( 'pmpro_getAllLevels' ) ) {
+		// PMPro is not active.
+		return;
+	}
+
 	$pmprogl_gift_levels = array();
 	$levels = pmpro_getAllLevels();
 	foreach ( $levels as $level_id => $level ) {
