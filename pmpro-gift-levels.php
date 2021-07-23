@@ -11,6 +11,7 @@ Domain Path: /languages
 */
 
 define( 'PMPROGL_VERSION', '0.4' );
+define( 'PMPROGL_BASE_FILE', __FILE__ );
 define( 'PMPROGL_DIR', dirname( __FILE__ ) );
 
 require_once( PMPROGL_DIR . '/includes/functions.php' );
@@ -25,12 +26,12 @@ require_once( PMPROGL_DIR . '/includes/frontend.php' ); // Show content on front
  * pmprogl_load_plugin_text_domain
  */
 function pmprogl_load_plugin_text_domain() {
-	load_plugin_textdomain( 'pmpro-gift-levels', false, basename( dirname( __FILE__ ) ) . '/languages' ); 
+	load_plugin_textdomain( 'pmpro-gift-levels', false, basename( PMPROGL_DIR ) . '/languages' ); 
 }
 add_action( 'init', 'pmprogl_load_plugin_text_domain' ); 
 
 function pmprogl_admin_enqueue_scripts() {
-	wp_enqueue_script( 'pmprogl_admin', plugins_url( 'js/pmprogl-admin.js', __FILE__ ), array( 'jquery' ), PMPROGL_VERSION  );
+	wp_enqueue_script( 'pmprogl_admin', plugins_url( 'js/pmprogl-admin.js', PMPROGL_BASE_FILE ), array( 'jquery' ), PMPROGL_VERSION  );
 }
 add_action( 'admin_enqueue_scripts', 'pmprogl_admin_enqueue_scripts' );
 

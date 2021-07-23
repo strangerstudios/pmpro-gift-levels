@@ -84,15 +84,16 @@ function pmprogl_pmpro_email_body($body, $pmpro_email)
 }
 add_filter("pmpro_email_body", "pmprogl_pmpro_email_body", 10, 2);
 
-function pmprogl_send_gift_code_to_gift_recipient( $recipient_email, $gift_code ) {
+function pmprogl_send_gift_code_to_gift_recipient( $recipient_email, $gift_message, $gift_code ) {
 	global $pmprogl_gift_levels;
 
 	$email = new PMProEmail();
 	$email->email = $recipient_email;
 	$email->template = "pmprogl_gift_recipient";
-	$email->subject = esc_html__( "You have been gifted a membership to ", 'pmpro_gift_levels' ) . get_bloginfo('name') . "!";
-	$email->body = '<p>' . esc_html__( 'Use this link to setup your membership', 'pmpro-gift_levels' ) . ': <a href="!!pmprogl_gift_code_url!!">!!pmprogl_gift_code_url!!</a></p>';
-	$email->gift_code = $gift_code; // Save this for later.
+	$email->subject = esc_html__( "You have been gifted a membership to ", 'pmpro_gift_levels' ) . "!!sitename!!!";
+	$email->body = pmprogl_get_default_gift_recipient_email_body();
+	$email->pmprogl_gift_message = $gift_message; // Save this for later.
+	$email->pmprogl_gift_code = $gift_code; // Save this for later.
 
 	add_filter( 'option_pmpro_email_header_disabled', '__return_true', 15 );
 	add_filter( 'default_option_pmpro_email_header_disabled', '__return_true', 15 );
@@ -110,11 +111,11 @@ function pmprogl_send_gift_code_to_gift_recipient( $recipient_email, $gift_code 
  *
  * @param array $templates that can be edited.
  */
-function pmprogl_template_callback( $templates ) {	
+function pmprogl_template_callback( $templates ) {
 	$templates['pmprogl_gift_recipient'] = array(
-		'subject' => esc_html__( "You have been gifted a membership to ", 'pmpro_gift_levels' ) . get_bloginfo('name') . "!",
+		'subject' => esc_html__( "You have been gifted a membership to ", 'pmpro_gift_levels' ) . "!!sitename!!!",
 		'description' => 'Gift Recipient',
-		'body' => '<p>' . esc_html__( 'Use this link to setup your membership', 'pmpro-gift_levels' ) . ': <a href="!!pmprogl_gift_code_url!!">!!pmprogl_gift_code_url!!</a></p>',
+		'body' => pmprogl_get_default_gift_recipient_email_body(),
 	);
 	
 	return $templates;
@@ -129,14 +130,35 @@ add_filter( 'pmproet_templates', 'pmprogl_template_callback');
  * @return array
  */
 function pmprogl_gift_recipient_email_data( $data, $pmpro_email ) {
-	global $pmprogl_gift_levels, $pmpro_level;
+	global $pmprogl_gift_levels, $pmpro_level, $current_user;
 	if ( $pmpro_email->template === 'pmprogl_gift_recipient' ) {
-		if ( empty( $pmpro_email->gift_code ) ) {
-			$pmpro_email->gift_code = '';
+		if ( empty( $pmpro_email->pmprogl_gift_code ) ) {
+			$pmpro_email->pmprogl_gift_code = '';
 		}
-		$data['pmprogl_gift_code']     = $pmpro_email->gift_code;
-		$data['pmprogl_gift_code_url'] = pmpro_url("checkout", "?level=" . $pmprogl_gift_levels[ intval( $pmpro_level->id ) ]['level_id'] . "&discount_code=" . $pmpro_email->gift_code);
+		if ( empty( $pmpro_email->pmprogl_gift_message ) ) {
+			$empty_gift_message = '[' . esc_html__( 'No Message Provided', 'pmpro-gift-levels' ) . ']';
+			$pmpro_email->pmprogl_gift_message = apply_filters( 'pmprogl_empty_gift_message', $empty_gift_message, $pmpro_email );
+		}
+		$data['pmprogl_giver_display_name']   = $current_user->display_name;
+		$data['pmprogl_gift_message']  = $pmpro_email->pmprogl_gift_message;
+		$data['pmprogl_gift_code']     = $pmpro_email->pmprogl_gift_code;
+		$data['pmprogl_gift_code_url'] = pmpro_url("checkout", "?level=" . $pmprogl_gift_levels[ intval( $pmpro_level->id ) ]['level_id'] . "&discount_code=" . $pmpro_email->pmprogl_gift_code);
 	}
 	return $data;
 }
 add_filter( 'pmpro_email_data', 'pmprogl_gift_recipient_email_data', 10, 2 );
+
+function pmprogl_get_default_gift_recipient_email_body() {
+	ob_start();
+	?>
+<p><?php esc_html_e( '!!pmprogl_giver_display_name!! has just sent you a gift membership to !!sitename!!!', 'pmpro-gift_levels' ); ?></p>
+
+<p><?php esc_html_e( 'Message:', 'pmpro-gift_levels' ); ?></p>
+<p>!!pmprogl_gift_message!!</p>
+<hr>
+<p><?php esc_html_e( 'Use this link to setup your membership', 'pmpro-gift_levels' ); ?>: <a href="!!pmprogl_gift_code_url!!">!!pmprogl_gift_code_url!!</a></p>
+	<?php
+	$body = ob_get_contents();
+	ob_end_clean();
+	return $body;
+}

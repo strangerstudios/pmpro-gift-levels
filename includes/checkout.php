@@ -13,21 +13,44 @@ function pmprogl_checkout_boxes() {
 	}
 
 	$current_recipient_email = empty( $_REQUEST['pmprogl_recipient_email'] ) ? '' : $_REQUEST['pmprogl_recipient_email'];
+	$current_gift_message = empty( $_REQUEST['pmprogl_gift_message'] ) ? '' : $_REQUEST['pmprogl_gift_message'];
+
+	$send_recipient_email_checked = empty( $current_recipient_email . $current_gift_message ) ? '' : ' checked';
+	$gift_field_style_attr = empty( $current_recipient_email . $current_gift_message ) ? 'style="display:none;"' : '';
+
 	?>
 	<div id="pmprogl_checkout_box" class="pmpro_checkout">
 		<hr />
 		<h3>
 			<span class="pmpro_checkout-h3-name"><?php esc_html_e( 'Gift Code' );?></span>
 		</h3>
-		<div class="pmpro_checkout_decription"><?php esc_html_e( 'If you would like the gift code purchased to be immediately sent to the gift recipient after checkout is complete, enter their email address here.' );?></div>
-		<div class="pmpro_checkout-fields">
+		<div class="pmpro_checkout-field">
+			<label for="pmprogl_send_recipient_email"><?php esc_html_e( 'Automatically email gift code to recipient after checkout' );?></label>
+			<input type="checkbox" id="pmprogl_send_recipient_email" name="pmprogl_send_recipient_email" value="1" <?php echo $send_recipient_email_checked; ?> />
+		</div>
+		<div class="pmpro_checkout-field pmprogl_checkout_field_div" <?php echo $gift_field_style_attr ?>>
 			<label for="pmprogl_recipient_email"><?php esc_html_e( 'Recipient Email' );?></label>
 			<input type="text" name="pmprogl_recipient_email" value="<?php echo esc_attr( $current_recipient_email ) ?>" />
+		</div>
+		<div class="pmpro_checkout-field pmprogl_checkout_field_div" <?php echo $gift_field_style_attr ?>>
+			<label for="pmprogl_gift_message"><?php esc_html_e( 'Gift Message' );?></label>
+			<textarea name="pmprogl_gift_message"><?php echo esc_textarea( $current_gift_message ); ?> </textarea>
 		</div>
 	</div>
 	<?php
 }
 add_action( 'pmpro_checkout_boxes', 'pmprogl_checkout_boxes' );
+
+/**
+ * Enqueue frontend JavaScript and CSS
+ */
+function pmprogl_enqueue_checkout_script() {
+	// Checkout page JS
+	if ( pmpro_is_checkout() ) {
+		wp_enqueue_script( 'pmprogl_checkout', plugins_url( 'js/pmprogl-checkout.js', PMPROGL_BASE_FILE ), array( 'jquery' ), PMPROGL_VERSION  );
+	}
+}
+add_action( 'wp_enqueue_scripts', 'pmprogl_enqueue_checkout_script' );
 
 /**
  * Prevent checkout if a user attempts to use their own gift code
@@ -77,8 +100,14 @@ add_filter("pmpro_registration_checks", "pmprogl_pmpro_registration_checks");
  * Save recipient email when paying offiste.
  */
 function pmprogl_paypalexpress_session_vars() {
+	if ( isset( $_REQUEST['pmprogl_send_recipient_email'] ) ) {
+		$_SESSION['pmprogl_send_recipient_email'] = $_REQUEST['pmprogl_send_recipient_email'];
+	}
 	if ( isset( $_REQUEST['pmprogl_recipient_email'] ) ) {
 		$_SESSION['pmprogl_recipient_email'] = $_REQUEST['pmprogl_recipient_email'];
+	}
+	if ( isset( $_REQUEST['pmprogl_gift_message'] ) ) {
+		$_SESSION['pmprogl_gift_message'] = $_REQUEST['pmprogl_gift_message'];
 	}
 }
 add_action("pmpro_paypalexpress_session_vars", "pmprogl_paypalexpress_session_vars");
@@ -188,12 +217,16 @@ function pmprogl_pmpro_after_checkout($user_id, $morder)
 		update_user_meta($user_id, "pmprogl_gift_codes_purchased", $gift_codes);
 
 		// Get gift recipeint email if available
-		if ( ! empty( $_REQUEST['pmprogl_recipient_email'] ) ) {
+		if ( ! empty( $_REQUEST['pmprogl_send_recipient_email'] ) && ! empty( $_REQUEST['pmprogl_recipient_email'] ) ) {
 			$recipient_email = sanitize_email( $_REQUEST['pmprogl_recipient_email'] );
-		} elseif ( ! empty( $_SESSION['pmprogl_recipient_email'] ) ) {
+			$gift_message    = empty( $_REQUEST['pmprogl_gift_message'] ) ? '' : sanitize_textarea_field( $_REQUEST['pmprogl_gift_message'] );
+		} elseif ( ! empty( $_SESSION['pmprogl_send_recipient_email'] ) && ! empty( $_SESSION['pmprogl_recipient_email'] ) ) {
 			$recipient_email = sanitize_email( $_SESSION['pmprogl_recipient_email'] );
-			unset( $_SESSION['pmprogl_recipient_email'] ); // In case the user checks out again after.
+			$gift_message    = empty( $_SESSION['pmprogl_gift_message'] ) ? '' : sanitize_textarea_field( $_SESSION['pmprogl_gift_message'] );
 		}
+		unset( $_SESSION['pmprogl_send_recipient_email'] ); // In case the user checks out again after.
+		unset( $_SESSION['pmprogl_recipient_email'] ); // In case the user checks out again after.
+		unset( $_SESSION['pmprogl_gift_message'] ); // In case the user checks out again after.
 
 		// Save order meta...
 		if ( version_compare( '2.5', PMPRO_VERSION, '<=' ) ) {
@@ -202,13 +235,16 @@ function pmprogl_pmpro_after_checkout($user_id, $morder)
 			if ( ! empty( $recipient_email ) ) {
 				update_pmpro_membership_order_meta( $morder->id, 'pmprogl_recipient_email', $recipient_email );
 			}
+			if ( ! empty( $gift_message ) ) {
+				update_pmpro_membership_order_meta( $morder->id, 'pmprogl_gift_message', $gift_message );
+			}
 		}
 
 		// Send email to gift recipient...
 		if ( ! empty( $recipient_email ) ) {
 			$code = $wpdb->get_var("SELECT code FROM $wpdb->pmpro_discount_codes WHERE id = '" . intval($code_id) . "' LIMIT 1");
 			if ( ! empty( $code ) ) {
-				pmprogl_send_gift_code_to_gift_recipient( $recipient_email, $code );
+				pmprogl_send_gift_code_to_gift_recipient( $recipient_email, $gift_message, $code );
 			}
 		}
 
