@@ -19,8 +19,9 @@ function pmprogl_populate_gift_levels_array() {
 	$levels = pmpro_getAllLevels();
 	foreach ( $levels as $level_id => $level ) {
 		// Update $pmprogl_gift_levels.
-		$gift_level = intval( get_pmpro_membership_level_meta( $level_id, 'pmprogl_gift_level', true ) );
-		if ( ! empty( $gift_level ) ) {
+		$gift_level_enabled = get_pmpro_membership_level_meta( $level_id, 'pmprogl_enabled_for_level', true );
+		if ( 'yes' === $gift_level_enabled ) {
+			$gift_level = intval( get_pmpro_membership_level_meta( $level_id, 'pmprogl_gift_level', true ) );
 			$expiration_number = intval( get_pmpro_membership_level_meta( $level_id, 'pmprogl_expiration_number', true ) );
 			$expiration_period = get_pmpro_membership_level_meta( $level_id, 'pmprogl_expiration_period', true );
 			if ( empty( $expiration_period ) ) {
