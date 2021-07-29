@@ -270,5 +270,20 @@ function pmprogl_pmpro_after_checkout($user_id, $morder)
 		// update user data and call action
 		pmpro_set_current_user();
 	}
+
+	// Send user to invoice after checkout instead of confirmation page since we took their level away.
+	add_action( 'pmpro_confirmation_url', 'pmprogl_overwrite_confirmation_url', 10, 2 );
 }
 add_action("pmpro_after_checkout", "pmprogl_pmpro_after_checkout", 10, 2);
+
+function pmprogl_overwrite_confirmation_url( $url, $user_id ) {
+	$morder = new MemberOrder();
+	$morder->getLastMemberOrder( $user_id );
+	if ( ! empty ( $morder->code ) ) {
+		$invoice_url = pmpro_url( 'invoice', '?invoice=' . $morder->code );
+		if ( ! empty( $invoice_url ) ) {
+			$url = $invoice_url;
+		}
+	}
+	return $url;
+}
