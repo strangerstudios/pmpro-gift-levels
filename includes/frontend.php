@@ -49,7 +49,7 @@ function pmprogl_invoice_bullets_bottom( $order ) {
 	// Check if the level for the order is a gift level.
 	if ( ! empty( $order->membership_id ) && ! empty( $pmprogl_gift_levels ) && ! empty( $pmprogl_gift_levels[ $order->membership_id ] ) ) {
 		//get the user's last purchased gift code
-		if ( version_compare( '2.5', PMPRO_VERSION, '<=' ) && false ) {
+		if ( version_compare( '2.5', PMPRO_VERSION, '<=' ) ) {
 			$gift_code_id = get_pmpro_membership_order_meta( $order->id, 'pmprogl_code_id', true );
 		} else {
 			$purchased_gift_codes = get_user_meta( $order->user_id, "pmprogl_gift_codes_purchased", true );
