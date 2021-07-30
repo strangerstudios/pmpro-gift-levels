@@ -60,41 +60,49 @@ add_action( 'wp_enqueue_scripts', 'pmprogl_enqueue_checkout_script' );
  * @param bool $pmpro_continue_registration whether checkout is valid.
  * @return bool
  */
-function pmprogl_pmpro_registration_checks( $pmpro_continue_registration ) {		
-	global $current_user, $pmpro_level, $discount_code, $wpdb, $pmprogl_require_gift_code;
+function pmprogl_registration_checks_own_code( $pmpro_continue_registration ) {		
+	global $current_user, $discount_code, $wpdb;
 
 	//only bother if things are okay so far
-	if(!$pmpro_continue_registration)
+	if ( ! $pmpro_continue_registration ) {
 		return $pmpro_continue_registration;
+	}
 		
 	//don't let users use their own gift codes (probably an accident)
-	if(!empty($discount_code) && !empty($current_user->ID))
-	{
+	if ( ! empty( $discount_code ) && ! empty( $current_user->ID ) ) {
 		$code_id = $wpdb->get_var("SELECT id FROM $wpdb->pmpro_discount_codes WHERE code = '" . esc_sql($discount_code) . "' LIMIT 1");
-		
-		if(!empty($code_id))
-		{
+		if ( ! empty( $code_id ) ) {
 			$gift_codes = get_user_meta($current_user->ID, "pmprogl_gift_codes_purchased", true);
-			
-			if(is_array($gift_codes) && in_array($code_id, $gift_codes))
-			{
-				pmpro_setMessage( __("You can't use a code you purchased yourself. This was probably an accident.", "pmpro-gift-levels" ), "pmpro_error" );
+			if ( is_array( $gift_codes ) && in_array( $code_id, $gift_codes ) ) {
+				pmpro_setMessage( __( "You can't use a code you purchased yourself. This was probably an accident.", "pmpro-gift-levels" ), "pmpro_error" );
 				return false;
 			}
 		}		
+	}				
+
+	//okay
+	return $pmpro_continue_registration;
+}
+add_filter( "pmpro_registration_checks", "pmprogl_registration_checks_own_code" );
+
+function pmprogl_registration_check_require_gift_code( $pmpro_continue_registration ) {		
+	global $pmpro_level, $discount_code, $pmprogl_require_gift_code;
+
+	//only bother if things are okay so far
+	if ( ! $pmpro_continue_registration ) {
+		return $pmpro_continue_registration;
 	}
 	
 	//does this level require a gift code?	
-	if(is_array($pmprogl_require_gift_code) && in_array($pmpro_level->id, $pmprogl_require_gift_code) && empty($discount_code))
-	{
-		pmpro_setMessage( __("You must use a valid discount code to register for this level.", "pmpro-gift-levels" ), "pmpro_error" );
+	if ( is_array( $pmprogl_require_gift_code ) && in_array( $pmpro_level->id, $pmprogl_require_gift_code ) && empty( $discount_code ) ) {
+		pmpro_setMessage( __( "You must use a valid discount code to register for this level.", "pmpro-gift-levels" ), "pmpro_error" );
 		return false;
 	}					
 	
 	//okay
 	return $pmpro_continue_registration;
 }
-add_filter("pmpro_registration_checks", "pmprogl_pmpro_registration_checks");
+add_filter( "pmpro_registration_checks", "pmprogl_registration_check_require_gift_code" );
 
 /**
  * Save recipient email when paying offiste.
