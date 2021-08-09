@@ -86,7 +86,7 @@ function pmprogl_membership_level_after_other_settings() {
 							}
 						?>
 						<p class="description">
-							<?php esc_html_e( 'This message will be shown on the confirmation page after checkout and in the checkout confirmation email.', 'pmpro-gift-levels' ); ?>
+							<?php esc_html_e( 'This message will be shown in the checkout confirmation email.', 'pmpro-gift-levels' ); ?>
 							<?php echo wp_kses_post( 'Available variables are <code>!!pmprogl_gift_code!!</code> and <code>!!pmprogl_gift_code_url!!</code>', 'pmpro-gift-levels' ); ?>
 						</p>
 					</div>
