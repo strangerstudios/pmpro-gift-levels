@@ -1,6 +1,36 @@
 <?php
 
 /**
+ * Add gift code to frontend invoice page.
+ *
+ * @param MemberOrder $order being shown to user.
+ */
+function pmprogl_invoice_bullets_bottom( $order ) {
+	global $pmprogl_gift_levels, $wpdb;
+
+	// Check if the level for the order is a gift level.
+	if ( ! empty( $order->membership_id ) && ! empty( $pmprogl_gift_levels ) && ! empty( $pmprogl_gift_levels[ $order->membership_id ] ) ) {
+		//get the user's last purchased gift code
+		if ( version_compare( '2.5', PMPRO_VERSION, '<=' ) ) {
+			$gift_code_id = get_pmpro_membership_order_meta( $order->id, 'pmprogl_code_id', true );
+		} else {
+			$purchased_gift_codes = get_user_meta( $order->user_id, "pmprogl_gift_codes_purchased", true );
+			if ( is_array( $purchased_gift_codes ) ) {
+				$gift_code_id = end( $purchased_gift_codes );
+			}
+		}
+		
+		if ( ! empty( $gift_code_id ) ) {
+			$code = $wpdb->get_row( "SELECT * FROM $wpdb->pmpro_discount_codes WHERE id = '" . intval( $gift_code_id ) . "' LIMIT 1" );
+			if ( ! empty( $code ) ) {
+				?><li><strong><?php _e('Gift Code', 'pmprogl');?>: </strong><?php echo $code->code;?></li><?php
+			}			
+		}
+	}
+}
+add_filter( 'pmpro_invoice_bullets_bottom', 'pmprogl_invoice_bullets_bottom' );
+
+/**
  * Show all gift codes that the current user has purchased on the PMPro
  * Account page.
  *

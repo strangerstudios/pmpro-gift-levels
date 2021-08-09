@@ -60,41 +60,49 @@ add_action( 'wp_enqueue_scripts', 'pmprogl_enqueue_checkout_script' );
  * @param bool $pmpro_continue_registration whether checkout is valid.
  * @return bool
  */
-function pmprogl_pmpro_registration_checks( $pmpro_continue_registration ) {		
-	global $current_user, $pmpro_level, $discount_code, $wpdb, $pmprogl_require_gift_code;
+function pmprogl_registration_checks_own_code( $pmpro_continue_registration ) {		
+	global $current_user, $discount_code, $wpdb;
 
 	//only bother if things are okay so far
-	if(!$pmpro_continue_registration)
+	if ( ! $pmpro_continue_registration ) {
 		return $pmpro_continue_registration;
+	}
 		
 	//don't let users use their own gift codes (probably an accident)
-	if(!empty($discount_code) && !empty($current_user->ID))
-	{
+	if ( ! empty( $discount_code ) && ! empty( $current_user->ID ) ) {
 		$code_id = $wpdb->get_var("SELECT id FROM $wpdb->pmpro_discount_codes WHERE code = '" . esc_sql($discount_code) . "' LIMIT 1");
-		
-		if(!empty($code_id))
-		{
+		if ( ! empty( $code_id ) ) {
 			$gift_codes = get_user_meta($current_user->ID, "pmprogl_gift_codes_purchased", true);
-			
-			if(is_array($gift_codes) && in_array($code_id, $gift_codes))
-			{
-				pmpro_setMessage( __("You can't use a code you purchased yourself. This was probably an accident.", "pmpro-gift-levels" ), "pmpro_error" );
+			if ( is_array( $gift_codes ) && in_array( $code_id, $gift_codes ) ) {
+				pmpro_setMessage( __( "You can't use a code you purchased yourself. This was probably an accident.", "pmpro-gift-levels" ), "pmpro_error" );
 				return false;
 			}
 		}		
+	}				
+
+	//okay
+	return $pmpro_continue_registration;
+}
+add_filter( "pmpro_registration_checks", "pmprogl_registration_checks_own_code" );
+
+function pmprogl_registration_check_require_gift_code( $pmpro_continue_registration ) {		
+	global $pmpro_level, $discount_code, $pmprogl_require_gift_code;
+
+	//only bother if things are okay so far
+	if ( ! $pmpro_continue_registration ) {
+		return $pmpro_continue_registration;
 	}
 	
 	//does this level require a gift code?	
-	if(is_array($pmprogl_require_gift_code) && in_array($pmpro_level->id, $pmprogl_require_gift_code) && empty($discount_code))
-	{
-		pmpro_setMessage( __("You must use a valid discount code to register for this level.", "pmpro-gift-levels" ), "pmpro_error" );
+	if ( is_array( $pmprogl_require_gift_code ) && in_array( $pmpro_level->id, $pmprogl_require_gift_code ) && empty( $discount_code ) ) {
+		pmpro_setMessage( __( "You must use a valid discount code to register for this level.", "pmpro-gift-levels" ), "pmpro_error" );
 		return false;
 	}					
 	
 	//okay
 	return $pmpro_continue_registration;
 }
-add_filter("pmpro_registration_checks", "pmprogl_pmpro_registration_checks");
+add_filter( "pmpro_registration_checks", "pmprogl_registration_check_require_gift_code" );
 
 /**
  * Save recipient email when paying offiste.
@@ -121,7 +129,7 @@ add_action("pmpro_before_send_to_twocheckout", "pmprogl_paypalexpress_session_va
  * @param MemberOrder|bool $morder created at checkout.
  */
 function pmprogl_pmpro_checkout_before_change_membership_level( $user_id = false, $morder = false ) {
-	global $pmprogl_existing_member_flag, $pmprogl_gift_levels;
+	global $pmprogl_gift_levels;
 
 	// Get the level that the user is checking out for.
 	if ( ! empty( $_REQUEST['level'] ) ) {
@@ -137,7 +145,6 @@ function pmprogl_pmpro_checkout_before_change_membership_level( $user_id = false
 	if ( ! empty( $pmprogl_gift_levels ) && array_key_exists( $level_id, $pmprogl_gift_levels ) ) {
 		add_filter('pmpro_cancel_previous_subscriptions', '__return_false');
 		add_filter('pmpro_deactivate_old_levels', '__return_false');
-		$pmprogl_existing_member_flag = true;
 	}
 }
 add_action('pmpro_checkout_before_processing', 'pmprogl_pmpro_checkout_before_change_membership_level', 1);
@@ -151,7 +158,7 @@ add_action('pmpro_checkout_before_change_membership_level', 'pmprogl_pmpro_check
  */
 function pmprogl_pmpro_after_checkout($user_id, $morder)
 {	
-	global $pmprogl_gift_levels, $wpdb, $pmprogl_existing_member_flag;
+	global $pmprogl_gift_levels, $wpdb;
 	
 	//which level purchased
 	$level_id = intval($morder->membership_id);	
@@ -251,25 +258,22 @@ function pmprogl_pmpro_after_checkout($user_id, $morder)
 		do_action( 'pmprogl_gift_code_purchased', $code_id, $user_id, $morder->id );
 	}
 
-	// $pmprogl_existing_member_flag is set below.
-	if(isset($pmprogl_existing_member_flag)) {
-		//remove last row added to members_users table
-		$sqlQuery = "DELETE FROM $wpdb->pmpro_memberships_users WHERE user_id = '" . $user_id . "' AND membership_id = '" . $level_id . "' ORDER BY id DESC LIMIT 1";
-		$wpdb->query($sqlQuery);
+	//remove last row added to members_users table
+	$sqlQuery = "DELETE FROM $wpdb->pmpro_memberships_users WHERE user_id = '" . $user_id . "' AND membership_id = '" . $level_id . "' ORDER BY id DESC LIMIT 1";
+	$wpdb->query($sqlQuery);
 
-		// remove cached level
-		global $all_membership_levels;
-		unset( $all_membership_levels[$user_id] );
+	// remove cached level
+	global $all_membership_levels;
+	unset( $all_membership_levels[$user_id] );
 
-		// remove levels cache for user
-		$cache_key = 'user_' . $user_id . '_levels';
-		wp_cache_delete( $cache_key, 'pmpro' );
-		wp_cache_delete( $cache_key . '_all', 'pmpro' );
-		wp_cache_delete( $cache_key . '_active', 'pmpro' );
+	// remove levels cache for user
+	$cache_key = 'user_' . $user_id . '_levels';
+	wp_cache_delete( $cache_key, 'pmpro' );
+	wp_cache_delete( $cache_key . '_all', 'pmpro' );
+	wp_cache_delete( $cache_key . '_active', 'pmpro' );
 
-		// update user data and call action
-		pmpro_set_current_user();
-	}
+  // update user data and call action
+	pmpro_set_current_user();
 
 	// Send user to invoice after checkout instead of confirmation page since we took their level away.
 	add_action( 'pmpro_confirmation_url', 'pmprogl_overwrite_confirmation_url', 10, 2 );
