@@ -104,6 +104,25 @@ function pmprogl_registration_check_require_gift_code( $pmpro_continue_registrat
 }
 add_filter( "pmpro_registration_checks", "pmprogl_registration_check_require_gift_code" );
 
+function pmprogl_registration_check_recipient_email( $pmpro_continue_registration ) {		
+	global $pmpro_level, $discount_code, $pmprogl_require_gift_code;
+
+	// Only bother if things are okay so far.
+	if ( ! $pmpro_continue_registration ) {
+		return $pmpro_continue_registration;
+	}
+	
+	// If the "Recipient Email" box is checked, make sure we have an email address.	
+	if ( ! empty( $_REQUEST['pmprogl_send_recipient_email'] ) && ( empty( $_REQUEST['pmprogl_recipient_email'] ) || empty( sanitize_email( $_REQUEST['pmprogl_recipient_email'] ) ) ) ) {
+		pmpro_setMessage( __( "Gift recipient's email address is not valid.", "pmpro-gift-levels" ), "pmpro_error" );
+		return false;
+	}					
+	
+	// Okay.
+	return $pmpro_continue_registration;
+}
+add_filter( "pmpro_registration_checks", "pmprogl_registration_check_recipient_email" );
+
 /**
  * Save recipient email when paying offiste.
  */
