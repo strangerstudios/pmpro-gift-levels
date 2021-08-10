@@ -113,7 +113,7 @@ function pmprogl_send_gift_code_to_gift_recipient( $recipient_email, $gift_messa
  */
 function pmprogl_template_callback( $templates ) {
 	$templates['pmprogl_gift_recipient'] = array(
-		'subject' => esc_html__( "You have been gifted a membership to ", 'pmpro_gift_levels' ) . "!!sitename!!!",
+		'subject' => esc_html( sprintf( __( "You have been gifted a membership to %s", 'pmpro_gift_levels' ), get_option("blogname") ) ),
 		'description' => 'Gift Recipient',
 		'body' => pmprogl_get_default_gift_recipient_email_body(),
 	);
