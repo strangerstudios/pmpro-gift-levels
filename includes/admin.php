@@ -132,7 +132,7 @@ add_action( 'pmpro_membership_level_after_other_settings', 'pmprogl_membership_l
 function pmprogl_save_membership_level( $save_id ) {
 	global $allowedposttags;
 	$enabled              = empty( $_REQUEST['pmprogl_enabled_for_level'] ) ? 'no' : 'yes';
-	$gift_level			  = intval( empty( $_REQUEST['pmprogl_gift_level'] ? 0 : $_REQUEST['pmprogl_gift_level'] ) );
+	$gift_level			  = intval( empty( $_REQUEST['pmprogl_gift_level'] ) ? 0 : $_REQUEST['pmprogl_gift_level'] );
 	$confirmation_message = wp_kses( wp_unslash( $_REQUEST['pmprogl_confirmation_message'] ), $allowedposttags);
 	$allow_gift_emails = empty( $_REQUEST['pmprogl_allow_gift_emails'] ) ? 'no' : 'yes';
 	if ( empty( $gift_level ) || empty( $_REQUEST['pmprogl_gift_expires'] ) ) {
