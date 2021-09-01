@@ -86,12 +86,12 @@ function pmprogl_get_confirmation_message( $level_id, $gift_code ) {
 }
 
 /**
- * Build a table showing all gift codes purchased by the current user.
+ * Build a unordered list showing all gift codes and claim status purchased by the current user.
  *
- * @param int|null $user_id to build table for.
+ * @param int|null $user_id to build list for.
  * @return string
  */
-function pmprogl_build_gift_code_table( $user_id = null ){
+function pmprogl_build_gift_code_list( $user_id = null ){
 	global $current_user, $wpdb;
 
 	if ( empty( $user_id ) ) {
@@ -121,13 +121,11 @@ function pmprogl_build_gift_code_table( $user_id = null ){
 					?>
 					<li>
 						<?php 
-						if(!empty($code_use)) 
-						{ 
-							echo $code->code, " ", esc_html__("claimed by", "pmpro-gift-levels" ), " ";
+						 if ( ! empty( $code_use ) ) {
 							$code_user = get_userdata( $code_use ); 
-							echo esc_html( $code_user->display_name );
+							printf( __( '%s: claimed by %s', 'pmpro-gift-levels' ), esc_html( $code->code ), esc_html( $code_user->display_name ) );
 						} else { ?>
-							<a target="_blank" href="<?php echo esc_attr( $code_url );?>"><?php echo esc_html( $code->code );?></a>
+							<a target="_blank" href="<?php echo esc_attr( $code_url );?>"><?php echo esc_html( $code->code ); ?></a>
 						<?php } ?>
 					</li>
 					<?php
