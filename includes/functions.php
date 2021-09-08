@@ -46,46 +46,6 @@ function pmprogl_populate_gift_levels_array() {
 add_action( 'init', 'pmprogl_populate_gift_levels_array', 15 );
 
 /**
- * Build a PMPro Gift Levels confirmation message.
- *
- * @param int $level_id that was used to purchase $gift_code.
- * @param string $gift_code to get confirmation message for.
- * @return string
- */
-function pmprogl_get_confirmation_message( $level_id, $gift_code ) {
-	global $wpdb, $pmprogl_gift_levels;
-
-	// Check that this is a gift membership level...
-	if ( empty( $pmprogl_gift_levels[ intval( $level_id ) ] ) ) {
-		return '';
-	}
-
-	// Get the gift membership level...
-	$gift_membership_level = $pmprogl_gift_levels[ intval( $level_id ) ]['level_id'];
-	if ( empty( $gift_membership_level ) ) {
-		// $level_id is not a gift level. Return.
-		return '';
-	}
-
-	// Get the raw confirmation message...
-	$confirmation_message = get_pmpro_membership_level_meta( $level_id, 'pmprogl_confirmation_message', true );
-	if ( empty( $confirmation_message ) ) {
-		$confirmation_message = '<p><strong>' . __( 'Share this link with your gift recipient' ) . ': <a href="!!pmprogl_gift_code_url!!">!!pmprogl_gift_code_url!!</a></p></strong>';
-	}
-
-	// Replace the variables...
-	$variables = array(
-		'pmprogl_gift_code' => $gift_code,
-		'pmprogl_gift_code_url' => pmpro_url( 'checkout', '?level=' . $gift_membership_level . '&discount_code=' . $gift_code ),
-	);
-	foreach($variables as $key => $value) {
-		$confirmation_message = str_replace( '!!' . $key . '!!', $value, $confirmation_message );
-	}
-
-	return $confirmation_message;
-}
-
-/**
  * Build a unordered list showing all gift codes and claim status purchased by the current user.
  *
  * @param int|null $user_id to build list for.
