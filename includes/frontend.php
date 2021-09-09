@@ -23,8 +23,8 @@ function pmprogl_invoice_bullets_bottom( $order ) {
 		if ( ! empty( $gift_code_id ) ) {
 			$code = $wpdb->get_row( "SELECT * FROM $wpdb->pmpro_discount_codes WHERE id = '" . intval( $gift_code_id ) . "' LIMIT 1" );
 			$code_level_id = $wpdb->get_var("SELECT level_id FROM $wpdb->pmpro_discount_codes_levels WHERE code_id = '" . intval($gift_code_id) . "' LIMIT 1");
-			$code_url = pmpro_url("checkout", "?level=" . $code_level_id . "&discount_code=" . $code->code);
-			if ( ! empty( $code ) ) { ?>
+			if ( ! empty( $code ) && ! empty( $code_level_id ) ) { ?>
+				$code_url = pmpro_url("checkout", "?level=" . $code_level_id . "&discount_code=" . $code->code);
 				<li><strong><?php esc_html_e( 'Gift Code:', 'pmpro-gift-levels'); ?></strong> <?php echo esc_html( $code->code ); ?></li>
 				<li>
 					<strong><?php esc_html_e( 'Gift Checkout URL:', 'pmpro-gift-levels' ); ?></strong> <?php echo esc_html( $code_url ); ?></li>
