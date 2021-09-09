@@ -46,52 +46,12 @@ function pmprogl_populate_gift_levels_array() {
 add_action( 'init', 'pmprogl_populate_gift_levels_array', 15 );
 
 /**
- * Build a PMPro Gift Levels confirmation message.
+ * Build a unordered list showing all gift codes and claim status purchased by the current user.
  *
- * @param int $level_id that was used to purchase $gift_code.
- * @param string $gift_code to get confirmation message for.
+ * @param int|null $user_id to build list for.
  * @return string
  */
-function pmprogl_get_confirmation_message( $level_id, $gift_code ) {
-	global $wpdb, $pmprogl_gift_levels;
-
-	// Check that this is a gift membership level...
-	if ( empty( $pmprogl_gift_levels[ intval( $level_id ) ] ) ) {
-		return '';
-	}
-
-	// Get the gift membership level...
-	$gift_membership_level = $pmprogl_gift_levels[ intval( $level_id ) ]['level_id'];
-	if ( empty( $gift_membership_level ) ) {
-		// $level_id is not a gift level. Return.
-		return '';
-	}
-
-	// Get the raw confirmation message...
-	$confirmation_message = get_pmpro_membership_level_meta( $level_id, 'pmprogl_confirmation_message', true );
-	if ( empty( $confirmation_message ) ) {
-		$confirmation_message = '<p><strong>' . __( 'Share this link with your gift recipient' ) . ': <a href="!!pmprogl_gift_code_url!!">!!pmprogl_gift_code_url!!</a></p></strong>';
-	}
-
-	// Replace the variables...
-	$variables = array(
-		'pmprogl_gift_code' => $gift_code,
-		'pmprogl_gift_code_url' => pmpro_url( 'checkout', '?level=' . $gift_membership_level . '&discount_code=' . $gift_code ),
-	);
-	foreach($variables as $key => $value) {
-		$confirmation_message = str_replace( '!!' . $key . '!!', $value, $confirmation_message );
-	}
-
-	return $confirmation_message;
-}
-
-/**
- * Build a table showing all gift codes purchased by the current user.
- *
- * @param int|null $user_id to build table for.
- * @return string
- */
-function pmprogl_build_gift_code_table( $user_id = null ){
+function pmprogl_build_gift_code_list( $user_id = null ){
 	global $current_user, $wpdb;
 
 	if ( empty( $user_id ) ) {
@@ -121,13 +81,11 @@ function pmprogl_build_gift_code_table( $user_id = null ){
 					?>
 					<li>
 						<?php 
-						if(!empty($code_use)) 
-						{ 
-							echo $code->code, " ", esc_html__("claimed by", "pmpro-gift-levels" ), " ";
+						 if ( ! empty( $code_use ) ) {
 							$code_user = get_userdata( $code_use ); 
-							echo esc_html( $code_user->display_name );
+							printf( __( '%s: claimed by %s', 'pmpro-gift-levels' ), esc_html( $code->code ), esc_html( $code_user->display_name ) );
 						} else { ?>
-							<a target="_blank" href="<?php echo esc_attr( $code_url );?>"><?php echo esc_html( $code->code );?></a>
+							<a target="_blank" href="<?php echo esc_attr( $code_url );?>"><?php echo esc_html( $code->code ); ?></a>
 						<?php } ?>
 					</li>
 					<?php

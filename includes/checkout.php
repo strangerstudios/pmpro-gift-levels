@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Show field to enter recipeient email at checkout.
+ * Show field to enter recipient email at checkout.
  *
  * Note: Can instead add this field with Register Helper by naming a field 'pmprogl_recipient_email`
  * and unchecking the allow gift emails box in the level settings.
@@ -22,20 +22,22 @@ function pmprogl_checkout_boxes() {
 	<div id="pmprogl_checkout_box" class="pmpro_checkout">
 		<hr />
 		<h3>
-			<span class="pmpro_checkout-h3-name"><?php esc_html_e( 'Gift Code' );?></span>
+			<span class="pmpro_checkout-h3-name"><?php esc_html_e( 'Gift Code', 'pmpro-gift-levels' );?></span>
 		</h3>
-		<div class="pmpro_checkout-field">
-			<label for="pmprogl_send_recipient_email"><?php esc_html_e( 'Automatically email gift code to recipient after checkout' );?></label>
-			<input type="checkbox" id="pmprogl_send_recipient_email" name="pmprogl_send_recipient_email" value="1" <?php echo $send_recipient_email_checked; ?> />
-		</div>
-		<div class="pmpro_checkout-field pmprogl_checkout_field_div" <?php echo $gift_field_style_attr ?>>
-			<label for="pmprogl_recipient_email"><?php esc_html_e( 'Recipient Email' );?></label>
-			<input type="text" name="pmprogl_recipient_email" value="<?php echo esc_attr( $current_recipient_email ) ?>" />
-		</div>
-		<div class="pmpro_checkout-field pmprogl_checkout_field_div" <?php echo $gift_field_style_attr ?>>
-			<label for="pmprogl_gift_message"><?php esc_html_e( 'Gift Message' );?></label>
-			<textarea name="pmprogl_gift_message"><?php echo esc_textarea( $current_gift_message ); ?> </textarea>
-		</div>
+		<div class="pmpro_checkout-fields">
+			<div class="pmpro_checkout-field pmpro_checkout-field-checkbox">
+				<input type="checkbox" id="pmprogl_send_recipient_email" name="pmprogl_send_recipient_email" value="1" <?php echo $send_recipient_email_checked; ?> />
+				<label for="pmprogl_send_recipient_email"><?php esc_html_e( 'Automatically deliver the gift code by email after checkout.', 'pmpro-gift-levels' );?></label>
+			</div>
+			<div class="pmpro_checkout-field pmpro_checkout-field-text pmprogl_checkout_field_div" <?php echo $gift_field_style_attr ?>>
+				<label for="pmprogl_recipient_email"><?php esc_html_e( 'Recipient Email Address', 'pmpro-gift-levels' );?></label>
+				<input type="text" name="pmprogl_recipient_email" value="<?php echo esc_attr( $current_recipient_email ) ?>" />
+			</div>
+			<div class="pmpro_checkout-field pmpro_checkout-field-textarea pmprogl_checkout_field_div" <?php echo $gift_field_style_attr ?>>
+				<label for="pmprogl_gift_message"><?php esc_html_e( 'Add a Personalized Message (optional)', 'pmpro-gift-levels' );?></label>
+				<textarea name="pmprogl_gift_message"><?php echo esc_textarea( wp_unslash( $current_gift_message ) ); ?></textarea>
+			</div>
+		</div> <!-- end pmpro_checkout-fields -->
 	</div>
 	<?php
 }
@@ -266,14 +268,6 @@ function pmprogl_pmpro_after_checkout($user_id, $morder)
 			}
 		}
 
-		// Send email to gift recipient...
-		if ( ! empty( $recipient_email ) ) {
-			$code = $wpdb->get_var("SELECT code FROM $wpdb->pmpro_discount_codes WHERE id = '" . intval($code_id) . "' LIMIT 1");
-			if ( ! empty( $code ) ) {
-				pmprogl_send_gift_code_to_gift_recipient( $recipient_email, $gift_message, $code );
-			}
-		}
-
 		do_action( 'pmprogl_gift_code_purchased', $code_id, $user_id, $morder->id );
 	}
 
@@ -291,8 +285,89 @@ function pmprogl_pmpro_after_checkout($user_id, $morder)
 	wp_cache_delete( $cache_key . '_all', 'pmpro' );
 	wp_cache_delete( $cache_key . '_active', 'pmpro' );
 
-  // update user data and call action
+	// Update user data and call action.
 	pmpro_set_current_user();
+
+	// Don't send the default checkout emails to user or admin.
+	add_filter( 'pmpro_send_checkout_emails', '__return_false', 15 );
+
+	// Send the checkout emails to gift purchasers, admin, and gift recipient (optional).
+	global $current_user;
+
+	// Get the gift code from the database.
+	$code = $wpdb->get_var("SELECT code FROM $wpdb->pmpro_discount_codes WHERE id = '" . intval( $code_id ) . "' LIMIT 1");
+
+	// Set some empty variables if not set previously.
+	if ( ! isset( $recipient_email ) ) {
+		$recipient_email = '';
+	}
+	if ( ! isset( $gift_message ) ) {
+		$gift_message = '';
+	}
+
+	// Build the email template variable replacement data.
+	$data = array(
+		// Gift Membership data.
+		'pmprogl_gift_recipient_email' => $recipient_email,
+		'pmprogl_giver_display_name' => $current_user->display_name,
+		'pmprogl_gift_message' => wp_unslash( $gift_message ),
+		'pmprogl_gift_code' => $code,
+		'pmprogl_gift_code_url' => pmpro_url( 'checkout', '?level=' . intval( $gift['level_id'] ) . "&discount_code=" . $code ),
+
+		// Order data.
+		'invoice_id' => $morder->code,
+		'invoice_total' => pmpro_formatPrice($morder->total),
+		'invoice_date' => date_i18n(get_option('date_format'), $morder->getTimestamp()),
+		'billing_name' => $morder->billing->name,
+		'billing_street' => $morder->billing->street,
+		'billing_city' => $morder->billing->city,
+		'billing_state' => $morder->billing->state,
+		'billing_zip' => $morder->billing->zip,
+		'billing_country' => $morder->billing->country,
+		'billing_phone' => $morder->billing->phone,
+		'cardtype' => $morder->cardtype,
+		'accountnumber' => hideCardNumber($morder->accountnumber),
+		'expirationmonth' => $morder->expirationmonth,
+		'expirationyear' => $morder->expirationyear,
+		'billing_address' => pmpro_formatAddress($morder->billing->name,
+												 $morder->billing->street,
+												 "", //address 2
+												 $morder->billing->city,
+												 $morder->billing->state,
+												 $morder->billing->zip,
+												 $morder->billing->country,
+												 $morder->billing->phone),
+		'invoice_url' => pmpro_login_url( pmpro_url( 'invoice', '?invoice=' . $morder->code ) ),
+	);
+
+	// Send email to the gift purchaser.
+	$email_purchaser = new PMProEmail();
+	$email_purchaser->template = 'pmprogl_gift_purchased';
+	$email_purchaser->email = $current_user->email;
+	$email_purchaser->data = $data;
+	$email_purchaser->sendEmail();
+
+	// Send email to the site admin.
+	$email_admin = new PMProEmail();
+	$email_admin->template = 'pmprogl_gift_purchased_admin';
+	$email_admin->email = get_bloginfo( 'admin_email' );
+	$email_admin->data = $data;
+	$email_admin->sendEmail();
+
+	// Send email to the gift recipient (optional).
+	if ( ! empty( $recipient_email ) ) {
+		// Replace any default email data that is user-specific.
+		$new_data = array(
+			'name' => $recipient_email,
+			'display_name' => $recipient_email,
+			'user_email' => $recipient_email,
+		);
+		$email_recipient = new PMProEmail();
+		$email_recipient->template = 'pmprogl_gift_recipient';
+		$email_recipient->email = $recipient_email;
+		$email_recipient->data = array_merge( $data, $new_data );
+		$email_recipient->sendEmail();
+	}
 
 	// Send user to invoice after checkout instead of confirmation page since we took their level away.
 	add_action( 'pmpro_confirmation_url', 'pmprogl_overwrite_confirmation_url', 10, 2 );
