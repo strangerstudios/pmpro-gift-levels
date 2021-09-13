@@ -6,46 +6,26 @@ Tested up to: 5.6
 Stable tag: 0.4
 
 == Description ==
-Setup some PMPro levels to allow for the purchase of gift certificates. A discount code for a "real" level is generated when checking out for the gift level.
 
-* Define "gift giver" and "gift recipeient" level relationships, with customized gift levels.
-* When users checkout for a gift giver level (or are assigned one by an admin), a discount code is generated to allow gift recipient members to sign up for the customized gift level.
-* If a user has purchased any gift levels, their claimed and unclaimed levels will be displayed on the Account page.
-* Restrict users from registering for the gift level if they don't have a gift code. Additionally, gift givers can not use their own gift codes.
-* Gift giver members will be linked to their giftee through their pmprogl_gift_codes_purchased user meta.
+Sell a gift certificate for membership to your site. This plugin generates a unique code for the gift recipient to claim their membership account.
+
+The person who purchases a gift of membership can optionally enter the recipient's email address and a personalized message at checkout. The gift code is automatically delivered to the recipient by email.
+
+Note that users who purchase gifts will not be given a membership level in your site. Gift purchasers can log in as a user and view the history of purchases made, available gift codes, and claimed gift codes.
+
+The plugin adds three new email templates that you can use to modify the default messages sent as part of a gift purchase:
+* Gift Recipient: This email is sent when the gift giver provides the recipient email address at checkout.
+* Gift Purchased: This email is sent to the gift giver as confirmation of their purchase after checkout.
+* Gift Purchased (admin): This email is sent to the admin as confirmation of gift purchase after checkout.
 
 == Installation ==
+
 1. Upload the `pmpro-gift-levels` directory to the `/wp-content/plugins/` directory of your site.
 2. Activate the plugin through the 'Plugins' menu in WordPress.
-3. Create one level for gift givers and one level for gift recipients.
-4. Add code like this to your active theme's functions.php or a custom plugin to setup the global gift levels array.
+3. Navigate to Memberships > Settings > Levels to create and manage gift membership levels.
+4. Navigate to Memberships > Settings > Email Templates to modify default messages sent through this plugin.
 
-`
-// Each key is the id of the "purchase level"
-// Each value is an array of values for the discount code created.
-global $pmprogl_gift_levels;
-	$pmprogl_gift_levels = array(
-		5 => array(						//5 is the purchase level
-			'level_id' => 6,			//6 is the level gifted
-			'initial_payment' => '', 	//discount code is setup for $0
-			'billing_amount' => '', 
-			'cycle_number' => '', 
-			'cycle_period' => '', 
-			'billing_limit' => '', 
-			'trial_amount' => '', 
-			'trial_limit' => '', 
-			'expiration_number' => 1, 		//membership expires after 1
-			'expiration_period' => 'Year'	//year
-		)
-	);
-`
-	
-4. Add a global array to set certain levels to require a discount code to check out. (Optional)
-
-`
-global $pmprogl_require_gift_code;
-$pmprogl_require_gift_code = array(6);
-`
+Refer to the [Gift Levels Add On documentation page](https://www.paidmembershipspro.com/add-ons/pmpro-gift-levels/) for more information on how to set up your gift levels.
 	
 == Frequently Asked Questions ==
 = I found a bug in the plugin.
