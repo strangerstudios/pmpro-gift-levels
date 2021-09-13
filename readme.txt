@@ -2,8 +2,8 @@
 Contributors: strangerstudios
 Tags: pmpro, paid memberships pro, membership, gift, gift level, gift card, giftcard, gift certificate
 Requires at least: 4.5
-Tested up to: 5.6
-Stable tag: 0.4
+Tested up to: 5.8
+Stable tag: 1.0
 
 == Description ==
 Setup some PMPro levels to allow for the purchase of gift certificates. A discount code for a "real" level is generated when checking out for the gift level.
@@ -52,6 +52,22 @@ $pmprogl_require_gift_code = array(6);
 Please post it in the issues section of GitHub and we'll fix it as soon as we can. Thanks for helping. https://github.com/strangerstudios/pmpro-gift-levels/issues
 
 == Changelog ==
+= 1.0 - 2021-09-13 =
+* FEATURE: Gift levels can now be configured on the Edit Level page
+* FEATURE: Users can now enter a recipient email address during checkout to send a gift code to
+* FEATURE: Added email templates for gift checkouts (both user and admin) and for gift recipient emails
+* ENHANCEMENT: Added filter pmprogl_gift_code_purchased (Thanks, Mirco Babini)
+* ENHANCEMENT: Gift code data is now being stored in order meta
+* ENHANCEMENT: Admins can now see the gift codes that a user has purchased on the Edit User page or by editing a discount code
+* BUG FIX/ENHANCEMENT: Added warning if membership level is set up with recurring payment or expiration date and gift level in GUI
+* BUG FIX/ENHANCEMENT: Gift levels are now immediately removed after checkout for all users (Thanks, Mirco Babini)
+* BUG FIX/ENHANCEMENT: Moved gift level confirmation message to end of checkout email (Thanks, Mirco Babini)
+* BUG FIX: Fixed issue where purchasing gift level with Stripe could set an expiration date on previous membership
+* BUG FIX/ENHANCEMENT: Now clearing cached membership levels after removing gift level (Thanks, Mirco Babini)
+* BUG FIX: Fixed issue where gift code may not be generated at checkout with specific gateways (Thanks, knit-pay on GitHub)
+* BUG FIX: Fixed PHP notice (Thanks, Mirco Babini)
+* REFACTOR: Broke code into separate files
+
 = 0.4 - 2020-12-09 =
 * BUG FIX: Fixed an issue when checking out with PayPal would change the user's level. User's will now keep their current level when purchasing a gift.
 * ENHANCEMENT: Plugin strings have been localized and now support translations.
