@@ -183,7 +183,7 @@ add_action( 'pmpro_after_order_settings', 'pmprogl_after_order_settings', 10, 1 
  * Show gift codes that the user has purchased on the Edit User page.
  */
 function pmprogl_after_membership_level_profile_fields( $user ) {
-	echo pmprogl_build_gift_code_table( $user->id );
+	echo pmprogl_build_gift_code_list( $user->ID );
 }
 add_action( 'pmpro_after_membership_level_profile_fields', 'pmprogl_after_membership_level_profile_fields' );
 
