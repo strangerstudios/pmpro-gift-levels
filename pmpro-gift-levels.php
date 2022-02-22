@@ -10,7 +10,7 @@ Text Domain: pmpro-gift-levels
 Domain Path: /languages
 */
 
-define( 'PMPROGL_VERSION', '0.4' );
+define( 'PMPROGL_VERSION', '1.0.1' );
 define( 'PMPROGL_BASE_FILE', __FILE__ );
 define( 'PMPROGL_DIR', dirname( __FILE__ ) );
 
