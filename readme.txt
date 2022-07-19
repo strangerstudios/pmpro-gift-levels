@@ -2,8 +2,8 @@
 Contributors: strangerstudios
 Tags: pmpro, paid memberships pro, membership, gift, gift level, gift card, giftcard, gift certificate
 Requires at least: 4.5
-Tested up to: 5.8
-Stable tag: 1.0.1
+Tested up to: 6.0
+Stable tag: 1.0.2
 
 == Description ==
 
@@ -32,6 +32,9 @@ Refer to the [Gift Levels Add On documentation page](https://www.paidmemberships
 Please post it in the issues section of GitHub and we'll fix it as soon as we can. Thanks for helping. https://github.com/strangerstudios/pmpro-gift-levels/issues
 
 == Changelog ==
+= 1.0.2 - 2022-07-19 =
+* ENHANCEMENT: Added Gift level template and support for PMPro v2.9+ settings UI.
+
 = 1.0.1 - 2021-09-14 =
 * BUG FIX: Fixed fatal error when viewing Edit User page
 * BUG FIX: Fixed incorrect output on invoice page when a gift order was purchased
