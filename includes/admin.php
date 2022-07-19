@@ -1,6 +1,7 @@
 <?php
 /**
  * Add the gift membership level template
+ * @since 1.0.2
  */
 function pmprogl_membershiplevels_template_level( $level, $template ) {
 	if ( $template === 'gift' ) {
@@ -29,7 +30,7 @@ function pmprogl_membership_level_after_other_settings() {
 
 	// Get the template if passed in the URL.
 	if ( isset( $_REQUEST['template'] ) ) {
-		$template = $_REQUEST['template'];
+		$template = sanitize_text_field( $_REQUEST['template'] );
 	} else {
 		$template = false;
 	}
@@ -145,7 +146,7 @@ function pmprogl_membership_level_after_other_settings() {
 								}
 								?>
 							</select>
-							<p class="description"><?php _e('Set the duration of membership access once the gift membership is redeemed.', 'pmpro-gift-levels' );?></p>
+							<p class="description"><?php esc_html_e('Set the duration of membership access once the gift membership is redeemed.', 'pmpro-gift-levels' );?></p>
 						</td>
 					</tr>
 				</tbody>
