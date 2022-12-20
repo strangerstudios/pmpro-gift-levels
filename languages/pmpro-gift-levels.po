@@ -1,17 +1,17 @@
-# Copyright (C) 2021 Stranger Studios
+# Copyright (C) 2022 Stranger Studios
 # This file is distributed under the same license as the Paid Memberships Pro - Gift Levels Add On plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Paid Memberships Pro - Gift Levels Add On 0.4\n"
+"Project-Id-Version: Paid Memberships Pro - Gift Levels Add On 1.0.2\n"
 "Report-Msgid-Bugs-To: info@paidmembershipspro.com\n"
 "Last-Translator: Paid Memberships Pro <info@paidmembershipspro.com>\n"
 "Language-Team: Paid Memberships Pro <info@paidmembershipspro.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2021-07-20T17:27:27+00:00\n"
+"POT-Creation-Date: 2022-12-20T09:59:40+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.5.0\n"
+"X-Generator: WP-CLI 2.7.1\n"
 "X-Domain: pmpro-gift-levels\n"
 
 #. Plugin Name of the plugin
@@ -55,6 +55,7 @@ msgid "Gift Confirmation Message"
 msgstr ""
 
 #: includes/admin.php:79
+#: includes/admin.php:122
 msgid "Allow Gift Emails"
 msgstr ""
 
@@ -63,58 +64,72 @@ msgid "Check to allow customers to enter an email address at checout to send the
 msgstr ""
 
 #: includes/admin.php:86
+#: includes/admin.php:130
 msgid "Gift Membership Expires"
 msgstr ""
 
 #: includes/admin.php:93
+#: includes/admin.php:138
 msgid "Gift Expiration Period"
 msgstr ""
 
 #: includes/admin.php:98
+#: includes/admin.php:143
 msgid "Day(s)"
 msgstr ""
 
 #: includes/admin.php:98
+#: includes/admin.php:143
 msgid "Week(s)"
 msgstr ""
 
 #: includes/admin.php:98
+#: includes/admin.php:143
 msgid "Month(s)"
 msgstr ""
 
 #: includes/admin.php:98
+#: includes/admin.php:143
 msgid "Year(s)"
 msgstr ""
 
 #: includes/admin.php:104
+#: includes/admin.php:149
 msgid "Set the duration of membership access once the gift membership is redeemed."
 msgstr ""
 
 #: includes/admin.php:158
+#: includes/admin.php:212
 msgid "[DELETED]"
 msgstr ""
 
 #: includes/admin.php:162
+#: includes/admin.php:216
 msgid "Gift Code Purchased"
 msgstr ""
 
 #: includes/admin.php:177
+#: includes/admin.php:231
 msgid "Gift Recipient Email"
 msgstr ""
 
 #: includes/admin.php:218
+#: includes/admin.php:272
 msgid "This discount code was purchased as a gift by"
 msgstr ""
 
 #: includes/checkout.php:58
+#: includes/checkout.php:79
 msgid "You can't use a code you purchased yourself. This was probably an accident."
 msgstr ""
 
 #: includes/checkout.php:67
+#: includes/checkout.php:100
 msgid "You must use a valid discount code to register for this level."
 msgstr ""
 
 #: includes/functions.php:95
+#: includes/functions.php:70
 msgid "Gift Codes"
 msgstr ""
 
@@ -123,17 +138,168 @@ msgid "claimed by"
 msgstr ""
 
 #: pmpro-gift-levels.php:44
+#: pmpro-gift-levels.php:45
 msgid "View Documentation"
 msgstr ""
 
 #: pmpro-gift-levels.php:44
+#: pmpro-gift-levels.php:45
 msgid "Docs"
 msgstr ""
 
 #: pmpro-gift-levels.php:45
+#: pmpro-gift-levels.php:46
 msgid "Visit Customer Support Forum"
 msgstr ""
 
 #: pmpro-gift-levels.php:45
+#: pmpro-gift-levels.php:46
 msgid "Support"
+msgstr ""
+
+#: includes/admin.php:78
+msgid "Gift Membership"
+msgstr ""
+
+#: includes/admin.php:82
+msgid "This level can be assigned as a \"gift level\" that users can purchase. After checkout, the gift giver will receive a code they can share with the recipient. To enable this feature, choose a level from the dropdown below. The selected level is the level that will be given to the user who claims the gift code generated after purchase."
+msgstr ""
+
+#: includes/admin.php:82
+msgid "Click here to read the Gift Membership Add On documentation."
+msgstr ""
+
+#: includes/admin.php:95
+msgid "Gift Membership Warning:"
+msgstr ""
+
+#: includes/admin.php:95
+msgid "The settings of this level are not recommended. Remove the recurring subscription and membership expiration from this level."
+msgstr ""
+
+#: includes/admin.php:103
+msgid "Gift Level?"
+msgstr ""
+
+#: includes/admin.php:109
+msgid "Level to Gift"
+msgstr ""
+
+#: includes/admin.php:125
+msgid "Check to allow customers to enter the recipient email address at checkout."
+msgstr ""
+
+#: includes/admin.php:126
+msgid "If an email address is provided, the recipient will automatically receive an email containing a personalized message and a link to claim the gift code. You can customize the \"Gift Recipient\" template on the Memberships > Settings > Email Templates page in the WordPress admin."
+msgstr ""
+
+#: includes/admin.php:134
+msgid "If you do not set an expiration period, the gift recipient's membership will never expire."
+msgstr ""
+
+#: includes/checkout.php:25
+msgid "Gift Code"
+msgstr ""
+
+#: includes/checkout.php:30
+msgid "Automatically deliver the gift code by email after checkout."
+msgstr ""
+
+#: includes/checkout.php:33
+msgid "Recipient Email Address"
+msgstr ""
+
+#: includes/checkout.php:37
+msgid "Add a Personalized Message (optional)"
+msgstr ""
+
+#: includes/checkout.php:119
+msgid "Gift recipient's email address is not valid."
+msgstr ""
+
+#: includes/email.php:10
+msgid "Gift Recipient"
+msgstr ""
+
+#: includes/email.php:12
+msgid "This email is sent when the gift giver provides the recipient email address at checkout. Additional placeholder variables you can use in this email template include !!pmprogl_giver_display_name!!, !!pmprogl_gift_message!!, !!pmprogl_gift_code!!, and !!pmprogl_gift_code_url!!."
+msgstr ""
+
+#: includes/email.php:16
+msgid "Gift Purchased"
+msgstr ""
+
+#: includes/email.php:18
+msgid "This email is sent to the gift giver as confirmation of their purchase after checkout. Additional placeholder variables you can use in this email template include !!pmprogl_giver_display_name!!, !!pmprogl_gift_message!!, !!pmprogl_gift_code!!, and !!pmprogl_gift_code_url!!."
+msgstr ""
+
+#: includes/email.php:22
+msgid "Gift Purchased (admin)"
+msgstr ""
+
+#: includes/email.php:24
+msgid "This email is sent to the admin as confirmation of gift purchase after checkout. Additional placeholder variables you can use in this email template include !!pmprogl_giver_display_name!!, !!pmprogl_gift_message!!, !!pmprogl_gift_code!!, and !!pmprogl_gift_code_url!!."
+msgstr ""
+
+#: includes/email.php:37
+msgid "!!pmprogl_giver_display_name!! has just sent you a gift membership to !!sitename!!!"
+msgstr ""
+
+#: includes/email.php:39
+msgid "Use this link to set up your membership:"
+msgstr ""
+
+#: includes/email.php:51
+msgid "Thank you for your purchase at !!sitename!!. Below is a receipt for your purchase."
+msgstr ""
+
+#: includes/email.php:52
+#: includes/email.php:73
+msgid "Account: !!display_name!! (!!user_email!!)"
+msgstr ""
+
+#: includes/email.php:54
+#: includes/email.php:75
+msgid "Invoice #!!invoice_id!! on !!invoice_date!!"
+msgstr ""
+
+#: includes/email.php:55
+#: includes/email.php:76
+msgid "Total Billed: !!invoice_total!!"
+msgstr ""
+
+#: includes/email.php:57
+msgid "Share this link with your gift recipient:"
+msgstr ""
+
+#: includes/email.php:58
+msgid "Log in to view your purchase history here: !!login_url!!"
+msgstr ""
+
+#: includes/email.php:59
+msgid "To view an online version of this invoice, click here: !!invoice_url!!"
+msgstr ""
+
+#: includes/email.php:71
+msgid "There was a new gift membership checkout at !!sitename!!."
+msgstr ""
+
+#: includes/email.php:72
+msgid "Below are details about the purchase and a receipt for the initial invoice."
+msgstr ""
+
+#: includes/email.php:77
+msgid "Gift Code: !!pmprogl_gift_code!!"
+msgstr ""
+
+#: includes/frontend.php:29
+msgid "Gift Code:"
+msgstr ""
+
+#: includes/frontend.php:31
+msgid "Gift Checkout URL:"
+msgstr ""
+
+#: includes/functions.php:86
+msgid "%s: claimed by %s"
 msgstr ""
