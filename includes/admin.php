@@ -89,7 +89,7 @@ function pmprogl_membership_level_after_other_settings() {
 				}
 
 				// Show an error if currently edited level has a recurring subscription or membership expiration set.
-				if ( ! empty( $current_level ) && ( ! empty( intval( $current_level->billing_amount ) ) || ! empty( intval( $current_level->expiration_number ) ) ) ) {
+				if ( ! empty( $current_level ) && ! empty( $enabled ) && ( ! empty( intval( $current_level->billing_amount ) ) || ! empty( intval( $current_level->expiration_number ) ) ) ) {
 					?>
 					<div class="pmprogl_gift_level_toggle_setting notice error" <?php if( empty( $gift_level ) ) {?>style="display: none;"<?php } ?>>
 						<p><strong><?php esc_html_e( 'Gift Membership Warning:', 'pmpro-gift-levels' ); ?></strong> <?php esc_html_e( 'The settings of this level are not recommended. Remove the recurring subscription and membership expiration from this level.', 'pmpro-gift-levels' ); ?></p>
