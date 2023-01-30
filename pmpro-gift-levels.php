@@ -3,14 +3,14 @@
 Plugin Name: Paid Memberships Pro - Gift Levels Add On
 Plugin URI: http://www.paidmembershipspro.com/add-ons/pmpro-gift-levels/
 Description: Some levels will generate discount codes to give to others to use for gift memberships.
-Version: 1.0.2
+Version: 1.0.3
 Author: Stranger Studios
 Author URI: http://www.strangerstudios.com
 Text Domain: pmpro-gift-levels
 Domain Path: /languages
 */
 
-define( 'PMPROGL_VERSION', '1.0.2' );
+define( 'PMPROGL_VERSION', '1.0.3' );
 define( 'PMPROGL_BASE_FILE', __FILE__ );
 define( 'PMPROGL_DIR', dirname( __FILE__ ) );
 

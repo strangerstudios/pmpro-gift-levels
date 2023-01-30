@@ -3,7 +3,7 @@ Contributors: strangerstudios
 Tags: pmpro, paid memberships pro, membership, gift, gift level, gift card, giftcard, gift certificate
 Requires at least: 4.5
 Tested up to: 6.0
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 
 == Description ==
 
@@ -32,6 +32,9 @@ Refer to the [Gift Levels Add On documentation page](https://www.paidmemberships
 Please post it in the issues section of GitHub and we'll fix it as soon as we can. Thanks for helping. https://github.com/strangerstudios/pmpro-gift-levels/issues
 
 == Changelog ==
+= 1.0.3 - 2023-01-30 =
+* BUG FIX: Resolved issue where the recurring payment warning was showing on all levels, not just gift levels.
+
 = 1.0.2 - 2022-07-19 =
 * ENHANCEMENT: Added Gift level template and support for PMPro v2.9+ settings UI.
 
