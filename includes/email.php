@@ -49,7 +49,7 @@ function pmprogl_get_default_gift_recipient_email_body() {
 function pmprogl_get_default_gift_purchased_email_body() {
 	ob_start(); ?>
 <p><?php esc_html_e( 'Thank you for your purchase at !!sitename!!. Below is a receipt for your purchase.', 'pmpro-gift-levels' ); ?></p>
-<p><?php esc_html_e( 'Account: !!display_name!! (!!user_email!!)', 'pmpro-gift-levels' ); ?></p>
+<p><?php esc_html_e( 'Account: !!pmprogl_giver_display_name!! (!!pmprogl_giver_email!!)', 'pmpro-gift-levels' ); ?></p>
 <p>
 	<?php esc_html_e( 'Invoice #!!invoice_id!! on !!invoice_date!!', 'pmpro-gift-levels' ); ?><br />
 	<?php esc_html_e( 'Total Billed: !!invoice_total!!', 'pmpro-gift-levels' ); ?>
@@ -70,7 +70,7 @@ function pmprogl_get_default_gift_purchased_admin_email_body() {
 	ob_start(); ?>
 <p><?php esc_html_e( 'There was a new gift membership checkout at !!sitename!!.', 'pmpro-gift-levels' ); ?></p>
 <p><?php esc_html_e( 'Below are details about the purchase and a receipt for the initial invoice.', 'pmpro-gift-levels' ); ?></p>
-<p><?php esc_html_e( 'Account: !!display_name!! (!!user_email!!)', 'pmpro-gift-levels' ); ?></p>
+<p><?php esc_html_e( 'Account: !!pmprogl_giver_display_name!! (!!pmprogl_giver_email!!)', 'pmpro-gift-levels' ); ?></p>
 <p>
 	<?php esc_html_e( 'Invoice #!!invoice_id!! on !!invoice_date!!', 'pmpro-gift-levels' ); ?><br />
 	<?php esc_html_e( 'Total Billed: !!invoice_total!!', 'pmpro-gift-levels' ); ?><br />
