@@ -153,8 +153,9 @@ function pmprogl_pmpro_checkout_before_change_membership_level( $user_id = false
 	global $pmprogl_gift_levels;
 
 	// Get the level that the user is checking out for.
-	if ( ! empty( $_REQUEST['level'] ) ) {
-		$level_id = intval( $_REQUEST['level'] );
+	$checkout_level = pmpro_getLevelAtCheckout();
+	if ( ! empty( $checkout_level->id ) ) {
+		$level_id = intval( $checkout_level->id );
 	} elseif( ! empty( $morder->membership_id ) ) {
 		$level_id = intval( $morder->membership_id );
 	} else {
