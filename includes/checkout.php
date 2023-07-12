@@ -21,9 +21,9 @@ function pmprogl_checkout_boxes() {
 	?>
 	<div id="pmprogl_checkout_box" class="pmpro_checkout">
 		<hr />
-		<h3>
-			<span class="pmpro_checkout-h3-name"><?php esc_html_e( 'Gift Code', 'pmpro-gift-levels' );?></span>
-		</h3>
+		<h2>
+			<span class="pmpro_checkout-h2-name"><?php esc_html_e( 'Gift Code', 'pmpro-gift-levels' );?></span>
+		</h2>
 		<div class="pmpro_checkout-fields">
 			<div class="pmpro_checkout-field pmpro_checkout-field-checkbox">
 				<input type="checkbox" id="pmprogl_send_recipient_email" name="pmprogl_send_recipient_email" value="1" <?php echo $send_recipient_email_checked; ?> />

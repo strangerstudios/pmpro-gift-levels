@@ -67,7 +67,7 @@ function pmprogl_build_gift_code_list( $user_id = null ){
 	?>
 	<div id="pmpro_account-gift_codes" class="pmpro_box">	
 
-		<h3><?php esc_html_e( "Gift Codes", "pmpro-gift-levels" ); ?></h3>
+		<h2><?php esc_html_e( "Gift Codes", "pmpro-gift-levels" ); ?></h2>
 		<ul>
 		<?php
 			foreach($gift_codes as $gift_code_id)
