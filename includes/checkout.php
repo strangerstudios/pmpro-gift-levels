@@ -47,6 +47,11 @@ add_action( 'pmpro_checkout_boxes', 'pmprogl_checkout_boxes' );
  * Enqueue frontend JavaScript and CSS
  */
 function pmprogl_enqueue_checkout_script() {
+	if ( ! function_exists( 'pmpro_is_checkout' ) ) {
+		// PMPro is not active.
+        return;
+    }
+
 	// Checkout page JS
 	if ( pmpro_is_checkout() ) {
 		wp_enqueue_script( 'pmprogl_checkout', plugins_url( 'js/pmprogl-checkout.js', PMPROGL_BASE_FILE ), array( 'jquery' ), PMPROGL_VERSION  );
