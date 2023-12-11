@@ -269,7 +269,7 @@ function pmprogl_discount_code_after_settings( $discount_code_id ) {
 
 	$user = get_userdata( $order->user_id );
 	if ( ! empty( $user ) ) {
-		echo '<strong>' . esc_html__( 'This discount code was purchased as a gift by', 'pmpro-gift-levels' ) . ' ' . '<a href="user-edit.php?user_id=' . $user->ID . '">' . $user->display_name . '</a></h3>';
+		echo '<strong>' . esc_html__( 'This discount code was purchased as a gift by', 'pmpro-gift-levels' ) . ' ' . '<a href="user-edit.php?user_id=' . $user->ID . '">' . $user->display_name . '</a></strong>';
 	}
 }
 add_action( 'pmpro_discount_code_after_settings', 'pmprogl_discount_code_after_settings' );
