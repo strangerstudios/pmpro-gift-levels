@@ -2,16 +2,16 @@
 # This file is distributed under the same license as the Paid Memberships Pro - Gift Levels Add On plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Paid Memberships Pro - Gift Levels Add On 1.0.3\n"
+"Project-Id-Version: Paid Memberships Pro - Gift Levels Add On 1.0.4\n"
 "Report-Msgid-Bugs-To: info@paidmembershipspro.com\n"
 "Last-Translator: Paid Memberships Pro <info@paidmembershipspro.com>\n"
 "Language-Team: Paid Memberships Pro <info@paidmembershipspro.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2023-01-30T17:20:25+00:00\n"
+"POT-Creation-Date: 2023-12-11T16:21:42+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.7.1\n"
+"X-Generator: WP-CLI 2.9.0\n"
 "X-Domain: pmpro-gift-levels\n"
 
 #. Plugin Name of the plugin
@@ -120,11 +120,13 @@ msgstr ""
 
 #: includes/checkout.php:58
 #: includes/checkout.php:79
+#: includes/checkout.php:84
 msgid "You can't use a code you purchased yourself. This was probably an accident."
 msgstr ""
 
 #: includes/checkout.php:67
 #: includes/checkout.php:100
+#: includes/checkout.php:105
 msgid "You must use a valid discount code to register for this level."
 msgstr ""
 
@@ -214,6 +216,7 @@ msgid "Add a Personalized Message (optional)"
 msgstr ""
 
 #: includes/checkout.php:119
+#: includes/checkout.php:124
 msgid "Gift recipient's email address is not valid."
 msgstr ""
 
@@ -302,4 +305,9 @@ msgstr ""
 
 #: includes/functions.php:86
 msgid "%s: claimed by %s"
+msgstr ""
+
+#: includes/email.php:52
+#: includes/email.php:73
+msgid "Account: !!pmprogl_giver_display_name!! (!!pmprogl_giver_email!!)"
 msgstr ""
