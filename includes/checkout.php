@@ -178,10 +178,13 @@ add_action('pmpro_checkout_before_change_membership_level', 'pmprogl_pmpro_check
  * @param MemberOrder $morder generated during checkout.
  */
 function pmprogl_pmpro_after_checkout($user_id, $morder) {	
-	global $pmprogl_gift_levels, $wpdb, $current_user;
+	global $pmprogl_gift_levels, $wpdb;
 	
 	//which level purchased
 	$level_id = intval($morder->membership_id);	
+
+	// Get the user who purchased the gift.
+	$giver = get_userdata( $user_id );
 		
 	//gift for this? if not, stop now
 	if(empty($pmprogl_gift_levels) || empty($pmprogl_gift_levels[$level_id]))
@@ -280,7 +283,8 @@ function pmprogl_pmpro_after_checkout($user_id, $morder) {
 		$data = array(
 			// Gift Membership data.
 			'pmprogl_gift_recipient_email' => $recipient_email,
-			'pmprogl_giver_display_name' => $current_user->display_name,
+			'pmprogl_giver_display_name' => $giver->display_name,
+			'pmprogl_giver_email' => $giver->user_email,
 			'pmprogl_gift_message' => wp_unslash( $gift_message ),
 			'pmprogl_gift_code' => $gcode,
 			'pmprogl_gift_code_url' => pmpro_url( 'checkout', '?level=' . intval( $gift['level_id'] ) . "&discount_code=" . $gcode ),
@@ -312,13 +316,15 @@ function pmprogl_pmpro_after_checkout($user_id, $morder) {
 		);
 
 		// Send email to the gift purchaser.
+		$data['header_name'] = $giver->display_name;
 		$email_purchaser = new PMProEmail();
 		$email_purchaser->template = 'pmprogl_gift_purchased';
-		$email_purchaser->email = $current_user->email;
+		$email_purchaser->email = $giver->user_email;
 		$email_purchaser->data = $data;
 		$email_purchaser->sendEmail();
 
 		// Send email to the site admin.
+		unset( $data['header_name'] );
 		$email_admin = new PMProEmail();
 		$email_admin->template = 'pmprogl_gift_purchased_admin';
 		$email_admin->email = get_bloginfo( 'admin_email' );
@@ -332,6 +338,7 @@ function pmprogl_pmpro_after_checkout($user_id, $morder) {
 				'name' => $recipient_email,
 				'display_name' => $recipient_email,
 				'user_email' => $recipient_email,
+				'header_name' => $recipient_email,
 			);
 			$email_recipient = new PMProEmail();
 			$email_recipient->template = 'pmprogl_gift_recipient';
