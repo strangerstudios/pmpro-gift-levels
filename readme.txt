@@ -35,7 +35,7 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 = 1.0.4 - 2023-12-11 =
 * ENHANCEMENT: Updating `<h3>` tags to `<h2>` tags for better accessibility. #66 (@michaelbeil)
 * BUG FIX: Fixed issue where gift level emails may not be sent when using Stripe Checkout or other asynchronous gateways. #64 (@dparker1005)
-* BUG FIX: Fixed issue where gift level emails sent to adminstrators may have their account credentials in place of the gift purchaser's. #64 (@dparker1005)
+* BUG FIX: Fixed issue where gift level emails sent to administrators may have their account credentials in place of the gift purchaser's. #64 (@dparker1005)
 * BUG FIX: Fixed PHP errors when the core PMPro plugin is not active. #68 (@mircobabini)
 * REFACTOR: No longer pulling the checkout level from the `$_REQUEST` variable. #65 (@dparker1005)
 
