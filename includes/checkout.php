@@ -157,24 +157,17 @@ add_action("pmpro_before_send_to_twocheckout", "pmprogl_paypalexpress_session_va
 function pmprogl_pmpro_checkout_before_change_membership_level( $user_id = false, $morder = false ) {
 	global $pmprogl_gift_levels;
 
-	// Get the level that the user is checking out for.
-	$checkout_level = pmpro_getLevelAtCheckout();
-	if ( ! empty( $checkout_level->id ) ) {
-		$level_id = intval( $checkout_level->id );
-	} elseif( ! empty( $morder->membership_id ) ) {
-		$level_id = intval( $morder->membership_id );
-	} else {
-		// We don't know what level the user is checking out for.
+	// If we don't have the level being purchased, bail.
+	if ( empty( $morder->membership_id ) ) {
 		return;
 	}
 
 	// If checking out for a gift level, do not cancel old membership.
-	if ( ! empty( $pmprogl_gift_levels ) && array_key_exists( $level_id, $pmprogl_gift_levels ) ) {
+	if ( ! empty( $pmprogl_gift_levels ) && array_key_exists( intval( $morder->membership_id ), $pmprogl_gift_levels ) ) {
 		add_filter('pmpro_cancel_previous_subscriptions', '__return_false');
 		add_filter('pmpro_deactivate_old_levels', '__return_false');
 	}
 }
-add_action('pmpro_checkout_before_processing', 'pmprogl_pmpro_checkout_before_change_membership_level', 1);
 add_action('pmpro_checkout_before_change_membership_level', 'pmprogl_pmpro_checkout_before_change_membership_level', 1, 2);
 
 /**
