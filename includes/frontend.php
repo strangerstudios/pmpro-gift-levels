@@ -28,7 +28,8 @@ function pmprogl_invoice_bullets_bottom( $order ) {
 				?>
 				<li><strong><?php esc_html_e( 'Gift Code:', 'pmpro-gift-levels'); ?></strong> <?php echo esc_html( $code->code ); ?></li>
 				<li>
-					<strong><?php esc_html_e( 'Gift Checkout URL:', 'pmpro-gift-levels' ); ?></strong> <?php echo esc_html( $code_url ); ?></li>
+					<strong><?php esc_html_e( 'Gift Checkout URL:', 'pmpro-gift-levels' ); ?></strong> <a href="<?php echo esc_url( $code_url ); ?>"><?php echo esc_html( $code_url ); ?></a>
+				</li>
 				<?php 
 			}
 		}
@@ -53,7 +54,18 @@ function pmprogl_the_content_account_page($content)
 		
 		if(!empty($gift_codes))
 		{
-			$temp_content = pmprogl_build_gift_code_list();
+			ob_start();
+			?>
+			<section id="pmpro_account-pmprogl" class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_section', 'pmpro_account-pmprogl' ) ); ?>">
+				<h2 class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_section_title pmpro_font-x-large' ) ); ?>"><?php esc_html_e( 'Purchased Gift Codes', 'pmpro-gift-levels' );  ?></h2>
+				<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_card' ) ); ?>">
+					<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_card_content' ) ); ?>">
+						<?php echo pmprogl_build_gift_code_list(); ?>
+					</div>
+				</div>
+			</section>
+			<?php
+			$temp_content = ob_get_contents();
 			$content = str_replace('<!-- end pmpro_account-profile -->', '<!-- end pmpro_account-profile -->' . $temp_content, $content);
  		}
 	}
