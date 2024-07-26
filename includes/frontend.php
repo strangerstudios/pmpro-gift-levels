@@ -65,7 +65,7 @@ function pmprogl_the_content_account_page($content)
 				</div>
 			</section>
 			<?php
-			$temp_content = ob_get_contents();
+			$temp_content = ob_get_clean();
 			$content = str_replace('<!-- end pmpro_account-profile -->', '<!-- end pmpro_account-profile -->' . $temp_content, $content);
  		}
 	}
