@@ -3,7 +3,7 @@ Contributors: strangerstudios
 Tags: pmpro, paid memberships pro, membership, gift, gift level, gift card, giftcard, gift certificate
 Requires at least: 4.5
 Tested up to: 6.4
-Stable tag: 1.0.4
+Stable tag: 1.1
 
 == Description ==
 
@@ -32,6 +32,11 @@ Refer to the [Gift Levels Add On documentation page](https://www.paidmemberships
 Please post it in the issues section of GitHub and we'll fix it as soon as we can. Thanks for helping. https://github.com/strangerstudios/pmpro-gift-levels/issues
 
 == Changelog ==
+= 1.1 - 2024-07-31 =
+* ENHANCEMENT: Updated the frontend UI for compatibility with PMPro v3.1. #71 (@dparker1005, @kimcoleman)
+* BUG FIX: Fixed conflict with the PMPro Pay By Check Add On. #70 (@dparker1005)
+* DEPRECATED: Removed `sample-setup.php` as settings can now be configured on the Edit Level page. #72 (@kimcoleman)
+
 = 1.0.4 - 2023-12-11 =
 * ENHANCEMENT: Updating `<h3>` tags to `<h2>` tags for better accessibility. #66 (@michaelbeil)
 * BUG FIX: Fixed issue where gift level emails may not be sent when using Stripe Checkout or other asynchronous gateways. #64 (@dparker1005)

@@ -286,7 +286,7 @@ add_action( 'pmpro_discount_code_after_settings', 'pmprogl_discount_code_after_s
 /**
  * Add Gift Codes to edit member panels.
  *
- * @since TBD
+ * @since 1.1
  *
  * @param array $panels Array of panels.
  */
