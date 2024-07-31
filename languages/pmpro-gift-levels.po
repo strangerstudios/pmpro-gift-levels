@@ -1,20 +1,21 @@
-# Copyright (C) 2023 Stranger Studios
+# Copyright (C) 2024 Paid Memberships Pro
 # This file is distributed under the same license as the Paid Memberships Pro - Gift Levels Add On plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Paid Memberships Pro - Gift Levels Add On 1.0.4\n"
+"Project-Id-Version: Paid Memberships Pro - Gift Levels Add On 1.1\n"
 "Report-Msgid-Bugs-To: info@paidmembershipspro.com\n"
 "Last-Translator: Paid Memberships Pro <info@paidmembershipspro.com>\n"
 "Language-Team: Paid Memberships Pro <info@paidmembershipspro.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2023-12-11T16:21:42+00:00\n"
+"POT-Creation-Date: 2024-07-31T19:10:14+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.9.0\n"
+"X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: pmpro-gift-levels\n"
 
 #. Plugin Name of the plugin
+#: pmpro-gift-levels.php
 msgid "Paid Memberships Pro - Gift Levels Add On"
 msgstr ""
 
@@ -115,23 +116,27 @@ msgstr ""
 
 #: includes/admin.php:218
 #: includes/admin.php:272
+#: includes/admin.php:281
 msgid "This discount code was purchased as a gift by"
 msgstr ""
 
 #: includes/checkout.php:58
 #: includes/checkout.php:79
 #: includes/checkout.php:84
+#: includes/checkout.php:91
 msgid "You can't use a code you purchased yourself. This was probably an accident."
 msgstr ""
 
 #: includes/checkout.php:67
 #: includes/checkout.php:100
 #: includes/checkout.php:105
+#: includes/checkout.php:112
 msgid "You must use a valid discount code to register for this level."
 msgstr ""
 
 #: includes/functions.php:95
 #: includes/functions.php:70
+#: includes/admin.php:252
 msgid "Gift Codes"
 msgstr ""
 
@@ -200,23 +205,28 @@ msgid "If you do not set an expiration period, the gift recipient's membership w
 msgstr ""
 
 #: includes/checkout.php:25
+#: includes/checkout.php:26
 msgid "Gift Code"
 msgstr ""
 
 #: includes/checkout.php:30
+#: includes/checkout.php:32
 msgid "Automatically deliver the gift code by email after checkout."
 msgstr ""
 
 #: includes/checkout.php:33
+#: includes/checkout.php:36
 msgid "Recipient Email Address"
 msgstr ""
 
 #: includes/checkout.php:37
+#: includes/checkout.php:40
 msgid "Add a Personalized Message (optional)"
 msgstr ""
 
 #: includes/checkout.php:119
 #: includes/checkout.php:124
+#: includes/checkout.php:131
 msgid "Gift recipient's email address is not valid."
 msgstr ""
 
@@ -296,18 +306,58 @@ msgid "Gift Code: !!pmprogl_gift_code!!"
 msgstr ""
 
 #: includes/frontend.php:29
+#: includes/frontend.php:30
 msgid "Gift Code:"
 msgstr ""
 
 #: includes/frontend.php:31
+#: includes/frontend.php:32
 msgid "Gift Checkout URL:"
 msgstr ""
 
 #: includes/functions.php:86
+#: includes/functions.php:83
 msgid "%s: claimed by %s"
 msgstr ""
 
 #: includes/email.php:52
 #: includes/email.php:73
 msgid "Account: !!pmprogl_giver_display_name!! (!!pmprogl_giver_email!!)"
+msgstr ""
+
+#. Plugin URI of the plugin
+#: pmpro-gift-levels.php
+msgid "https://www.paidmembershipspro.com/add-ons/pmpro-gift-levels/"
+msgstr ""
+
+#. Description of the plugin
+#: pmpro-gift-levels.php
+msgid "Sell a gift certificate that generates a unique gift code for membership to your site."
+msgstr ""
+
+#. Author of the plugin
+#: pmpro-gift-levels.php
+msgid "Paid Memberships Pro"
+msgstr ""
+
+#. Author URI of the plugin
+#: pmpro-gift-levels.php
+msgid "https://www.paidmembershipspro.com"
+msgstr ""
+
+#: classes/pmprogl-class-member-edit-panel.php:9
+#: includes/frontend.php:68
+msgid "Purchased Gift Codes"
+msgstr ""
+
+#: includes/frontend.php:41
+msgid "Your gift code will be available after payment is received."
+msgstr ""
+
+#: includes/frontend.php:72
+msgid "Below is a list of gift codes you have purchased."
+msgstr ""
+
+#: includes/functions.php:63
+msgid "No gift codes purchased."
 msgstr ""
