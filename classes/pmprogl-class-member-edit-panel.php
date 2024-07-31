@@ -6,7 +6,7 @@ class PMProgl_Member_Edit_Panel extends PMPro_Member_Edit_Panel {
 	 */
 	public function __construct() {
 		$this->slug = 'pmprogl';
-		$this->title = esc_html__( 'Purchased Gift Codes', 'pmpro-mailpoet' );
+		$this->title = esc_html__( 'Purchased Gift Codes', 'pmpro-gift-levels' );
 	}
 
 	/**

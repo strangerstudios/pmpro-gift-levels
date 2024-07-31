@@ -26,8 +26,8 @@ function pmprogl_invoice_bullets_bottom( $order ) {
 			if ( ! empty( $code ) && ! empty( $code_level_id ) ) {
 				$code_url = pmpro_url("checkout", "?level=" . $code_level_id . "&discount_code=" . $code->code);
 				?>
-				<li><strong><?php esc_html_e( 'Gift Code:', 'pmpro-gift-levels'); ?></strong> <?php echo esc_html( $code->code ); ?></li>
-				<li>
+				<li class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_list_item' ) ); ?>"><strong><?php esc_html_e( 'Gift Code:', 'pmpro-gift-levels'); ?></strong> <span class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_tag pmpro_tag-discount-code', 'pmpro_tag-discount-code' ) ); ?>"><?php echo esc_html( $code->code ); ?></span></li>
+				<li class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_list_item' ) ); ?>">
 					<strong><?php esc_html_e( 'Gift Checkout URL:', 'pmpro-gift-levels' ); ?></strong> <a href="<?php echo esc_url( $code_url ); ?>"><?php echo esc_html( $code_url ); ?></a>
 				</li>
 				<?php 
@@ -58,9 +58,13 @@ function pmprogl_the_content_account_page($content)
 			?>
 			<section id="pmpro_account-pmprogl" class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_section', 'pmpro_account-pmprogl' ) ); ?>">
 				<h2 class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_section_title pmpro_font-x-large' ) ); ?>"><?php esc_html_e( 'Purchased Gift Codes', 'pmpro-gift-levels' );  ?></h2>
-				<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_card' ) ); ?>">
-					<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_card_content' ) ); ?>">
-						<?php echo pmprogl_build_gift_code_list(); ?>
+				<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_section_content' ) ); ?>">
+					<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_card' ) ); ?>">
+						<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_card_content' ) ); ?>">
+							<p><?php esc_html_e( 'Below is a list of gift codes you have purchased.', 'pmpro-gift-levels' ); ?></p>
+							<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_divider' ) ); ?>"></div>
+							<?php echo pmprogl_build_gift_code_list(); ?>
+						</div>
 					</div>
 				</div>
 			</section>

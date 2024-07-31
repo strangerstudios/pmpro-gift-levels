@@ -65,7 +65,7 @@ function pmprogl_build_gift_code_list( $user_id = null ){
 
 	ob_start();
 	?>
-	<ul class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_list pmpro_list-plain' ) ); ?>">
+	<ul class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_list pmpro_list-bulleted' ) ); ?>">
 		<?php
 		foreach($gift_codes as $gift_code_id)
 		{
@@ -76,7 +76,7 @@ function pmprogl_build_gift_code_list( $user_id = null ){
 				$code_url = pmpro_url("checkout", "?level=" . $code_level_id . "&discount_code=" . $code->code);
 				$code_use = $wpdb->get_var("SELECT user_id FROM $wpdb->pmpro_discount_codes_uses WHERE code_id = '" . intval($gift_code_id) . "' LIMIT 1");
 				?>
-				<li>
+				<li class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_list_item' ) ); ?>">
 					<?php 
 					if ( ! empty( $code_use ) ) {
 						$code_user = get_userdata( $code_use ); 
