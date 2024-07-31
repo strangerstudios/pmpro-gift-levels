@@ -243,7 +243,16 @@ add_action( 'pmpro_after_order_settings', 'pmprogl_after_order_settings', 10, 1 
  * Show gift codes that the user has purchased on the Edit User page.
  */
 function pmprogl_after_membership_level_profile_fields( $user ) {
-	echo pmprogl_build_gift_code_list( $user->ID );
+	// If we are running PMPro v3.0+, bail. We will create a new Edit Member panel for this.
+	if ( class_exists( 'PMPro_Subscription' ) ) {
+		return;
+	}
+	?>
+	<div id="pmpro_account-gift_codes" class="pmpro_box">	
+		<h2><?php esc_html_e( "Gift Codes", "pmpro-gift-levels" ); ?></h2>
+		<?php echo pmprogl_build_gift_code_list( $user->ID ); ?>
+	</div>
+	<?php
 }
 add_action( 'pmpro_after_membership_level_profile_fields', 'pmprogl_after_membership_level_profile_fields' );
 
@@ -273,3 +282,25 @@ function pmprogl_discount_code_after_settings( $discount_code_id ) {
 	}
 }
 add_action( 'pmpro_discount_code_after_settings', 'pmprogl_discount_code_after_settings' );
+
+/**
+ * Add Gift Codes to edit member panels.
+ *
+ * @since TBD
+ *
+ * @param array $panels Array of panels.
+ */
+function pmprogl_member_edit_panels( $panels ) {
+	// If the class doesn't exist and the abstract class does, require the class.
+	if ( ! class_exists( 'PMProgl_Member_Edit_Panel' ) && class_exists( 'PMPro_Member_Edit_Panel' ) ) {
+		require_once( PMPROGL_DIR . '/classes/pmprogl-class-member-edit-panel.php' );
+	}
+
+	// If the class exists, add a panel.
+	if ( class_exists( 'PMProgl_Member_Edit_Panel' ) ) {
+		$panels[] = new PMProgl_Member_Edit_Panel();
+	}
+
+	return $panels;
+}
+add_filter( 'pmpro_member_edit_panels', 'pmprogl_member_edit_panels' );

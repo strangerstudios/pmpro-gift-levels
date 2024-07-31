@@ -19,26 +19,33 @@ function pmprogl_checkout_boxes() {
 	$gift_field_style_attr = empty( $current_recipient_email . $current_gift_message ) ? 'style="display:none;"' : '';
 
 	?>
-	<div id="pmprogl_checkout_box" class="pmpro_checkout">
-		<hr />
-		<h2>
-			<span class="pmpro_checkout-h2-name"><?php esc_html_e( 'Gift Code', 'pmpro-gift-levels' );?></span>
-		</h2>
-		<div class="pmpro_checkout-fields">
-			<div class="pmpro_checkout-field pmpro_checkout-field-checkbox">
-				<input type="checkbox" id="pmprogl_send_recipient_email" name="pmprogl_send_recipient_email" value="1" <?php echo $send_recipient_email_checked; ?> />
-				<label for="pmprogl_send_recipient_email"><?php esc_html_e( 'Automatically deliver the gift code by email after checkout.', 'pmpro-gift-levels' );?></label>
+	<fieldset id="pmprogl_checkout_box" class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_fieldset' ) ); ?>">
+		<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_card' ) ); ?>">
+			<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_card_content' ) ); ?>">
+				<legend class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_legend' ) ); ?>">
+					<h2 class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_heading pmpro_font-large' ) ); ?>"><?php esc_html_e( 'Gift Code', 'pmpro-gift-levels' ); ?></h2>
+				</legend>
+				<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_fields' ) ); ?>">
+					<div id="pmprogl_send_recipient_email_div" class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_field pmpro_form_field-checkbox', 'pmprogl_send_recipient_email_div' ) ); ?>">
+						<label for="pmprogl_send_recipient_email" class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_label pmpro_form_label-inline pmpro_clickable' ) ); ?>">
+							<input type="checkbox" id="pmprogl_send_recipient_email" name="pmprogl_send_recipient_email" class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_input pmpro_form_input-checkbox' ) ); ?>" value="1" <?php echo $send_recipient_email_checked; ?> />	
+							<?php esc_html_e( 'Automatically deliver the gift code by email after checkout.', 'pmpro-gift-levels' ); ?>
+						</label>
+					</div>
+					<div id="pmprogl_recipient_email_div" class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_field pmpro_form_field-text', 'pmprogl_recipient_email_div' ) ); ?>" <?php echo $gift_field_style_attr; ?>>
+						<label for="pmprogl_recipient_email" class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_label' ) ); ?>"><?php esc_html_e( 'Recipient Email Address', 'pmpro-gift-levels' ); ?></label>
+						<input type="email" id="pmprogl_recipient_email" name="pmprogl_recipient_email" class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_input pmpro_form_input-text' ) ); ?>" value="<?php echo esc_attr( $current_recipient_email ); ?>" />
+					</div>
+					<div id="pmprogl_gift_message_div" class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_field pmpro_form_field-textarea', 'pmprogl_gift_message_div' ) ); ?>" <?php echo $gift_field_style_attr; ?>>
+						<label for="pmprogl_gift_message" class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_label' ) ); ?>"><?php esc_html_e( 'Add a Personalized Message (optional)', 'pmpro-gift-levels' ); ?></label>
+						<textarea name="pmprogl_gift_message" id="pmprogl_gift_message" class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_input pmpro_form_input-textarea' ) ); ?>"><?php echo esc_textarea( wp_unslash( $current_gift_message ) ); ?></textarea>
+					</div>
+				</div>
+					
+					
 			</div>
-			<div class="pmpro_checkout-field pmpro_checkout-field-text pmprogl_checkout_field_div" <?php echo $gift_field_style_attr ?>>
-				<label for="pmprogl_recipient_email"><?php esc_html_e( 'Recipient Email Address', 'pmpro-gift-levels' );?></label>
-				<input type="text" name="pmprogl_recipient_email" value="<?php echo esc_attr( $current_recipient_email ) ?>" />
-			</div>
-			<div class="pmpro_checkout-field pmpro_checkout-field-textarea pmprogl_checkout_field_div" <?php echo $gift_field_style_attr ?>>
-				<label for="pmprogl_gift_message"><?php esc_html_e( 'Add a Personalized Message (optional)', 'pmpro-gift-levels' );?></label>
-				<textarea name="pmprogl_gift_message"><?php echo esc_textarea( wp_unslash( $current_gift_message ) ); ?></textarea>
-			</div>
-		</div> <!-- end pmpro_checkout-fields -->
-	</div>
+		</div>
+	</fieldset>
 	<?php
 }
 add_action( 'pmpro_checkout_boxes', 'pmprogl_checkout_boxes' );

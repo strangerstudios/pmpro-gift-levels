@@ -1,11 +1,11 @@
 <?php
 /*
 Plugin Name: Paid Memberships Pro - Gift Levels Add On
-Plugin URI: http://www.paidmembershipspro.com/add-ons/pmpro-gift-levels/
-Description: Some levels will generate discount codes to give to others to use for gift memberships.
+Plugin URI: https://www.paidmembershipspro.com/add-ons/pmpro-gift-levels/
+Description: Sell a gift certificate that generates a unique gift code for membership to your site.
 Version: 1.0.4
-Author: Stranger Studios
-Author URI: http://www.strangerstudios.com
+Author: Paid Memberships Pro
+Author URI: https://www.paidmembershipspro.com
 Text Domain: pmpro-gift-levels
 Domain Path: /languages
 */
@@ -42,7 +42,7 @@ function pmprogl_plugin_row_meta($links, $file) {
 	if(strpos($file, 'pmpro-gift-levels.php') !== false)
 	{
 		$new_links = array(
-			'<a href="' . esc_url('https://www.paidmembershipspro.com/add-ons/plugins-on-github/pmpro-gift-levels/')  . '" title="' . esc_attr( __( 'View Documentation', 'pmpro-gift-levels' ) ) . '">' . __( 'Docs', 'pmpro-gift-levels' ) . '</a>',
+			'<a href="' . esc_url( 'https://www.paidmembershipspro.com/add-ons/pmpro-gift-levels/' )  . '" title="' . esc_attr( __( 'View Documentation', 'pmpro-gift-levels' ) ) . '">' . __( 'Docs', 'pmpro-gift-levels' ) . '</a>',
 			'<a href="' . esc_url('https://www.paidmembershipspro.com/support/') . '" title="' . esc_attr( __( 'Visit Customer Support Forum', 'pmpro-gift-levels' ) ) . '">' . __( 'Support', 'pmpro-gift-levels' ) . '</a>',
 		);
 		$links = array_merge($links, $new_links);

@@ -19,22 +19,31 @@ function pmprogl_invoice_bullets_bottom( $order ) {
 				$gift_code_id = end( $purchased_gift_codes );
 			}
 		}
-		
+
+		// Show the gift code and checkout URL.
 		if ( ! empty( $gift_code_id ) ) {
 			$code = $wpdb->get_row( "SELECT * FROM $wpdb->pmpro_discount_codes WHERE id = '" . intval( $gift_code_id ) . "' LIMIT 1" );
 			$code_level_id = $wpdb->get_var("SELECT level_id FROM $wpdb->pmpro_discount_codes_levels WHERE code_id = '" . intval($gift_code_id) . "' LIMIT 1");
 			if ( ! empty( $code ) && ! empty( $code_level_id ) ) {
 				$code_url = pmpro_url("checkout", "?level=" . $code_level_id . "&discount_code=" . $code->code);
 				?>
-				<li><strong><?php esc_html_e( 'Gift Code:', 'pmpro-gift-levels'); ?></strong> <?php echo esc_html( $code->code ); ?></li>
-				<li>
-					<strong><?php esc_html_e( 'Gift Checkout URL:', 'pmpro-gift-levels' ); ?></strong> <?php echo esc_html( $code_url ); ?></li>
+				<li class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_list_item' ) ); ?>"><strong><?php esc_html_e( 'Gift Code:', 'pmpro-gift-levels'); ?></strong> <span class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_tag pmpro_tag-discount-code', 'pmpro_tag-discount-code' ) ); ?>"><?php echo esc_html( $code->code ); ?></span></li>
+				<li class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_list_item' ) ); ?>">
+					<strong><?php esc_html_e( 'Gift Checkout URL:', 'pmpro-gift-levels' ); ?></strong> <a href="<?php echo esc_url( $code_url ); ?>"><?php echo esc_html( $code_url ); ?></a>
+				</li>
 				<?php 
 			}
 		}
+
+		// If the order status is pending, show a message.
+		if ( $order->status == 'pending' ) {
+			?>
+			<li class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_list_item' ) ); ?>"><?php esc_html_e( 'Your gift code will be available after payment is received.', 'pmpro-gift-levels' ); ?></li>
+			<?php
+		}
 	}
 }
-add_filter( 'pmpro_invoice_bullets_bottom', 'pmprogl_invoice_bullets_bottom' );
+add_filter( 'pmpro_invoice_bullets_bottom', 'pmprogl_invoice_bullets_bottom', 15 );
 
 /**
  * Show all gift codes that the current user has purchased on the Membership Account page.
@@ -53,7 +62,22 @@ function pmprogl_the_content_account_page($content)
 		
 		if(!empty($gift_codes))
 		{
-			$temp_content = pmprogl_build_gift_code_list();
+			ob_start();
+			?>
+			<section id="pmpro_account-pmprogl" class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_section', 'pmpro_account-pmprogl' ) ); ?>">
+				<h2 class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_section_title pmpro_font-x-large' ) ); ?>"><?php esc_html_e( 'Purchased Gift Codes', 'pmpro-gift-levels' );  ?></h2>
+				<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_section_content' ) ); ?>">
+					<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_card' ) ); ?>">
+						<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_card_content' ) ); ?>">
+							<p><?php esc_html_e( 'Below is a list of gift codes you have purchased.', 'pmpro-gift-levels' ); ?></p>
+							<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_divider' ) ); ?>"></div>
+							<?php echo pmprogl_build_gift_code_list(); ?>
+						</div>
+					</div>
+				</div>
+			</section>
+			<?php
+			$temp_content = ob_get_clean();
 			$content = str_replace('<!-- end pmpro_account-profile -->', '<!-- end pmpro_account-profile -->' . $temp_content, $content);
  		}
 	}
