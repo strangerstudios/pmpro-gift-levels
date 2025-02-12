@@ -20,6 +20,9 @@ require_once( PMPROGL_DIR . '/includes/admin.php' );    // Set up settings pages
 require_once( PMPROGL_DIR . '/includes/checkout.php' ); // Add functionality to checkout.
 require_once( PMPROGL_DIR . '/includes/email.php' );    // Modify emails that are sent.
 require_once( PMPROGL_DIR . '/includes/frontend.php' ); // Show content on frontend.
+require_once( PMPROGL_DIR . '/classes/email-templates/class-pmprogl-email-template-gift-purchased.php' );
+require_once( PMPROGL_DIR . '/classes/email-templates/class-pmprogl-email-template-gift-purchased-admin.php' );
+require_once( PMPROGL_DIR . '/classes/email-templates/class-pmprogl-email-template-gift-recipient.php' );
 
 /**
  * Load text domain
