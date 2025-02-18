@@ -115,9 +115,9 @@ class PMProGL_Email_Template_Gift_Recipient extends PMPro_Email_Template {
 	 */
 	public static function get_default_body() {
 
-		return wp_kses_post( '<p>!!pmprogl_giver_display_name!! has just sent you a gift membership to !!sitename!!!</p>
+		return wp_kses_post( __( '<p>!!pmprogl_giver_display_name!! has just sent you a gift membership to !!sitename!!!</p>
 <p>!!pmprogl_gift_message!!</p>
-<p>Use this link to set up your membership: <a href="!!pmprogl_gift_code_url!!">!!pmprogl_gift_code_url!!</a></p>', 'pmpro-gift-levels' );
+<p>Use this link to set up your membership: <a href="!!pmprogl_gift_code_url!!">!!pmprogl_gift_code_url!!</a></p>', 'pmpro-gift-levels' ) );
 	}
 
 	/**

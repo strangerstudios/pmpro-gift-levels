@@ -106,12 +106,12 @@ class PMProGL_Email_Template_Gift_Purchased_Admin extends PMPro_Email_Template {
 	 * @return string The default body content for the email.
 	 */
 	public static function get_default_body() {
-		return wp_kses_post( '<p>There was a new gift membership checkout at !!sitename!!.</p>
+		return wp_kses_post( __( '<p>There was a new gift membership checkout at !!sitename!!.</p>
 <p>Below are details about the purchase and a receipt for the initial order.</p>
 <p>Account: !!pmprogl_giver_display_name!! (!!pmprogl_giver_email!!)</p>
 <p>Order #!!order_id!! on !!order_date!!</p>
 <p>Total Billed: !!order_total!!</p>
-<p>Gift Code: !!pmprogl_gift_code!!', 'pmpro-gift-levels' );
+<p>Gift Code: !!pmprogl_gift_code!!', 'pmpro-gift-levels' ) );
 	}
 
 	/**

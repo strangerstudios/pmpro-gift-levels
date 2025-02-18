@@ -109,13 +109,13 @@ class PMProGL_Email_Template_Gift_Purchased extends PMPro_Email_Template {
 	 */
 	public static function get_default_body() {
 
-		return wp_kses_post( '<p>Thank you for your purchase at !!sitename!!. Below is a receipt for your purchase.</p>
+		return wp_kses_post( __( '<p>Thank you for your purchase at !!sitename!!. Below is a receipt for your purchase.</p>
 <p>Account: !!pmprogl_giver_display_name!! (!!pmprogl_giver_email!!)</p>
 <p>Order #!!order_id!! on !!order_date!!<br />
 Total Billed: !!order_total!!</p>
 <p><strong>Share this link with your gift recipient: <a href="!!pmprogl_gift_code_url!!">!!pmprogl_gift_code_url!!</a></strong></p>
 <p>Log in to view your purchase history here: !!login_url!!</p>
-<p>To view an online version of this order, click here: !!order_url!!</p>', 'pmpro-gift-levels' );			
+<p>To view an online version of this order, click here: !!order_url!!</p>', 'pmpro-gift-levels' ) );
 	}
 
 	/**
