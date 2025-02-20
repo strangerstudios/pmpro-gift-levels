@@ -1,5 +1,24 @@
 <?php
 /**
+ * Set up the email templates for the plugin.
+ *
+ * @since TBD
+ */
+function pmprogl_load_email_templates() {
+	if ( class_exists( 'PMPro_Email_Template' ) ) {
+		// PMPro v3.4+. Load the email template classes.
+		require_once( PMPROGL_DIR . '/classes/email-templates/class-pmprogl-email-template-gift-purchased.php' );
+		require_once( PMPROGL_DIR . '/classes/email-templates/class-pmprogl-email-template-gift-purchased-admin.php' );
+		require_once( PMPROGL_DIR . '/classes/email-templates/class-pmprogl-email-template-gift-recipient.php' );
+	} else {
+		// Legacy hook to add email templates.
+		add_filter( 'pmproet_templates', 'pmprogl_template_callback' );
+	}
+}
+
+add_action( 'init', 'pmprogl_load_email_templates', 8 ); // Priority 8 to ensure the pmproet_templates hook is added before PMPro loads email templates.
+
+/**
  * Add Gift Membership-specific templates to the email templates.
  *
  * @param array $templates that can be edited.

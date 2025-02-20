@@ -20,22 +20,6 @@ require_once( PMPROGL_DIR . '/includes/admin.php' );    // Set up settings pages
 require_once( PMPROGL_DIR . '/includes/checkout.php' ); // Add functionality to checkout.
 require_once( PMPROGL_DIR . '/includes/email.php' );    // Modify emails that are sent.
 require_once( PMPROGL_DIR . '/includes/frontend.php' ); // Show content on frontend.
-add_filter( 'pmproet_templates', 'pmprogl_template_callback' );
-
-
-//Instead of requiring email template class files immediately in the main plugin file, let’s hook a new function on init that either requires the email template class files or hooks pmprogl_template_callback() depending on if the PMPro_Email_Template class exists
-
-function pmprogl_load_email_templates() {
-	if ( class_exists( 'PMPro_Email_Template' ) ) {
-		require_once( PMPROGL_DIR . '/classes/email-templates/class-pmprogl-email-template-gift-purchased.php' );
-		require_once( PMPROGL_DIR . '/classes/email-templates/class-pmprogl-email-template-gift-purchased-admin.php' );
-		require_once( PMPROGL_DIR . '/classes/email-templates/class-pmprogl-email-template-gift-recipient.php' );
-		// We don't need the pmprogl_template_callback function if the PMPro_Email_Template class exists.
-		remove_filter( 'pmproet_templates', 'pmprogl_template_callback' );
-	}
-}
-
-add_action( 'init', 'pmprogl_load_email_templates' );
 
 /**
  * Load text domain
