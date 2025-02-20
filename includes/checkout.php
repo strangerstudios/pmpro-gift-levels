@@ -284,20 +284,20 @@ function pmprogl_pmpro_after_checkout($user_id, $morder) {
 		// Don't send the default checkout emails to user or admin.
 		add_filter( 'pmpro_send_checkout_emails', '__return_false', 15 );
 
-		//If PMPro version is v3.4+ then we can use the new email classes
-		if ( defined( 'PMPRO_VERSION' ) && version_compare( PMPRO_VERSION, '3.4', '>=' ) ) {
+		//If PMPro_Email_Template class exists, we're safe using new email classes.
+		if ( class_exists( 'PMPro_Email_Template' ) ) {
 			// Send the checkout emails to gift purchasers, admin, and gift recipient (optional) with the new email classes.
 			$pmprogl_gift_purchased_email =
-				new PMProGL_Email_Template_Gift_Purchased( $morder, intval( $gift['level_id'] ), $giver, $gcode, $gift_message );
+				new PMPro_Email_Template_PMProGL_Gift_Purchased( $morder, intval( $gift['level_id'] ), $giver, $gcode, $gift_message );
 			$pmprogl_gift_purchased_email->send();
 
 			$pmprogl_gift_purchased_admin_email =
-				new PMProGL_Email_Template_Gift_Purchased_Admin( $morder, intval( $gift['level_id'] ), $giver, $gcode, $gift_message );
+				new PMPro_Email_Template_PMProGL_Gift_Purchased_Admin( $morder, intval( $gift['level_id'] ), $giver, $gcode, $gift_message );
 			$pmprogl_gift_purchased_admin_email->send();
 
 			//MemberOrder $order, PMPro_Level $gift,  WP_User $giver,  String $email_recipient
 			$pmprogl_gift_recipient_email =
-				new PMProGL_Email_Template_Gift_Recipient ( $morder, intval( $gift['level_id'] ), $giver, $recipient_email, $gcode, $gift_message );
+				new PMPro_Email_Template_PMProGL_Gift_Recipient( $morder, intval( $gift['level_id'] ), $giver, $recipient_email, $gcode, $gift_message );
 			$pmprogl_gift_recipient_email->send();
 
 

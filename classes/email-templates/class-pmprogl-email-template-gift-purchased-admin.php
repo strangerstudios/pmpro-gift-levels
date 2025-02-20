@@ -1,6 +1,6 @@
-<?php 
+<?php
 
-class PMProGL_Email_Template_Gift_Purchased_Admin extends PMPro_Email_Template {
+class PMPro_Email_Template_PMProGL_Gift_Purchased_Admin extends PMPro_Email_Template {
 
 	/**
 	 * The Order that was created for the gift purchase.
@@ -225,7 +225,7 @@ class PMProGL_Email_Template_Gift_Purchased_Admin extends PMPro_Email_Template {
  * @return array The modified email templates array.
  */
 function pmprogl_email_template_gift_purchased_admin( $email_templates ) {
-	$email_templates['pmprogl_gift_purchased_admin'] = 'PMProGL_Email_Template_Gift_Purchased_Admin';
+	$email_templates['pmprogl_gift_purchased_admin'] = 'PMPro_Email_Template_PMProGL_Gift_Purchased_Admin';
 	return $email_templates;
 }
 add_filter( 'pmpro_email_templates', 'pmprogl_email_template_gift_purchased_admin' );

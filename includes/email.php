@@ -26,12 +26,6 @@ function pmprogl_template_callback( $templates ) {
 	
 	return $templates;
 }
-add_filter( 'pmproet_templates', 'pmprogl_template_callback');
-
-//If PMPro is V3.4+ then we can use the  new Email Classes. Remove filter above.
-if ( defined( 'PMPRO_VERSION' ) && version_compare( PMPRO_VERSION, '3.4', '>=' ) ) {
-	remove_filter( 'pmproet_templates', 'pmprogl_template_callback');
-}
 
 /**
  * Default email content for the gift recipient email template.
