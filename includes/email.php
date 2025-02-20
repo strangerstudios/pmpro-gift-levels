@@ -7,9 +7,9 @@
 function pmprogl_load_email_templates() {
 	if ( class_exists( 'PMPro_Email_Template' ) ) {
 		// PMPro v3.4+. Load the email template classes.
-		require_once( PMPROGL_DIR . '/classes/email-templates/class-pmprogl-email-template-gift-purchased.php' );
-		require_once( PMPROGL_DIR . '/classes/email-templates/class-pmprogl-email-template-gift-purchased-admin.php' );
-		require_once( PMPROGL_DIR . '/classes/email-templates/class-pmprogl-email-template-gift-recipient.php' );
+		require_once( PMPROGL_DIR . '/classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased.php' );
+		require_once( PMPROGL_DIR . '/classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased-admin.php' );
+		require_once( PMPROGL_DIR . '/classes/email-templates/class-pmpro-email-template-pmprogl-gift-recipient.php' );
 	} else {
 		// Legacy hook to add email templates.
 		add_filter( 'pmproet_templates', 'pmprogl_template_callback' );
