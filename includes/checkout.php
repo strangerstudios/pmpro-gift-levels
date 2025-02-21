@@ -318,6 +318,11 @@ function pmprogl_pmpro_after_checkout($user_id, $morder) {
 				'invoice_id' => $morder->code,
 				'invoice_total' => pmpro_formatPrice($morder->total),
 				'invoice_date' => date_i18n(get_option('date_format'), $morder->getTimestamp()),
+				'invoice_url' => pmpro_login_url( pmpro_url( 'invoice', '?invoice=' . $morder->code ) ),
+				'order_id' => $morder->code,
+				'order_total' => pmpro_formatPrice( $morder->total ),
+				'order_date' => date_i18n( get_option( 'date_format' ), $morder->getTimestamp() ),
+				'order_url' => pmpro_login_url( pmpro_url( 'invoice', '?invoice=' . $morder->code ) ),
 				'billing_name' => $morder->billing->name,
 				'billing_street' => $morder->billing->street,
 				'billing_city' => $morder->billing->city,
@@ -337,7 +342,6 @@ function pmprogl_pmpro_after_checkout($user_id, $morder) {
 														$morder->billing->zip,
 														$morder->billing->country,
 														$morder->billing->phone),
-				'invoice_url' => pmpro_login_url( pmpro_url( 'invoice', '?invoice=' . $morder->code ) ),
 			);
 
 			// Send email to the gift purchaser.

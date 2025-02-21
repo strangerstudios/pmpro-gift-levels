@@ -90,9 +90,7 @@ class PMPro_Email_Template_PMProGL_Gift_Recipient extends PMPro_Email_Template {
 	 * @return string The "help text" to display to the admin when editing the email template.
 	 */
 	public static function get_template_description() {
-		return esc_html__( 'This email is sent when the gift giver provides the recipient email address at checkout. 
-		Additional placeholder variables you can use in this email template include !!pmprogl_giver_display_name!!, 
-		!!pmprogl_gift_message!!, !!pmprogl_gift_code!!, and !!pmprogl_gift_code_url!!.', 'pmpro-gift-levels' );
+		return esc_html__( 'This email is sent when the gift giver provides the recipient email address at checkout.', 'pmpro-gift-levels' );
 	}
 
 	/**
@@ -114,10 +112,7 @@ class PMPro_Email_Template_PMProGL_Gift_Recipient extends PMPro_Email_Template {
 	 * @return string The default body content for the email.
 	 */
 	public static function get_default_body() {
-
-		return wp_kses_post( __( '<p>!!pmprogl_giver_display_name!! has just sent you a gift membership to !!sitename!!!</p>
-<p>!!pmprogl_gift_message!!</p>
-<p>Use this link to set up your membership: <a href="!!pmprogl_gift_code_url!!">!!pmprogl_gift_code_url!!</a></p>', 'pmpro-gift-levels' ) );
+		return pmprogl_get_default_gift_recipient_email_body();
 	}
 
 	/**
@@ -131,12 +126,14 @@ class PMPro_Email_Template_PMProGL_Gift_Recipient extends PMPro_Email_Template {
 		return array(
 			'!!pmprogl_giver_display_name!!' => esc_html__( 'The display name of the user who gifted the membership.', 'pmpro-gift-levels' ),
 			'!!pmprogl_giver_email!! ' => esc_html__( 'The email address of the user who gifted the membership.', 'pmpro-gift-levels' ),
+			'!!pmpro_gift_recipient_email!!' => esc_html__( 'The email address of the recipient of the gift.', 'pmpro-gift-levels' ),
 			'!!pmprogl_gift_code_url!!' => esc_html__( 'The URL to the page where the recipient can redeem their gift.', 'pmpro-gift-levels' ),
 			'!!pmprogl_gift_message!!' => esc_html__( 'The message the giver included with the gift.', 'pmpro-gift-levels' ),
 			'!!pmprogl_gift_code!!' => esc_html__( 'The gift code the recipient can use to redeem their gift.', 'pmpro-gift-levels' ),
 			'!!order_id!!' => esc_html__( 'The ID of the order.', 'pmpro-gift-levels' ),
 			'!!order_date!!' => esc_html__( 'The date of the order.', 'pmpro-gift-levels' ),
 			'!!order_total!!' => esc_html__( 'The total cost of the order.', 'pmpro-gift-levels' ),
+			'!!order_url!!' => esc_html__( 'The URL of the order.', 'pmpro-gift-levels' ),
 			'!!billing_name!!' => esc_html__( 'Billing Info Name', 'pmpro-gift-levels' ),
 			'!!billing_street!!' => esc_html__( 'Billing Info Street', 'pmpro-gift-levels' ),
 			'!!billing_street2!!' => esc_html__( 'Billing Info Street 2', 'pmpro-gift-levels' ),
@@ -150,7 +147,6 @@ class PMPro_Email_Template_PMProGL_Gift_Recipient extends PMPro_Email_Template {
 			'!!accountnumber!!' => esc_html__( 'Credit Card Number (last 4 digits)', 'pmpro-gift-levels' ),
 			'!!expirationmonth!!' => esc_html__( 'Credit Card Expiration Month (mm format)', 'pmpro-gift-levels' ),
 			'!!expirationyear!!' => esc_html__( 'Credit Card Expiration Year (yyyy format)', 'pmpro-gift-levels' ),
-			'!!order_url!!' => esc_html__( 'The URL of the order.', 'pmpro-gift-levels' ),
 		);
 	}
 
@@ -165,13 +161,20 @@ class PMPro_Email_Template_PMProGL_Gift_Recipient extends PMPro_Email_Template {
 		$morder = $this->order;
 
 		$email_template_variables = array(
+			'pmprogl_giver_email' => $this->giver->user_email,
 			'pmprogl_giver_display_name' => $this->giver->display_name,
+			'pmpro_gift_recipient_email' => $this->get_recipient_email(),
 			'pmprogl_gift_code_url' => pmpro_url( 'checkout', '?level=' . $this->gift_level_id . '&discount_code=' . $this->gcode ),
 			'pmprogl_gift_message' => wp_unslash( $this->gift_message ),
 			'pmprogl_gift_code' => $this->gcode,
 			'order_id' => $morder->code,
 			'order_total' => pmpro_formatPrice( $morder->total ),
 			'order_date' => date_i18n( get_option( 'date_format' ), $morder->getTimestamp() ),
+			'order_url' => pmpro_login_url( pmpro_url( 'invoice', '?invoice=' . $morder->code ) ),
+			'invoice_id' => $morder->code,
+			'invoice_total' => pmpro_formatPrice( $morder->total ),
+			'invoice_date' => date_i18n(get_option( 'date_format' ), $morder->getTimestamp() ),
+			'invoice_url' => pmpro_login_url( pmpro_url( 'invoice', '?invoice=' . $morder->code ) ),
 			'billing_name' => $morder->billing->name,
 			'billing_street' => $morder->billing->street,
 			'billing_city' => $morder->billing->city,
@@ -191,7 +194,6 @@ class PMPro_Email_Template_PMProGL_Gift_Recipient extends PMPro_Email_Template {
 													  $morder->billing->zip,
 													  $morder->billing->country,
 													  $morder->billing->phone ),
-			'order_url' => pmpro_login_url( pmpro_url( 'invoice', '?invoice=' . $morder->code ) ),
 		);
 		return $email_template_variables;
 	}
