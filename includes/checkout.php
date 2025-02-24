@@ -295,10 +295,11 @@ function pmprogl_pmpro_after_checkout($user_id, $morder) {
 				new PMPro_Email_Template_PMProGL_Gift_Purchased_Admin( $morder, intval( $gift['level_id'] ), $giver, $gcode, $gift_message );
 			$pmprogl_gift_purchased_admin_email->send();
 
-			//MemberOrder $order, PMPro_Level $gift,  WP_User $giver,  String $email_recipient
-			$pmprogl_gift_recipient_email =
-				new PMPro_Email_Template_PMProGL_Gift_Recipient( $morder, intval( $gift['level_id'] ), $giver, $recipient_email, $gcode, $gift_message );
-			$pmprogl_gift_recipient_email->send();
+			if ( ! empty( $recipient_email ) ) {
+				$pmprogl_gift_recipient_email =
+					new PMPro_Email_Template_PMProGL_Gift_Recipient( $morder, intval( $gift['level_id'] ), $giver, $recipient_email, $gcode, $gift_message );
+				$pmprogl_gift_recipient_email->send();
+			}
 
 
 		} else {
