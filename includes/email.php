@@ -2,7 +2,7 @@
 /**
  * Set up the email templates for the plugin.
  *
- * @since TBD
+ * @since 1.1.1
  */
 function pmprogl_load_email_templates() {
 	if ( class_exists( 'PMPro_Email_Template' ) ) {

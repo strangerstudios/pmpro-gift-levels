@@ -3,14 +3,14 @@
 Plugin Name: Paid Memberships Pro - Gift Levels Add On
 Plugin URI: https://www.paidmembershipspro.com/add-ons/pmpro-gift-levels/
 Description: Sell a gift certificate that generates a unique gift code for membership to your site.
-Version: 1.1
+Version: 1.1.1
 Author: Paid Memberships Pro
 Author URI: https://www.paidmembershipspro.com
 Text Domain: pmpro-gift-levels
 Domain Path: /languages
 */
 
-define( 'PMPROGL_VERSION', '1.1' );
+define( 'PMPROGL_VERSION', '1.1.1' );
 define( 'PMPROGL_BASE_FILE', __FILE__ );
 define( 'PMPROGL_DIR', dirname( __FILE__ ) );
 
