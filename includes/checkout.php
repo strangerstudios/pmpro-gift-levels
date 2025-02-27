@@ -284,73 +284,98 @@ function pmprogl_pmpro_after_checkout($user_id, $morder) {
 		// Don't send the default checkout emails to user or admin.
 		add_filter( 'pmpro_send_checkout_emails', '__return_false', 15 );
 
-		// Send the checkout emails to gift purchasers, admin, and gift recipient (optional).
-		// Build the email template variable replacement data.
-		$data = array(
-			// Gift Membership data.
-			'pmprogl_gift_recipient_email' => $recipient_email,
-			'pmprogl_giver_display_name' => $giver->display_name,
-			'pmprogl_giver_email' => $giver->user_email,
-			'pmprogl_gift_message' => wp_unslash( $gift_message ),
-			'pmprogl_gift_code' => $gcode,
-			'pmprogl_gift_code_url' => pmpro_url( 'checkout', '?level=' . intval( $gift['level_id'] ) . "&discount_code=" . $gcode ),
+		//If PMPro_Email_Template class exists, we're safe using new email classes.
+		if ( class_exists( 'PMPro_Email_Template' ) ) {
+			// Send the checkout emails to gift purchasers, admin, and gift recipient (optional) with the new email classes.
+			$pmprogl_gift_purchased_email =
+				new PMPro_Email_Template_PMProGL_Gift_Purchased( $morder, intval( $gift['level_id'] ), $giver, $gcode, $gift_message );
+			$pmprogl_gift_purchased_email->send();
 
-			// Order data.
-			'invoice_id' => $morder->code,
-			'invoice_total' => pmpro_formatPrice($morder->total),
-			'invoice_date' => date_i18n(get_option('date_format'), $morder->getTimestamp()),
-			'billing_name' => $morder->billing->name,
-			'billing_street' => $morder->billing->street,
-			'billing_city' => $morder->billing->city,
-			'billing_state' => $morder->billing->state,
-			'billing_zip' => $morder->billing->zip,
-			'billing_country' => $morder->billing->country,
-			'billing_phone' => $morder->billing->phone,
-			'cardtype' => $morder->cardtype,
-			'accountnumber' => hideCardNumber($morder->accountnumber),
-			'expirationmonth' => $morder->expirationmonth,
-			'expirationyear' => $morder->expirationyear,
-			'billing_address' => pmpro_formatAddress($morder->billing->name,
-													$morder->billing->street,
-													"", //address 2
-													$morder->billing->city,
-													$morder->billing->state,
-													$morder->billing->zip,
-													$morder->billing->country,
-													$morder->billing->phone),
-			'invoice_url' => pmpro_login_url( pmpro_url( 'invoice', '?invoice=' . $morder->code ) ),
-		);
+			$pmprogl_gift_purchased_admin_email =
+				new PMPro_Email_Template_PMProGL_Gift_Purchased_Admin( $morder, intval( $gift['level_id'] ), $giver, $gcode, $gift_message );
+			$pmprogl_gift_purchased_admin_email->send();
 
-		// Send email to the gift purchaser.
-		$data['header_name'] = $giver->display_name;
-		$email_purchaser = new PMProEmail();
-		$email_purchaser->template = 'pmprogl_gift_purchased';
-		$email_purchaser->email = $giver->user_email;
-		$email_purchaser->data = $data;
-		$email_purchaser->sendEmail();
+			if ( ! empty( $recipient_email ) ) {
+				$pmprogl_gift_recipient_email =
+					new PMPro_Email_Template_PMProGL_Gift_Recipient( $morder, intval( $gift['level_id'] ), $giver, $recipient_email, $gcode, $gift_message );
+				$pmprogl_gift_recipient_email->send();
+			}
 
-		// Send email to the site admin.
-		unset( $data['header_name'] );
-		$email_admin = new PMProEmail();
-		$email_admin->template = 'pmprogl_gift_purchased_admin';
-		$email_admin->email = get_bloginfo( 'admin_email' );
-		$email_admin->data = $data;
-		$email_admin->sendEmail();
 
-		// Send email to the gift recipient (optional).
-		if ( ! empty( $recipient_email ) ) {
-			// Replace any default email data that is user-specific.
-			$new_data = array(
-				'name' => $recipient_email,
-				'display_name' => $recipient_email,
-				'user_email' => $recipient_email,
-				'header_name' => $recipient_email,
+		} else {
+
+			// Send the checkout emails to gift purchasers, admin, and gift recipient (optional).
+			// Build the email template variable replacement data.
+			$data = array(
+				// Gift Membership data.
+				'pmprogl_gift_recipient_email' => $recipient_email,
+				'pmprogl_giver_display_name' => $giver->display_name,
+				'pmprogl_giver_email' => $giver->user_email,
+				'pmprogl_gift_message' => wp_unslash( $gift_message ),
+				'pmprogl_gift_code' => $gcode,
+				'pmprogl_gift_code_url' => pmpro_url( 'checkout', '?level=' . intval( $gift['level_id'] ) . "&discount_code=" . $gcode ),
+
+				// Order data.
+				'invoice_id' => $morder->code,
+				'invoice_total' => pmpro_formatPrice($morder->total),
+				'invoice_date' => date_i18n(get_option('date_format'), $morder->getTimestamp()),
+				'invoice_url' => pmpro_login_url( pmpro_url( 'invoice', '?invoice=' . $morder->code ) ),
+				'order_id' => $morder->code,
+				'order_total' => pmpro_formatPrice( $morder->total ),
+				'order_date' => date_i18n( get_option( 'date_format' ), $morder->getTimestamp() ),
+				'order_url' => pmpro_login_url( pmpro_url( 'invoice', '?invoice=' . $morder->code ) ),
+				'billing_name' => $morder->billing->name,
+				'billing_street' => $morder->billing->street,
+				'billing_city' => $morder->billing->city,
+				'billing_state' => $morder->billing->state,
+				'billing_zip' => $morder->billing->zip,
+				'billing_country' => $morder->billing->country,
+				'billing_phone' => $morder->billing->phone,
+				'cardtype' => $morder->cardtype,
+				'accountnumber' => hideCardNumber($morder->accountnumber),
+				'expirationmonth' => $morder->expirationmonth,
+				'expirationyear' => $morder->expirationyear,
+				'billing_address' => pmpro_formatAddress($morder->billing->name,
+														$morder->billing->street,
+														"", //address 2
+														$morder->billing->city,
+														$morder->billing->state,
+														$morder->billing->zip,
+														$morder->billing->country,
+														$morder->billing->phone),
 			);
-			$email_recipient = new PMProEmail();
-			$email_recipient->template = 'pmprogl_gift_recipient';
-			$email_recipient->email = $recipient_email;
-			$email_recipient->data = array_merge( $data, $new_data );
-			$email_recipient->sendEmail();
+
+			// Send email to the gift purchaser.
+			$data['header_name'] = $giver->display_name;
+			$email_purchaser = new PMProEmail();
+			$email_purchaser->template = 'pmprogl_gift_purchased';
+			$email_purchaser->email = $giver->user_email;
+			$email_purchaser->data = $data;
+			$email_purchaser->sendEmail();
+
+			// Send email to the site admin.
+			unset( $data['header_name'] );
+			$email_admin = new PMProEmail();
+			$email_admin->template = 'pmprogl_gift_purchased_admin';
+			$email_admin->email = get_bloginfo( 'admin_email' );
+			$email_admin->data = $data;
+			$email_admin->sendEmail();
+
+			// Send email to the gift recipient (optional).
+			if ( ! empty( $recipient_email ) ) {
+				// Replace any default email data that is user-specific.
+				$new_data = array(
+					'name' => $recipient_email,
+					'display_name' => $recipient_email,
+					'user_email' => $recipient_email,
+					'header_name' => $recipient_email,
+				);
+				$email_recipient = new PMProEmail();
+				$email_recipient->template = 'pmprogl_gift_recipient';
+				$email_recipient->email = $recipient_email;
+				$email_recipient->data = array_merge( $data, $new_data );
+				$email_recipient->sendEmail();
+			}
 		}
 	}
 

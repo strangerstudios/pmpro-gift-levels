@@ -1,5 +1,24 @@
 <?php
 /**
+ * Set up the email templates for the plugin.
+ *
+ * @since TBD
+ */
+function pmprogl_load_email_templates() {
+	if ( class_exists( 'PMPro_Email_Template' ) ) {
+		// PMPro v3.4+. Load the email template classes.
+		require_once( PMPROGL_DIR . '/classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased.php' );
+		require_once( PMPROGL_DIR . '/classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased-admin.php' );
+		require_once( PMPROGL_DIR . '/classes/email-templates/class-pmpro-email-template-pmprogl-gift-recipient.php' );
+	} else {
+		// Legacy hook to add email templates.
+		add_filter( 'pmproet_templates', 'pmprogl_template_callback' );
+	}
+}
+
+add_action( 'init', 'pmprogl_load_email_templates', 8 ); // Priority 8 to ensure the pmproet_templates hook is added before PMPro loads email templates.
+
+/**
  * Add Gift Membership-specific templates to the email templates.
  *
  * @param array $templates that can be edited.
@@ -26,7 +45,6 @@ function pmprogl_template_callback( $templates ) {
 	
 	return $templates;
 }
-add_filter( 'pmproet_templates', 'pmprogl_template_callback');
 
 /**
  * Default email content for the gift recipient email template.
@@ -51,12 +69,12 @@ function pmprogl_get_default_gift_purchased_email_body() {
 <p><?php esc_html_e( 'Thank you for your purchase at !!sitename!!. Below is a receipt for your purchase.', 'pmpro-gift-levels' ); ?></p>
 <p><?php esc_html_e( 'Account: !!pmprogl_giver_display_name!! (!!pmprogl_giver_email!!)', 'pmpro-gift-levels' ); ?></p>
 <p>
-	<?php esc_html_e( 'Invoice #!!invoice_id!! on !!invoice_date!!', 'pmpro-gift-levels' ); ?><br />
-	<?php esc_html_e( 'Total Billed: !!invoice_total!!', 'pmpro-gift-levels' ); ?>
+	<?php esc_html_e( 'Order #!!order_id!! on !!order_date!!', 'pmpro-gift-levels' ); ?><br />
+	<?php esc_html_e( 'Total Billed: !!order_total!!', 'pmpro-gift-levels' ); ?>
 </p>
 <p><strong><?php esc_html_e( 'Share this link with your gift recipient:', 'pmpro-gift-levels' ); ?> <a href="!!pmprogl_gift_code_url!!">!!pmprogl_gift_code_url!!</a></strong></p>
 <p><?php esc_html_e( 'Log in to view your purchase history here: !!login_url!!', 'pmpro-gift-levels' ); ?></p>
-<p><?php esc_html_e( 'To view an online version of this invoice, click here: !!invoice_url!!', 'pmpro-gift-levels' ); ?></p><?php
+<p><?php esc_html_e( 'To view an online version of this order, click here: !!order_url!!', 'pmpro-gift-levels' ); ?></p><?php
 	$body = ob_get_contents();
 	ob_end_clean();
 	return $body;
@@ -69,11 +87,11 @@ function pmprogl_get_default_gift_purchased_email_body() {
 function pmprogl_get_default_gift_purchased_admin_email_body() {
 	ob_start(); ?>
 <p><?php esc_html_e( 'There was a new gift membership checkout at !!sitename!!.', 'pmpro-gift-levels' ); ?></p>
-<p><?php esc_html_e( 'Below are details about the purchase and a receipt for the initial invoice.', 'pmpro-gift-levels' ); ?></p>
+<p><?php esc_html_e( 'Below are details about the purchase and a receipt for the initial order.', 'pmpro-gift-levels' ); ?></p>
 <p><?php esc_html_e( 'Account: !!pmprogl_giver_display_name!! (!!pmprogl_giver_email!!)', 'pmpro-gift-levels' ); ?></p>
 <p>
-	<?php esc_html_e( 'Invoice #!!invoice_id!! on !!invoice_date!!', 'pmpro-gift-levels' ); ?><br />
-	<?php esc_html_e( 'Total Billed: !!invoice_total!!', 'pmpro-gift-levels' ); ?><br />
+	<?php esc_html_e( 'Order #!!order_id!! on !!order_date!!', 'pmpro-gift-levels' ); ?><br />
+	<?php esc_html_e( 'Total Billed: !!order_total!!', 'pmpro-gift-levels' ); ?><br />
 	<?php esc_html_e( 'Gift Code: !!pmprogl_gift_code!!', 'pmpro-gift-levels' ); ?>
 </p><?php
 	$body = ob_get_contents();
