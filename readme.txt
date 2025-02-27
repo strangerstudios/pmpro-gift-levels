@@ -33,7 +33,7 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 
 == Changelog ==
 = 1.1.1 - 2025-02-27 =
-* ENHANCEMENT: Updated email logic to use the new `PMPro_Email_Template` class to show email template variables when editing email templates in PMPro v3.4+. 73 (@MaximilianoRicoTabo)
+* ENHANCEMENT: Now using the new `PMPro_Email_Template` class to show email template variables when editing email templates in PMPro v3.4+. #73 (@MaximilianoRicoTabo)
 
 = 1.1 - 2024-07-31 =
 * ENHANCEMENT: Updated the frontend UI for compatibility with PMPro v3.1. #71 (@dparker1005, @kimcoleman)
