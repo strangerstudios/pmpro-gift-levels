@@ -2,8 +2,8 @@
 Contributors: strangerstudios
 Tags: pmpro, paid memberships pro, membership, gift, gift level, gift card, giftcard, gift certificate
 Requires at least: 4.5
-Tested up to: 6.7
-Stable tag: 1.1.1
+Tested up to: 6.9
+Stable tag: 1.1.2
 
 == Description ==
 
@@ -32,6 +32,9 @@ Refer to the [Gift Levels Add On documentation page](https://www.paidmemberships
 Please post it in the issues section of GitHub and we'll fix it as soon as we can. Thanks for helping. https://github.com/strangerstudios/pmpro-gift-levels/issues
 
 == Changelog ==
+= 1.1.2 - 2026-05-05 =
+* ENHANCEMENT: Updated email templates to use liquid `{{ }}` variable syntax when running Paid Memberships Pro v3.7+, with backwards-compatible fallback to legacy `!!` syntax for older versions of PMPro. #76 (@dparker1005)
+
 = 1.1.1 - 2025-02-27 =
 * ENHANCEMENT: Now using the new `PMPro_Email_Template` class to show email template variables when editing email templates in PMPro v3.4+. #73 (@MaximilianoRicoTabo)
 
