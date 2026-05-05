@@ -51,6 +51,18 @@ function pmprogl_template_callback( $templates ) {
  *
  */
 function pmprogl_get_default_gift_recipient_email_body() {
+	if ( class_exists( 'PMPro_Liquid_Renderer' ) ) {
+		// Running a version of PMPro that supports liquid email rendering.
+		ob_start(); ?>
+<p><?php esc_html_e( '{{ pmprogl_giver_display_name }} has just sent you a gift membership to {{ sitename }}!', 'pmpro-gift-levels' ); ?></p>
+{{ pmprogl_gift_message }}
+<p><?php esc_html_e( 'Use this link to set up your membership:', 'pmpro-gift-levels' ); ?> <a href="{{ pmprogl_gift_code_url }}">{{ pmprogl_gift_code_url }}</a></p><?php
+		$body = ob_get_contents();
+		ob_end_clean();
+		return $body;
+	}
+
+	// Running a version of PMPro before liquid email rendering was available.
 	ob_start(); ?>
 <p><?php esc_html_e( '!!pmprogl_giver_display_name!! has just sent you a gift membership to !!sitename!!!', 'pmpro-gift-levels' ); ?></p>
 !!pmprogl_gift_message!!
@@ -65,6 +77,24 @@ function pmprogl_get_default_gift_recipient_email_body() {
  *
  */
 function pmprogl_get_default_gift_purchased_email_body() {
+	if ( class_exists( 'PMPro_Liquid_Renderer' ) ) {
+		// Running a version of PMPro that supports liquid email rendering.
+		ob_start(); ?>
+<p><?php esc_html_e( 'Thank you for your purchase at {{ sitename }}. Below is a receipt for your purchase.', 'pmpro-gift-levels' ); ?></p>
+<p><?php esc_html_e( 'Account: {{ pmprogl_giver_display_name }} ({{ pmprogl_giver_email }})', 'pmpro-gift-levels' ); ?></p>
+<p>
+	<?php esc_html_e( 'Order #{{ order_id }} on {{ order_date }}', 'pmpro-gift-levels' ); ?><br />
+	<?php esc_html_e( 'Total Billed: {{ order_total }}', 'pmpro-gift-levels' ); ?>
+</p>
+<p><strong><?php esc_html_e( 'Share this link with your gift recipient:', 'pmpro-gift-levels' ); ?> <a href="{{ pmprogl_gift_code_url }}">{{ pmprogl_gift_code_url }}</a></strong></p>
+<p><?php esc_html_e( 'Log in to view your purchase history here: {{ login_url }}', 'pmpro-gift-levels' ); ?></p>
+<p><?php esc_html_e( 'To view an online version of this order, click here: {{ order_url }}', 'pmpro-gift-levels' ); ?></p><?php
+		$body = ob_get_contents();
+		ob_end_clean();
+		return $body;
+	}
+
+	// Running a version of PMPro before liquid email rendering was available.
 	ob_start(); ?>
 <p><?php esc_html_e( 'Thank you for your purchase at !!sitename!!. Below is a receipt for your purchase.', 'pmpro-gift-levels' ); ?></p>
 <p><?php esc_html_e( 'Account: !!pmprogl_giver_display_name!! (!!pmprogl_giver_email!!)', 'pmpro-gift-levels' ); ?></p>
@@ -85,6 +115,23 @@ function pmprogl_get_default_gift_purchased_email_body() {
  *
  */
 function pmprogl_get_default_gift_purchased_admin_email_body() {
+	if ( class_exists( 'PMPro_Liquid_Renderer' ) ) {
+		// Running a version of PMPro that supports liquid email rendering.
+		ob_start(); ?>
+<p><?php esc_html_e( 'There was a new gift membership checkout at {{ sitename }}.', 'pmpro-gift-levels' ); ?></p>
+<p><?php esc_html_e( 'Below are details about the purchase and a receipt for the initial order.', 'pmpro-gift-levels' ); ?></p>
+<p><?php esc_html_e( 'Account: {{ pmprogl_giver_display_name }} ({{ pmprogl_giver_email }})', 'pmpro-gift-levels' ); ?></p>
+<p>
+	<?php esc_html_e( 'Order #{{ order_id }} on {{ order_date }}', 'pmpro-gift-levels' ); ?><br />
+	<?php esc_html_e( 'Total Billed: {{ order_total }}', 'pmpro-gift-levels' ); ?><br />
+	<?php esc_html_e( 'Gift Code: {{ pmprogl_gift_code }}', 'pmpro-gift-levels' ); ?>
+</p><?php
+		$body = ob_get_contents();
+		ob_end_clean();
+		return $body;
+	}
+
+	// Running a version of PMPro before liquid email rendering was available.
 	ob_start(); ?>
 <p><?php esc_html_e( 'There was a new gift membership checkout at !!sitename!!.', 'pmpro-gift-levels' ); ?></p>
 <p><?php esc_html_e( 'Below are details about the purchase and a receipt for the initial order.', 'pmpro-gift-levels' ); ?></p>
