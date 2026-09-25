@@ -1,5 +1,9 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * If the gift levels array is not yet set up, populate it from GUI settings.
  */
@@ -69,18 +73,18 @@ function pmprogl_build_gift_code_list( $user_id = null ){
 		<?php
 		foreach($gift_codes as $gift_code_id)
 		{
-			$code = $wpdb->get_row("SELECT * FROM $wpdb->pmpro_discount_codes WHERE id = '" . intval($gift_code_id) . "' LIMIT 1");					
+			$code = $wpdb->get_row("SELECT * FROM $wpdb->pmpro_discount_codes WHERE id = '" . intval($gift_code_id) . "' LIMIT 1"); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- PMPro custom table; value is cast with intval().					
 			if(!empty($code))
 			{
-				$code_level_id = $wpdb->get_var("SELECT level_id FROM $wpdb->pmpro_discount_codes_levels WHERE code_id = '" . intval($gift_code_id) . "' LIMIT 1");
+				$code_level_id = $wpdb->get_var("SELECT level_id FROM $wpdb->pmpro_discount_codes_levels WHERE code_id = '" . intval($gift_code_id) . "' LIMIT 1"); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- PMPro custom table; value is cast with intval().
 				$code_url = pmpro_url("checkout", "?level=" . $code_level_id . "&discount_code=" . $code->code);
-				$code_use = $wpdb->get_var("SELECT user_id FROM $wpdb->pmpro_discount_codes_uses WHERE code_id = '" . intval($gift_code_id) . "' LIMIT 1");
+				$code_use = $wpdb->get_var("SELECT user_id FROM $wpdb->pmpro_discount_codes_uses WHERE code_id = '" . intval($gift_code_id) . "' LIMIT 1"); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- PMPro custom table; value is cast with intval().
 				?>
 				<li class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_list_item' ) ); ?>">
 					<?php 
 					if ( ! empty( $code_use ) ) {
 						$code_user = get_userdata( $code_use ); 
-						printf( __( '%s: claimed by %s', 'pmpro-gift-levels' ), esc_html( $code->code ), esc_html( $code_user->display_name ) );
+						printf( esc_html__( '%s: claimed by %s', 'pmpro-gift-levels' ), esc_html( $code->code ), esc_html( $code_user->display_name ) );
 					} else { ?>
 						<a target="_blank" href="<?php echo esc_attr( $code_url );?>"><?php echo esc_html( $code->code ); ?></a>
 					<?php } ?>

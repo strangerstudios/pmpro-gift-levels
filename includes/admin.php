@@ -1,4 +1,9 @@
 <?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Add the gift membership level template
  * @since 1.0.2
@@ -26,14 +31,16 @@ add_filter( 'pmpro_membershiplevels_template_level', 'pmprogl_membershiplevels_t
  */
 function pmprogl_membership_level_after_other_settings() {
 	global $wpdb, $wp_version;
-	$edit_level_id        = $_REQUEST['edit'];
+	// phpcs:disable WordPress.Security.NonceVerification.Recommended -- Read-only display on the Edit Level page.
+	$edit_level_id        = isset( $_REQUEST['edit'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['edit'] ) ) : '';
 
 	// Get the template if passed in the URL.
 	if ( isset( $_REQUEST['template'] ) ) {
-		$template = sanitize_text_field( $_REQUEST['template'] );
+		$template = sanitize_text_field( wp_unslash( $_REQUEST['template'] ) );
 	} else {
 		$template = false;
 	}
+	// phpcs:enable WordPress.Security.NonceVerification.Recommended
 
 	// Set template default if this is a new gift level.
 	if ( $template === 'gift' && $edit_level_id === '-1' ) {
@@ -102,7 +109,7 @@ function pmprogl_membership_level_after_other_settings() {
 					<tr>
 						<th scope="row" valign="top"><label><?php esc_html_e( 'Gift Level?', 'pmpro-gift-levels' ); ?></label></th>
 						<td>
-							<input type="checkbox" id="pmprogl_enabled_for_level" name="pmprogl_enabled_for_level" value="1" <?php echo $gift_level_checked; ?> />
+							<input type="checkbox" id="pmprogl_enabled_for_level" name="pmprogl_enabled_for_level" value="1" <?php echo $gift_level_checked; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Hardcoded string. ?> />
 						</td>
 					</tr>
 					<tr class="pmprogl_gift_level_toggle_setting" <?php if( ! $enabled ) {?>style="display: none;"<?php }  ?>>
@@ -140,9 +147,9 @@ function pmprogl_membership_level_after_other_settings() {
 							<input id="pmprogl_expiration_number" name="pmprogl_expiration_number" type="number" value="<?php echo esc_attr( $expiration_number );?>" />
 							<select id="pmprogl_expiration_period" name="pmprogl_expiration_period">
 								<?php
-								$cycles = array(  esc_html__('Day(s)', 'pmpro-gift-levels' ) => 'Day', esc_html__('Week(s)', 'pmpro-gift-levels' ) => 'Week', esc_html__('Month(s)', 'pmpro-gift-levels' ) => 'Month', esc_html__('Year(s)', 'pmpro-gift-levels' ) => 'Year' );													
+								$cycles = array(  __('Day(s)', 'pmpro-gift-levels' ) => 'Day', __('Week(s)', 'pmpro-gift-levels' ) => 'Week', __('Month(s)', 'pmpro-gift-levels' ) => 'Month', __('Year(s)', 'pmpro-gift-levels' ) => 'Year' );													
 								foreach ( $cycles as $name => $value ) {
-									echo "<option value='$value' ".selected( $expiration_period, $value, true ).">$name</option>";
+									echo "<option value='" . esc_attr( $value ) . "' ".selected( $expiration_period, $value, true ).">" . esc_html( $name ) . "</option>";
 								}
 								?>
 							</select>
@@ -166,6 +173,8 @@ if ( defined( 'PMPRO_VERSION' ) && PMPRO_VERSION >= '2.9' ) {
 
 function pmprogl_save_membership_level( $save_id ) {
 	global $allowedposttags;
+	// Nonce and capability are verified by PMPro before pmpro_save_membership_level runs. Values are saved with the metadata API, which unslashes.
+	// phpcs:disable WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
 	$enabled              = empty( $_REQUEST['pmprogl_enabled_for_level'] ) ? 'no' : 'yes';
 	$gift_level			  = empty( $_REQUEST['pmprogl_gift_level'] ) ? 0 : intval( $_REQUEST['pmprogl_gift_level'] );
 	$allow_gift_emails = empty( $_REQUEST['pmprogl_allow_gift_emails'] ) ? 'no' : 'yes';
@@ -173,9 +182,10 @@ function pmprogl_save_membership_level( $save_id ) {
 		$expiration_number = 0;
 		$expiration_period = 'day';
 	} else {
-		$expiration_number = intval( $_REQUEST['pmprogl_expiration_number'] );
-		$expiration_period = sanitize_text_field( $_REQUEST['pmprogl_expiration_period'] );
+		$expiration_number = isset( $_REQUEST['pmprogl_expiration_number'] ) ? intval( $_REQUEST['pmprogl_expiration_number'] ) : 0;
+		$expiration_period = isset( $_REQUEST['pmprogl_expiration_period'] ) ? sanitize_text_field( $_REQUEST['pmprogl_expiration_period'] ) : '';
 	}
+	// phpcs:enable WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
 
 	update_pmpro_membership_level_meta( $save_id, 'pmprogl_enabled_for_level', $enabled );
 	update_pmpro_membership_level_meta( $save_id, 'pmprogl_gift_level', $gift_level );
@@ -207,7 +217,7 @@ function pmprogl_after_order_settings( $order ) {
 		return;
 	}
 
-	$gift_code = $wpdb->get_var("SELECT code FROM $wpdb->pmpro_discount_codes WHERE id = '" . intval( $gift_code_id ) . "' LIMIT 1");
+	$gift_code = $wpdb->get_var("SELECT code FROM $wpdb->pmpro_discount_codes WHERE id = '" . intval( $gift_code_id ) . "' LIMIT 1"); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- PMPro custom table; value is cast with intval().
 	if ( empty( $gift_code ) ) {
 		$gift_code = __( '[DELETED]', 'pmpro-gift-levels' ); 
 	}
@@ -250,7 +260,7 @@ function pmprogl_after_membership_level_profile_fields( $user ) {
 	?>
 	<div id="pmpro_account-gift_codes" class="pmpro_box">	
 		<h2><?php esc_html_e( "Gift Codes", "pmpro-gift-levels" ); ?></h2>
-		<?php echo pmprogl_build_gift_code_list( $user->ID ); ?>
+		<?php echo pmprogl_build_gift_code_list( $user->ID ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Returns HTML that is escaped when built. ?>
 	</div>
 	<?php
 }
@@ -266,7 +276,7 @@ function pmprogl_discount_code_after_settings( $discount_code_id ) {
 		return;
 	}
 
-	$order_id = $wpdb->get_var("SELECT pmpro_membership_order_id FROM $wpdb->pmpro_membership_ordermeta WHERE meta_key = 'pmprogl_code_id' AND meta_value = '" . intval($discount_code_id) . "' LIMIT 1");
+	$order_id = $wpdb->get_var("SELECT pmpro_membership_order_id FROM $wpdb->pmpro_membership_ordermeta WHERE meta_key = 'pmprogl_code_id' AND meta_value = '" . intval($discount_code_id) . "' LIMIT 1"); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- PMPro custom table; value is cast with intval().
 	if ( empty( $order_id ) ) {
 		return;
 	}
@@ -278,7 +288,7 @@ function pmprogl_discount_code_after_settings( $discount_code_id ) {
 
 	$user = get_userdata( $order->user_id );
 	if ( ! empty( $user ) ) {
-		echo '<strong>' . esc_html__( 'This discount code was purchased as a gift by', 'pmpro-gift-levels' ) . ' ' . '<a href="user-edit.php?user_id=' . $user->ID . '">' . $user->display_name . '</a></strong>';
+		echo '<strong>' . esc_html__( 'This discount code was purchased as a gift by', 'pmpro-gift-levels' ) . ' ' . '<a href="user-edit.php?user_id=' . intval( $user->ID ) . '">' . esc_html( $user->display_name ) . '</a></strong>';
 	}
 }
 add_action( 'pmpro_discount_code_after_settings', 'pmprogl_discount_code_after_settings' );

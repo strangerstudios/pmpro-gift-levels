@@ -1,5 +1,9 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Add gift code to frontend invoice page.
  *
@@ -22,8 +26,8 @@ function pmprogl_invoice_bullets_bottom( $order ) {
 
 		// Show the gift code and checkout URL.
 		if ( ! empty( $gift_code_id ) ) {
-			$code = $wpdb->get_row( "SELECT * FROM $wpdb->pmpro_discount_codes WHERE id = '" . intval( $gift_code_id ) . "' LIMIT 1" );
-			$code_level_id = $wpdb->get_var("SELECT level_id FROM $wpdb->pmpro_discount_codes_levels WHERE code_id = '" . intval($gift_code_id) . "' LIMIT 1");
+			$code = $wpdb->get_row( "SELECT * FROM $wpdb->pmpro_discount_codes WHERE id = '" . intval( $gift_code_id ) . "' LIMIT 1" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- PMPro custom table; value is cast with intval().
+			$code_level_id = $wpdb->get_var("SELECT level_id FROM $wpdb->pmpro_discount_codes_levels WHERE code_id = '" . intval($gift_code_id) . "' LIMIT 1"); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- PMPro custom table; value is cast with intval().
 			if ( ! empty( $code ) && ! empty( $code_level_id ) ) {
 				$code_url = pmpro_url("checkout", "?level=" . $code_level_id . "&discount_code=" . $code->code);
 				?>
@@ -71,7 +75,7 @@ function pmprogl_the_content_account_page($content)
 						<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_card_content' ) ); ?>">
 							<p><?php esc_html_e( 'Below is a list of gift codes you have purchased.', 'pmpro-gift-levels' ); ?></p>
 							<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_divider' ) ); ?>"></div>
-							<?php echo pmprogl_build_gift_code_list(); ?>
+							<?php echo pmprogl_build_gift_code_list(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Returns HTML that is escaped when built. ?>
 						</div>
 					</div>
 				</div>

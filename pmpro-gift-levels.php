@@ -10,6 +10,10 @@ Text Domain: pmpro-gift-levels
 Domain Path: /languages
 */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 define( 'PMPROGL_VERSION', '1.1.2' );
 define( 'PMPROGL_BASE_FILE', __FILE__ );
 define( 'PMPROGL_DIR', dirname( __FILE__ ) );

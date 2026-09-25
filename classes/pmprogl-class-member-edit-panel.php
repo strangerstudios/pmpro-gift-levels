@@ -1,5 +1,9 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class PMProgl_Member_Edit_Panel extends PMPro_Member_Edit_Panel {
 	/**
 	 * Set up the panel.
@@ -15,6 +19,6 @@ class PMProgl_Member_Edit_Panel extends PMPro_Member_Edit_Panel {
 	protected function display_panel_contents() {
 		// Get the user being edited.
 		$user = self::get_user();
-        echo pmprogl_build_gift_code_list( $user->ID );
+        echo pmprogl_build_gift_code_list( $user->ID ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Returns HTML that is escaped when built.
 	}
 }

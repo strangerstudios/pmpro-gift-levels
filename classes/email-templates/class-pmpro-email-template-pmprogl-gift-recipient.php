@@ -1,5 +1,9 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class PMPro_Email_Template_PMProGL_Gift_Recipient extends PMPro_Email_Template {
 
 	/**
