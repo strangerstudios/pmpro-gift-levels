@@ -1,5 +1,9 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Show field to enter recipient email at checkout.
  *
@@ -12,8 +16,10 @@ function pmprogl_checkout_boxes() {
 		return;
 	}
 
-	$current_recipient_email = empty( $_REQUEST['pmprogl_recipient_email'] ) ? '' : $_REQUEST['pmprogl_recipient_email'];
-	$current_gift_message = empty( $_REQUEST['pmprogl_gift_message'] ) ? '' : $_REQUEST['pmprogl_gift_message'];
+	// phpcs:disable WordPress.Security.NonceVerification.Recommended -- Only repopulating checkout fields for display; PMPro verifies the checkout nonce before processing.
+	$current_recipient_email = empty( $_REQUEST['pmprogl_recipient_email'] ) ? '' : sanitize_text_field( wp_unslash( $_REQUEST['pmprogl_recipient_email'] ) );
+	$current_gift_message = empty( $_REQUEST['pmprogl_gift_message'] ) ? '' : sanitize_textarea_field( wp_unslash( $_REQUEST['pmprogl_gift_message'] ) );
+	// phpcs:enable WordPress.Security.NonceVerification.Recommended
 
 	$send_recipient_email_checked = empty( $current_recipient_email . $current_gift_message ) ? '' : ' checked';
 	$gift_field_style_attr = empty( $current_recipient_email . $current_gift_message ) ? 'style="display:none;"' : '';
@@ -28,17 +34,17 @@ function pmprogl_checkout_boxes() {
 				<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_fields' ) ); ?>">
 					<div id="pmprogl_send_recipient_email_div" class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_field pmpro_form_field-checkbox', 'pmprogl_send_recipient_email_div' ) ); ?>">
 						<label for="pmprogl_send_recipient_email" class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_label pmpro_form_label-inline pmpro_clickable' ) ); ?>">
-							<input type="checkbox" id="pmprogl_send_recipient_email" name="pmprogl_send_recipient_email" class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_input pmpro_form_input-checkbox' ) ); ?>" value="1" <?php echo $send_recipient_email_checked; ?> />	
+							<input type="checkbox" id="pmprogl_send_recipient_email" name="pmprogl_send_recipient_email" class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_input pmpro_form_input-checkbox' ) ); ?>" value="1" <?php echo $send_recipient_email_checked; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Hardcoded string. ?> />	
 							<?php esc_html_e( 'Automatically deliver the gift code by email after checkout.', 'pmpro-gift-levels' ); ?>
 						</label>
 					</div>
-					<div id="pmprogl_recipient_email_div" class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_field pmpro_form_field-text', 'pmprogl_recipient_email_div' ) ); ?>" <?php echo $gift_field_style_attr; ?>>
+					<div id="pmprogl_recipient_email_div" class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_field pmpro_form_field-text', 'pmprogl_recipient_email_div' ) ); ?>" <?php echo $gift_field_style_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Hardcoded string. ?>>
 						<label for="pmprogl_recipient_email" class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_label' ) ); ?>"><?php esc_html_e( 'Recipient Email Address', 'pmpro-gift-levels' ); ?></label>
 						<input type="email" id="pmprogl_recipient_email" name="pmprogl_recipient_email" class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_input pmpro_form_input-text' ) ); ?>" value="<?php echo esc_attr( $current_recipient_email ); ?>" />
 					</div>
-					<div id="pmprogl_gift_message_div" class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_field pmpro_form_field-textarea', 'pmprogl_gift_message_div' ) ); ?>" <?php echo $gift_field_style_attr; ?>>
+					<div id="pmprogl_gift_message_div" class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_field pmpro_form_field-textarea', 'pmprogl_gift_message_div' ) ); ?>" <?php echo $gift_field_style_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Hardcoded string. ?>>
 						<label for="pmprogl_gift_message" class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_label' ) ); ?>"><?php esc_html_e( 'Add a Personalized Message (optional)', 'pmpro-gift-levels' ); ?></label>
-						<textarea name="pmprogl_gift_message" id="pmprogl_gift_message" class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_input pmpro_form_input-textarea' ) ); ?>"><?php echo esc_textarea( wp_unslash( $current_gift_message ) ); ?></textarea>
+						<textarea name="pmprogl_gift_message" id="pmprogl_gift_message" class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_input pmpro_form_input-textarea' ) ); ?>"><?php echo esc_textarea( $current_gift_message ); ?></textarea>
 					</div>
 				</div>
 					
@@ -84,7 +90,7 @@ function pmprogl_registration_checks_own_code( $pmpro_continue_registration ) {
 		
 	//don't let users use their own gift codes (probably an accident)
 	if ( ! empty( $discount_code ) && ! empty( $current_user->ID ) ) {
-		$code_id = $wpdb->get_var("SELECT id FROM $wpdb->pmpro_discount_codes WHERE code = '" . esc_sql($discount_code) . "' LIMIT 1");
+		$code_id = $wpdb->get_var("SELECT id FROM $wpdb->pmpro_discount_codes WHERE code = '" . esc_sql($discount_code) . "' LIMIT 1"); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- PMPro custom table; value is escaped with esc_sql() and quoted.
 		if ( ! empty( $code_id ) ) {
 			$gift_codes = get_user_meta($current_user->ID, "pmprogl_gift_codes_purchased", true);
 			if ( is_array( $gift_codes ) && in_array( $code_id, $gift_codes ) ) {
@@ -127,7 +133,8 @@ function pmprogl_registration_check_recipient_email( $pmpro_continue_registratio
 	}
 	
 	// If the "Recipient Email" box is checked, make sure we have an email address.	
-	if ( ! empty( $_REQUEST['pmprogl_send_recipient_email'] ) && ( empty( $_REQUEST['pmprogl_recipient_email'] ) || empty( sanitize_email( $_REQUEST['pmprogl_recipient_email'] ) ) ) ) {
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Runs on pmpro_registration_checks, after PMPro verifies the checkout nonce.
+	if ( ! empty( $_REQUEST['pmprogl_send_recipient_email'] ) && ( empty( $_REQUEST['pmprogl_recipient_email'] ) || empty( sanitize_email( wp_unslash( $_REQUEST['pmprogl_recipient_email'] ) ) ) ) ) {
 		pmpro_setMessage( __( "Gift recipient's email address is not valid.", "pmpro-gift-levels" ), "pmpro_error" );
 		return false;
 	}					
@@ -141,6 +148,9 @@ add_filter( "pmpro_registration_checks", "pmprogl_registration_check_recipient_e
  * Save recipient email when paying offiste.
  */
 function pmprogl_paypalexpress_session_vars() {
+	// Runs during checkout processing, after PMPro verifies the checkout nonce.
+	// Values are stored slashed to match the $_REQUEST path in pmprogl_pmpro_after_checkout(), where they are sanitized and saved with the metadata API (which unslashes).
+	// phpcs:disable WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 	if ( isset( $_REQUEST['pmprogl_send_recipient_email'] ) ) {
 		$_SESSION['pmprogl_send_recipient_email'] = $_REQUEST['pmprogl_send_recipient_email'];
 	}
@@ -150,6 +160,7 @@ function pmprogl_paypalexpress_session_vars() {
 	if ( isset( $_REQUEST['pmprogl_gift_message'] ) ) {
 		$_SESSION['pmprogl_gift_message'] = $_REQUEST['pmprogl_gift_message'];
 	}
+	// phpcs:enable WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 }
 add_action("pmpro_paypalexpress_session_vars", "pmprogl_paypalexpress_session_vars");
 add_action("pmpro_before_send_to_twocheckout", "pmprogl_paypalexpress_session_vars", 10, 0);
@@ -220,7 +231,7 @@ function pmprogl_pmpro_after_checkout($user_id, $morder) {
 			
 	$sqlQuery = "INSERT INTO $wpdb->pmpro_discount_codes (code, starts, expires, uses) VALUES('" . esc_sql($gcode) . "', '" . $gstarts . "', '" . $gexpires . "', '$guses')";
 	
-	if($wpdb->query($sqlQuery) !== false)
+	if($wpdb->query($sqlQuery) !== false) // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.PreparedSQL.NotPrepared -- PMPro custom table; every value is escaped with esc_sql() and quoted above.
 	{
 		//get id of new code
 		$code_id = $wpdb->insert_id;
@@ -237,7 +248,7 @@ function pmprogl_pmpro_after_checkout($user_id, $morder) {
 													 '" . esc_sql($gift['trial_limit']) . "',
 													 '" . esc_sql($gift['expiration_number']) . "',
 													 '" . esc_sql($gift['expiration_period']) . "')";
-		$wpdb->query($sqlQuery);
+		$wpdb->query($sqlQuery); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- PMPro custom table; every value is escaped with esc_sql() and quoted above.
 		
 		//get existing gift codes
 		$gift_codes = get_user_meta($user_id, "pmprogl_gift_codes_purchased", true);	
@@ -253,9 +264,12 @@ function pmprogl_pmpro_after_checkout($user_id, $morder) {
 		update_user_meta($user_id, "pmprogl_gift_codes_purchased", $gift_codes);
 
 		// Get gift recipeint email if available
+		// Checkout nonce is verified by PMPro before checkout processing. Values stay slashed because they are saved with the metadata API, which unslashes.
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
 		if ( ! empty( $_REQUEST['pmprogl_send_recipient_email'] ) && ! empty( $_REQUEST['pmprogl_recipient_email'] ) ) {
 			$recipient_email = sanitize_email( $_REQUEST['pmprogl_recipient_email'] );
 			$gift_message    = empty( $_REQUEST['pmprogl_gift_message'] ) ? '' : sanitize_textarea_field( $_REQUEST['pmprogl_gift_message'] );
+			// phpcs:enable WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
 		} elseif ( ! empty( $_SESSION['pmprogl_send_recipient_email'] ) && ! empty( $_SESSION['pmprogl_recipient_email'] ) ) {
 			$recipient_email = sanitize_email( $_SESSION['pmprogl_recipient_email'] );
 			$gift_message    = empty( $_SESSION['pmprogl_gift_message'] ) ? '' : sanitize_textarea_field( $_SESSION['pmprogl_gift_message'] );
@@ -380,8 +394,8 @@ function pmprogl_pmpro_after_checkout($user_id, $morder) {
 	}
 
 	//remove last row added to members_users table
-	$sqlQuery = "DELETE FROM $wpdb->pmpro_memberships_users WHERE user_id = '" . $user_id . "' AND membership_id = '" . $level_id . "' ORDER BY id DESC LIMIT 1";
-	$wpdb->query($sqlQuery);
+	$sqlQuery = $wpdb->prepare( "DELETE FROM $wpdb->pmpro_memberships_users WHERE user_id = %d AND membership_id = %d ORDER BY id DESC LIMIT 1", $user_id, $level_id );
+	$wpdb->query($sqlQuery); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared -- PMPro custom table; query is prepared above.
 
 	// remove cached level
 	global $all_membership_levels;
