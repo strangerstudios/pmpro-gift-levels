@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Paid Memberships Pro - Gift Levels Add On plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Paid Memberships Pro - Gift Levels Add On 1.1.2\n"
+"Project-Id-Version: Paid Memberships Pro - Gift Levels Add On 1.1.3\n"
 "Report-Msgid-Bugs-To: info@paidmembershipspro.com\n"
 "Last-Translator: Paid Memberships Pro <info@paidmembershipspro.com>\n"
 "Language-Team: Paid Memberships Pro <info@paidmembershipspro.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-05-05T14:17:23+00:00\n"
+"POT-Creation-Date: 2026-09-29T16:12:19+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: pmpro-gift-levels\n"
@@ -39,49 +39,13 @@ msgstr ""
 msgid "https://www.paidmembershipspro.com"
 msgstr ""
 
-#: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased-admin.php:74
-#: includes/email.php:41
+#: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased-admin.php:78
+#: includes/email.php:46
 msgid "Gift Purchased (admin)"
 msgstr ""
 
-#: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased-admin.php:85
+#: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased-admin.php:89
 msgid "This email is sent to the admin as confirmation of gift purchase after checkout."
-msgstr ""
-
-#: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased-admin.php:125
-#: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased-admin.php:151
-#: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased.php:121
-#: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased.php:147
-#: classes/email-templates/class-pmpro-email-template-pmprogl-gift-recipient.php:129
-#: classes/email-templates/class-pmpro-email-template-pmprogl-gift-recipient.php:155
-msgid "The display name of the user who gifted the membership."
-msgstr ""
-
-#: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased-admin.php:126
-#: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased-admin.php:152
-#: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased.php:122
-#: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased.php:148
-#: classes/email-templates/class-pmpro-email-template-pmprogl-gift-recipient.php:130
-#: classes/email-templates/class-pmpro-email-template-pmprogl-gift-recipient.php:156
-msgid "The email address of the user who gifted the membership."
-msgstr ""
-
-#: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased-admin.php:127
-#: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased-admin.php:153
-#: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased.php:123
-#: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased.php:149
-#: classes/email-templates/class-pmpro-email-template-pmprogl-gift-recipient.php:131
-#: classes/email-templates/class-pmpro-email-template-pmprogl-gift-recipient.php:157
-msgid "The email address of the recipient of the gift."
-msgstr ""
-
-#: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased-admin.php:128
-#: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased-admin.php:154
-#: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased.php:124
-#: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased.php:150
-#: classes/email-templates/class-pmpro-email-template-pmprogl-gift-recipient.php:132
-#: classes/email-templates/class-pmpro-email-template-pmprogl-gift-recipient.php:158
-msgid "The URL to the page where the recipient can redeem their gift."
 msgstr ""
 
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased-admin.php:129
@@ -90,7 +54,7 @@ msgstr ""
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased.php:151
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-recipient.php:133
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-recipient.php:159
-msgid "The message the giver included with the gift."
+msgid "The display name of the user who gifted the membership."
 msgstr ""
 
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased-admin.php:130
@@ -99,7 +63,7 @@ msgstr ""
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased.php:152
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-recipient.php:134
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-recipient.php:160
-msgid "The gift code the recipient can use to redeem their gift."
+msgid "The email address of the user who gifted the membership."
 msgstr ""
 
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased-admin.php:131
@@ -108,7 +72,7 @@ msgstr ""
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased.php:153
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-recipient.php:135
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-recipient.php:161
-msgid "The ID of the order."
+msgid "The email address of the recipient of the gift."
 msgstr ""
 
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased-admin.php:132
@@ -117,7 +81,7 @@ msgstr ""
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased.php:154
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-recipient.php:136
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-recipient.php:162
-msgid "The date of the order."
+msgid "The URL to the page where the recipient can redeem their gift."
 msgstr ""
 
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased-admin.php:133
@@ -126,7 +90,7 @@ msgstr ""
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased.php:155
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-recipient.php:137
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-recipient.php:163
-msgid "The total cost of the order."
+msgid "The message the giver included with the gift."
 msgstr ""
 
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased-admin.php:134
@@ -135,7 +99,7 @@ msgstr ""
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased.php:156
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-recipient.php:138
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-recipient.php:164
-msgid "The URL of the order."
+msgid "The gift code the recipient can use to redeem their gift."
 msgstr ""
 
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased-admin.php:135
@@ -144,7 +108,7 @@ msgstr ""
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased.php:157
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-recipient.php:139
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-recipient.php:165
-msgid "Billing Info Name"
+msgid "The ID of the order."
 msgstr ""
 
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased-admin.php:136
@@ -153,7 +117,7 @@ msgstr ""
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased.php:158
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-recipient.php:140
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-recipient.php:166
-msgid "Billing Info Street"
+msgid "The date of the order."
 msgstr ""
 
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased-admin.php:137
@@ -162,7 +126,7 @@ msgstr ""
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased.php:159
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-recipient.php:141
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-recipient.php:167
-msgid "Billing Info Street 2"
+msgid "The total cost of the order."
 msgstr ""
 
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased-admin.php:138
@@ -171,7 +135,7 @@ msgstr ""
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased.php:160
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-recipient.php:142
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-recipient.php:168
-msgid "Billing Info City"
+msgid "The URL of the order."
 msgstr ""
 
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased-admin.php:139
@@ -180,7 +144,7 @@ msgstr ""
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased.php:161
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-recipient.php:143
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-recipient.php:169
-msgid "Billing Info State"
+msgid "Billing Info Name"
 msgstr ""
 
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased-admin.php:140
@@ -189,7 +153,7 @@ msgstr ""
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased.php:162
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-recipient.php:144
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-recipient.php:170
-msgid "Billing Info Zip"
+msgid "Billing Info Street"
 msgstr ""
 
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased-admin.php:141
@@ -198,7 +162,7 @@ msgstr ""
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased.php:163
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-recipient.php:145
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-recipient.php:171
-msgid "Billing Info Country"
+msgid "Billing Info Street 2"
 msgstr ""
 
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased-admin.php:142
@@ -207,7 +171,7 @@ msgstr ""
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased.php:164
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-recipient.php:146
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-recipient.php:172
-msgid "Billing Info Phone"
+msgid "Billing Info City"
 msgstr ""
 
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased-admin.php:143
@@ -216,7 +180,7 @@ msgstr ""
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased.php:165
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-recipient.php:147
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-recipient.php:173
-msgid "Billing Info Complete Address"
+msgid "Billing Info State"
 msgstr ""
 
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased-admin.php:144
@@ -225,7 +189,7 @@ msgstr ""
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased.php:166
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-recipient.php:148
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-recipient.php:174
-msgid "Credit Card Type"
+msgid "Billing Info Zip"
 msgstr ""
 
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased-admin.php:145
@@ -234,7 +198,7 @@ msgstr ""
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased.php:167
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-recipient.php:149
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-recipient.php:175
-msgid "Credit Card Number (last 4 digits)"
+msgid "Billing Info Country"
 msgstr ""
 
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased-admin.php:146
@@ -243,7 +207,7 @@ msgstr ""
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased.php:168
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-recipient.php:150
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-recipient.php:176
-msgid "Credit Card Expiration Month (mm format)"
+msgid "Billing Info Phone"
 msgstr ""
 
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased-admin.php:147
@@ -252,298 +216,334 @@ msgstr ""
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased.php:169
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-recipient.php:151
 #: classes/email-templates/class-pmpro-email-template-pmprogl-gift-recipient.php:177
+msgid "Billing Info Complete Address"
+msgstr ""
+
+#: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased-admin.php:148
+#: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased-admin.php:174
+#: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased.php:144
+#: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased.php:170
+#: classes/email-templates/class-pmpro-email-template-pmprogl-gift-recipient.php:152
+#: classes/email-templates/class-pmpro-email-template-pmprogl-gift-recipient.php:178
+msgid "Credit Card Type"
+msgstr ""
+
+#: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased-admin.php:149
+#: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased-admin.php:175
+#: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased.php:145
+#: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased.php:171
+#: classes/email-templates/class-pmpro-email-template-pmprogl-gift-recipient.php:153
+#: classes/email-templates/class-pmpro-email-template-pmprogl-gift-recipient.php:179
+msgid "Credit Card Number (last 4 digits)"
+msgstr ""
+
+#: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased-admin.php:150
+#: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased-admin.php:176
+#: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased.php:146
+#: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased.php:172
+#: classes/email-templates/class-pmpro-email-template-pmprogl-gift-recipient.php:154
+#: classes/email-templates/class-pmpro-email-template-pmprogl-gift-recipient.php:180
+msgid "Credit Card Expiration Month (mm format)"
+msgstr ""
+
+#: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased-admin.php:151
+#: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased-admin.php:177
+#: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased.php:147
+#: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased.php:173
+#: classes/email-templates/class-pmpro-email-template-pmprogl-gift-recipient.php:155
+#: classes/email-templates/class-pmpro-email-template-pmprogl-gift-recipient.php:181
 msgid "Credit Card Expiration Year (yyyy format)"
 msgstr ""
 
-#: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased-admin.php:246
+#: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased-admin.php:250
 msgid "Admin"
 msgstr ""
 
-#: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased.php:74
-#: includes/email.php:35
+#: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased.php:78
+#: includes/email.php:40
 msgid "Gift Purchased"
 msgstr ""
 
-#: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased.php:85
+#: classes/email-templates/class-pmpro-email-template-pmprogl-gift-purchased.php:89
 msgid "This email is sent to the gift giver as confirmation of their purchase after checkout."
 msgstr ""
 
-#: classes/email-templates/class-pmpro-email-template-pmprogl-gift-recipient.php:82
-#: includes/email.php:29
+#: classes/email-templates/class-pmpro-email-template-pmprogl-gift-recipient.php:86
+#: includes/email.php:34
 msgid "Gift Recipient"
 msgstr ""
 
-#: classes/email-templates/class-pmpro-email-template-pmprogl-gift-recipient.php:93
+#: classes/email-templates/class-pmpro-email-template-pmprogl-gift-recipient.php:97
 msgid "This email is sent when the gift giver provides the recipient email address at checkout."
 msgstr ""
 
-#: classes/pmprogl-class-member-edit-panel.php:9
-#: includes/frontend.php:68
+#: classes/pmprogl-class-member-edit-panel.php:13
+#: includes/frontend.php:72
 msgid "Purchased Gift Codes"
 msgstr ""
 
-#: includes/admin.php:78
+#: includes/admin.php:85
 msgid "Gift Membership"
 msgstr ""
 
-#: includes/admin.php:82
+#: includes/admin.php:89
 msgid "This level can be assigned as a \"gift level\" that users can purchase. After checkout, the gift giver will receive a code they can share with the recipient. To enable this feature, choose a level from the dropdown below. The selected level is the level that will be given to the user who claims the gift code generated after purchase."
 msgstr ""
 
-#: includes/admin.php:82
+#: includes/admin.php:89
 msgid "Click here to read the Gift Membership Add On documentation."
 msgstr ""
 
-#: includes/admin.php:95
+#: includes/admin.php:102
 msgid "Gift Membership Warning:"
 msgstr ""
 
-#: includes/admin.php:95
+#: includes/admin.php:102
 msgid "The settings of this level are not recommended. Remove the recurring subscription and membership expiration from this level."
 msgstr ""
 
-#: includes/admin.php:103
+#: includes/admin.php:110
 msgid "Gift Level?"
 msgstr ""
 
-#: includes/admin.php:109
+#: includes/admin.php:116
 msgid "Level to Gift"
 msgstr ""
 
-#: includes/admin.php:122
+#: includes/admin.php:129
 msgid "Allow Gift Emails"
 msgstr ""
 
-#: includes/admin.php:125
+#: includes/admin.php:132
 msgid "Check to allow customers to enter the recipient email address at checkout."
 msgstr ""
 
-#: includes/admin.php:126
+#: includes/admin.php:133
 msgid "If an email address is provided, the recipient will automatically receive an email containing a personalized message and a link to claim the gift code. You can customize the \"Gift Recipient\" template on the Memberships > Settings > Email Templates page in the WordPress admin."
 msgstr ""
 
-#: includes/admin.php:130
+#: includes/admin.php:137
 msgid "Gift Membership Expires"
 msgstr ""
 
-#: includes/admin.php:134
+#: includes/admin.php:141
 msgid "If you do not set an expiration period, the gift recipient's membership will never expire."
 msgstr ""
 
-#: includes/admin.php:138
+#: includes/admin.php:145
 msgid "Gift Expiration Period"
 msgstr ""
 
-#: includes/admin.php:143
+#: includes/admin.php:150
 msgid "Day(s)"
 msgstr ""
 
-#: includes/admin.php:143
+#: includes/admin.php:150
 msgid "Week(s)"
 msgstr ""
 
-#: includes/admin.php:143
+#: includes/admin.php:150
 msgid "Month(s)"
 msgstr ""
 
-#: includes/admin.php:143
+#: includes/admin.php:150
 msgid "Year(s)"
 msgstr ""
 
-#: includes/admin.php:149
+#: includes/admin.php:156
 msgid "Set the duration of membership access once the gift membership is redeemed."
 msgstr ""
 
-#: includes/admin.php:212
+#: includes/admin.php:222
 msgid "[DELETED]"
 msgstr ""
 
-#: includes/admin.php:216
+#: includes/admin.php:226
 msgid "Gift Code Purchased"
 msgstr ""
 
-#: includes/admin.php:231
+#: includes/admin.php:241
 msgid "Gift Recipient Email"
 msgstr ""
 
-#: includes/admin.php:252
+#: includes/admin.php:262
 msgid "Gift Codes"
 msgstr ""
 
-#: includes/admin.php:281
+#: includes/admin.php:291
 msgid "This discount code was purchased as a gift by"
 msgstr ""
 
-#: includes/checkout.php:26
+#: includes/checkout.php:32
 msgid "Gift Code"
 msgstr ""
 
-#: includes/checkout.php:32
+#: includes/checkout.php:38
 msgid "Automatically deliver the gift code by email after checkout."
 msgstr ""
 
-#: includes/checkout.php:36
+#: includes/checkout.php:42
 msgid "Recipient Email Address"
 msgstr ""
 
-#: includes/checkout.php:40
+#: includes/checkout.php:46
 msgid "Add a Personalized Message (optional)"
 msgstr ""
 
-#: includes/checkout.php:91
+#: includes/checkout.php:97
 msgid "You can't use a code you purchased yourself. This was probably an accident."
 msgstr ""
 
-#: includes/checkout.php:112
+#: includes/checkout.php:118
 msgid "You must use a valid discount code to register for this level."
 msgstr ""
 
-#: includes/checkout.php:131
+#: includes/checkout.php:138
 msgid "Gift recipient's email address is not valid."
 msgstr ""
 
-#: includes/email.php:31
+#: includes/email.php:36
 msgid "This email is sent when the gift giver provides the recipient email address at checkout. Additional placeholder variables you can use in this email template include !!pmprogl_giver_display_name!!, !!pmprogl_gift_message!!, !!pmprogl_gift_code!!, and !!pmprogl_gift_code_url!!."
 msgstr ""
 
-#: includes/email.php:37
+#: includes/email.php:42
 msgid "This email is sent to the gift giver as confirmation of their purchase after checkout. Additional placeholder variables you can use in this email template include !!pmprogl_giver_display_name!!, !!pmprogl_gift_message!!, !!pmprogl_gift_code!!, and !!pmprogl_gift_code_url!!."
 msgstr ""
 
-#: includes/email.php:43
+#: includes/email.php:48
 msgid "This email is sent to the admin as confirmation of gift purchase after checkout. Additional placeholder variables you can use in this email template include !!pmprogl_giver_display_name!!, !!pmprogl_gift_message!!, !!pmprogl_gift_code!!, and !!pmprogl_gift_code_url!!."
 msgstr ""
 
-#: includes/email.php:57
+#: includes/email.php:62
 msgid "{{ pmprogl_giver_display_name }} has just sent you a gift membership to {{ sitename }}!"
 msgstr ""
 
-#: includes/email.php:59
-#: includes/email.php:69
+#: includes/email.php:64
+#: includes/email.php:74
 msgid "Use this link to set up your membership:"
 msgstr ""
 
-#: includes/email.php:67
+#: includes/email.php:72
 msgid "!!pmprogl_giver_display_name!! has just sent you a gift membership to !!sitename!!!"
 msgstr ""
 
-#: includes/email.php:83
+#: includes/email.php:88
 msgid "Thank you for your purchase at {{ sitename }}. Below is a receipt for your purchase."
 msgstr ""
 
-#: includes/email.php:84
-#: includes/email.php:123
+#: includes/email.php:89
+#: includes/email.php:128
 msgid "Account: {{ pmprogl_giver_display_name }} ({{ pmprogl_giver_email }})"
 msgstr ""
 
-#: includes/email.php:86
-#: includes/email.php:125
+#: includes/email.php:91
+#: includes/email.php:130
 msgid "Order #{{ order_id }} on {{ order_date }}"
 msgstr ""
 
-#: includes/email.php:87
-#: includes/email.php:126
+#: includes/email.php:92
+#: includes/email.php:131
 msgid "Total Billed: {{ order_total }}"
 msgstr ""
 
-#: includes/email.php:89
-#: includes/email.php:105
+#: includes/email.php:94
+#: includes/email.php:110
 msgid "Share this link with your gift recipient:"
 msgstr ""
 
-#: includes/email.php:90
+#: includes/email.php:95
 msgid "Log in to view your purchase history here: {{ login_url }}"
 msgstr ""
 
-#: includes/email.php:91
+#: includes/email.php:96
 msgid "To view an online version of this order, click here: {{ order_url }}"
 msgstr ""
 
-#: includes/email.php:99
+#: includes/email.php:104
 msgid "Thank you for your purchase at !!sitename!!. Below is a receipt for your purchase."
 msgstr ""
 
-#: includes/email.php:100
-#: includes/email.php:138
+#: includes/email.php:105
+#: includes/email.php:143
 msgid "Account: !!pmprogl_giver_display_name!! (!!pmprogl_giver_email!!)"
 msgstr ""
 
-#: includes/email.php:102
-#: includes/email.php:140
+#: includes/email.php:107
+#: includes/email.php:145
 msgid "Order #!!order_id!! on !!order_date!!"
 msgstr ""
 
-#: includes/email.php:103
-#: includes/email.php:141
+#: includes/email.php:108
+#: includes/email.php:146
 msgid "Total Billed: !!order_total!!"
 msgstr ""
 
-#: includes/email.php:106
+#: includes/email.php:111
 msgid "Log in to view your purchase history here: !!login_url!!"
 msgstr ""
 
-#: includes/email.php:107
+#: includes/email.php:112
 msgid "To view an online version of this order, click here: !!order_url!!"
 msgstr ""
 
-#: includes/email.php:121
+#: includes/email.php:126
 msgid "There was a new gift membership checkout at {{ sitename }}."
 msgstr ""
 
-#: includes/email.php:122
-#: includes/email.php:137
+#: includes/email.php:127
+#: includes/email.php:142
 msgid "Below are details about the purchase and a receipt for the initial order."
 msgstr ""
 
-#: includes/email.php:127
+#: includes/email.php:132
 msgid "Gift Code: {{ pmprogl_gift_code }}"
 msgstr ""
 
-#: includes/email.php:136
+#: includes/email.php:141
 msgid "There was a new gift membership checkout at !!sitename!!."
 msgstr ""
 
-#: includes/email.php:142
+#: includes/email.php:147
 msgid "Gift Code: !!pmprogl_gift_code!!"
 msgstr ""
 
-#: includes/frontend.php:30
+#: includes/frontend.php:34
 msgid "Gift Code:"
 msgstr ""
 
-#: includes/frontend.php:32
+#: includes/frontend.php:36
 msgid "Gift Checkout URL:"
 msgstr ""
 
-#: includes/frontend.php:41
+#: includes/frontend.php:45
 msgid "Your gift code will be available after payment is received."
 msgstr ""
 
-#: includes/frontend.php:72
+#: includes/frontend.php:76
 msgid "Below is a list of gift codes you have purchased."
 msgstr ""
 
-#: includes/functions.php:63
+#: includes/functions.php:67
 msgid "No gift codes purchased."
 msgstr ""
 
-#: includes/functions.php:83
+#: includes/functions.php:87
 #, php-format
 msgid "%s: claimed by %s"
 msgstr ""
 
-#: pmpro-gift-levels.php:45
+#: pmpro-gift-levels.php:49
 msgid "View Documentation"
 msgstr ""
 
-#: pmpro-gift-levels.php:45
+#: pmpro-gift-levels.php:49
 msgid "Docs"
 msgstr ""
 
-#: pmpro-gift-levels.php:46
+#: pmpro-gift-levels.php:50
 msgid "Visit Customer Support Forum"
 msgstr ""
 
-#: pmpro-gift-levels.php:46
+#: pmpro-gift-levels.php:50
 msgid "Support"
 msgstr ""
