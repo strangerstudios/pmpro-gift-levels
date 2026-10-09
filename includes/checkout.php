@@ -409,16 +409,29 @@ function pmprogl_pmpro_after_checkout($user_id, $morder) {
 
 	// Update user data and call action.
 	pmpro_set_current_user();
-
-	// Send user to invoice after checkout instead of confirmation page since we took their level away.
-	add_action( 'pmpro_confirmation_url', 'pmprogl_overwrite_confirmation_url', 10, 2 );
 }
 add_action("pmpro_after_checkout", "pmprogl_pmpro_after_checkout", 10, 2);
 
-function pmprogl_overwrite_confirmation_url( $url, $user_id ) {
+/**
+ * Send gift purchasers to the invoice instead of the confirmation page since we take their level away.
+ *
+ * @param string $url The confirmation URL.
+ * @param int $user_id The ID of the user who checked out.
+ * @param object $level The level that was purchased.
+ * @return string
+ */
+function pmprogl_overwrite_confirmation_url( $url, $user_id, $level = null ) {
+	global $pmprogl_gift_levels;
+
+	// Only redirect for gift levels.
+	if ( empty( $level->id ) || empty( $pmprogl_gift_levels ) || ! array_key_exists( intval( $level->id ), $pmprogl_gift_levels ) ) {
+		return $url;
+	}
+
+	// Include pending orders (e.g. Pay by Check). Token orders are still awaiting payment, so let the confirmation page handle those.
 	$morder = new MemberOrder();
-	$morder->getLastMemberOrder( $user_id );
-	if ( ! empty ( $morder->code ) ) {
+	$morder->getLastMemberOrder( $user_id, array( 'success', 'pending', 'token' ), intval( $level->id ) );
+	if ( ! empty ( $morder->code ) && 'token' !== $morder->status ) {
 		$invoice_url = pmpro_url( 'invoice', '?invoice=' . $morder->code );
 		if ( ! empty( $invoice_url ) ) {
 			$url = $invoice_url;
@@ -426,3 +439,4 @@ function pmprogl_overwrite_confirmation_url( $url, $user_id ) {
 	}
 	return $url;
 }
+add_filter( 'pmpro_confirmation_url', 'pmprogl_overwrite_confirmation_url', 10, 3 );
