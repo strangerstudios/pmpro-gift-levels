@@ -417,7 +417,7 @@ add_action("pmpro_after_checkout", "pmprogl_pmpro_after_checkout", 10, 2);
  *
  * @param string $url The confirmation URL.
  * @param int $user_id The ID of the user who checked out.
- * @param object $level The level that was purchased.
+ * @param object|null $level The level that was purchased.
  * @return string
  */
 function pmprogl_overwrite_confirmation_url( $url, $user_id, $level = null ) {
