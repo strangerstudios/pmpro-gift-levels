@@ -3,7 +3,7 @@ Contributors: strangerstudios
 Tags: pmpro, paid memberships pro, membership, gift, gift level, gift card, giftcard, gift certificate
 Requires at least: 4.5
 Tested up to: 7.1
-Stable tag: 1.1.3
+Stable tag: 1.1.4
 
 == Description ==
 
@@ -32,6 +32,9 @@ Refer to the [Gift Levels Add On documentation page](https://www.paidmemberships
 Please post it in the issues section of GitHub and we'll fix it as soon as we can. Thanks for helping. https://github.com/strangerstudios/pmpro-gift-levels/issues
 
 == Changelog ==
+= 1.1.4 - 2026-11-18 =
+* BUG FIX: Fixed an issue where gift purchases with pending payments (such as Pay by Check) were not redirected to the invoice page after checkout. #78 (@dparker1005)
+
 = 1.1.3 - 2026-09-29 =
 * SECURITY: Improved sanitization and escaping throughout the plugin to resolve Plugin Check security findings. #77 (@dparker1005)
 * BUG FIX: Fixed a stray backslash in the redisplayed recipient email when it contains an apostrophe. #77 (@dparker1005)
