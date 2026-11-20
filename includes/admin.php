@@ -137,7 +137,7 @@ function pmprogl_membership_level_after_other_settings() {
 						<th scope="row" valign="top"><?php esc_html_e( 'Gift Membership Expires', 'pmpro-gift-levels' ); ?></th>
 						<td>
 							<input id="pmprogl_gift_expires" name="pmprogl_gift_expires" type="checkbox" value="yes" <?php if ( $expiration_number ) { echo "checked='checked'"; } ?>/>
-							<label for="pmprogl_gift_expires"><?php esc_html_e( 'Check this to set an expiration period for the gifted membership level.', 'pmpro_gift_levels' ); ?></label>
+							<label for="pmprogl_gift_expires"><?php esc_html_e( 'Check this to set an expiration period for the gifted membership level.', 'pmpro-gift-levels' ); ?></label>
 							<p class="description"><?php esc_html_e( 'If you do not set an expiration period, the gift recipient\'s membership will never expire.', 'pmpro-gift-levels' ); ?></p>
 						</td>
 					</tr>
