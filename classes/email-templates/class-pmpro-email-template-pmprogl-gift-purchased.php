@@ -201,6 +201,7 @@ class PMPro_Email_Template_PMProGL_Gift_Purchased extends PMPro_Email_Template {
 			'invoice_url' => pmpro_login_url( pmpro_url( 'invoice', '?invoice=' . $morder->code ) ),
 			'billing_name' => $morder->billing->name,
 			'billing_street' => $morder->billing->street,
+			'billing_street2' => $morder->billing->street2,
 			'billing_city' => $morder->billing->city,
 			'billing_state' => $morder->billing->state,
 			'billing_zip' => $morder->billing->zip,
