@@ -30,19 +30,19 @@ add_action( 'init', 'pmprogl_load_email_templates', 8 ); // Priority 8 to ensure
  */
 function pmprogl_template_callback( $templates ) {
 	$templates['pmprogl_gift_recipient'] = array(
-		'subject' => esc_html( sprintf( __( 'You have been gifted a membership to %s', 'pmpro_gift_levels' ), get_option( 'blogname' ) ) ),
+		'subject' => esc_html( sprintf( __( 'You have been gifted a membership to %s', 'pmpro-gift-levels' ), get_option( 'blogname' ) ) ),
 		'description' => __( 'Gift Recipient', 'pmpro-gift-levels' ),
 		'body' => pmprogl_get_default_gift_recipient_email_body(),
 		'help_text' => __( 'This email is sent when the gift giver provides the recipient email address at checkout. Additional placeholder variables you can use in this email template include !!pmprogl_giver_display_name!!, !!pmprogl_gift_message!!, !!pmprogl_gift_code!!, and !!pmprogl_gift_code_url!!.', 'pmpro-gift-levels' )
 	);
 	$templates['pmprogl_gift_purchased'] = array(
-		'subject' => esc_html( sprintf( __( 'Gift membership purchase confirmation for %s', 'pmpro_gift_levels' ), get_option( 'blogname' ) ) ),
+		'subject' => esc_html( sprintf( __( 'Gift membership purchase confirmation for %s', 'pmpro-gift-levels' ), get_option( 'blogname' ) ) ),
 		'description' => __( 'Gift Purchased', 'pmpro-gift-levels' ),
 		'body' => pmprogl_get_default_gift_purchased_email_body(),
 		'help_text' => __( 'This email is sent to the gift giver as confirmation of their purchase after checkout. Additional placeholder variables you can use in this email template include !!pmprogl_giver_display_name!!, !!pmprogl_gift_message!!, !!pmprogl_gift_code!!, and !!pmprogl_gift_code_url!!.', 'pmpro-gift-levels' )
 	);
 	$templates['pmprogl_gift_purchased_admin'] = array(
-		'subject' => esc_html( sprintf( __( '!!pmprogl_giver_display_name!! has purchased a gift membership to %s', 'pmpro_gift_levels' ), get_option( 'blogname' ) ) ),
+		'subject' => esc_html( sprintf( __( '!!pmprogl_giver_display_name!! has purchased a gift membership to %s', 'pmpro-gift-levels' ), get_option( 'blogname' ) ) ),
 		'description' => __( 'Gift Purchased (admin)', 'pmpro-gift-levels' ),
 		'body' => pmprogl_get_default_gift_purchased_admin_email_body(),
 		'help_text' => __( 'This email is sent to the admin as confirmation of gift purchase after checkout. Additional placeholder variables you can use in this email template include !!pmprogl_giver_display_name!!, !!pmprogl_gift_message!!, !!pmprogl_gift_code!!, and !!pmprogl_gift_code_url!!.', 'pmpro-gift-levels' )

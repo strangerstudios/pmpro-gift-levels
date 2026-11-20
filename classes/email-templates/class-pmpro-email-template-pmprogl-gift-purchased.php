@@ -97,7 +97,7 @@ class PMPro_Email_Template_PMProGL_Gift_Purchased extends PMPro_Email_Template {
 	 * @return string The default subject for the email.
 	 */
 	public static function get_default_subject() {
-		return esc_html( sprintf( __( 'Gift membership purchase confirmation for %s', 'pmpro_gift_levels' ), get_option( 'blogname' ) ) );
+		return esc_html( sprintf( __( 'Gift membership purchase confirmation for %s', 'pmpro-gift-levels' ), get_option( 'blogname' ) ) );
 	}
 
 	/**

@@ -99,9 +99,9 @@ class PMPro_Email_Template_PMProGL_Gift_Purchased_Admin extends PMPro_Email_Temp
 	public static function get_default_subject() {
 		if ( ! class_exists( 'PMPro_Liquid_Renderer' ) ) {
 			// Running a version of PMPro before liquid email rendering was available.
-			return esc_html( sprintf( __( '!!pmprogl_giver_display_name!! has purchased a gift membership to %s', 'pmpro_gift_levels' ), get_option( 'blogname' ) ) );
+			return esc_html( sprintf( __( '!!pmprogl_giver_display_name!! has purchased a gift membership to %s', 'pmpro-gift-levels' ), get_option( 'blogname' ) ) );
 		}
-		return esc_html( sprintf( __( '{{ pmprogl_giver_display_name }} has purchased a gift membership to %s', 'pmpro_gift_levels' ), get_option( 'blogname' ) ) );
+		return esc_html( sprintf( __( '{{ pmprogl_giver_display_name }} has purchased a gift membership to %s', 'pmpro-gift-levels' ), get_option( 'blogname' ) ) );
 	}
 
 	/**
