@@ -191,7 +191,7 @@ class PMPro_Email_Template_PMProGL_Gift_Purchased_Admin extends PMPro_Email_Temp
 		$email_template_variables = array(
 			'pmprogl_giver_display_name' => $this->giver->display_name,
 			'pmprogl_giver_email' => $this->giver->user_email,
-			'pmpro_gift_recipient_email' => $this->get_recipient_email(),
+			'pmpro_gift_recipient_email' => get_pmpro_membership_order_meta( $morder->id, 'pmprogl_recipient_email', true ),
 			'pmprogl_gift_code_url' => pmpro_url( 'checkout', '?level=' . $this->gift_level_id . '&discount_code=' . $this->gcode ),
 			'pmprogl_gift_message' => wp_unslash( $this->gift_message ),
 			'pmprogl_gift_code' => $this->gcode,
